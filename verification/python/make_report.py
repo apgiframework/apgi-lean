@@ -83,10 +83,13 @@ def main() -> int:
     incomplete = [f for f in conflicts["acknowledged"] + conflicts["unacknowledged"] if f["check"] == "incomplete_parameter"]
     empirical_from_proof = [c["id"] for c in C if c["status"] == "empirically-supported" and any(r in thms for r in c["evidence"])]
 
+    unpinned = [f for f in conflicts["acknowledged"] + conflicts["unacknowledged"] if f["check"] == "unpinned_source"]
+    c1_parts = [f"{len(incomplete[0]['params'])} incomplete parameter(s)" if incomplete else "all parameters complete"]
+    if unpinned:
+        c1_parts.append(unpinned[0]["detail"])
     criteria = [
         ("Every canonical parameter has a source identifier, unit, version, and documented range",
-         not incomplete and not any(f["check"] == "unpinned_source" for f in conflicts["acknowledged"]),
-         f"{len(incomplete[0]['params']) if incomplete else 0} incomplete parameter(s); sources unpinned" if incomplete else "complete"),
+         not incomplete and not unpinned, "; ".join(c1_parts)),
         ("Known discrepancies produce explicit failures",
          bool(conflict_tests) and all(v == "passed" for v in conflict_tests) and conflicts["ok"],
          f"{len(conflicts['acknowledged'])} open conflicts tracked; seeded suite {'passed' if conflict_tests and all(v == 'passed' for v in conflict_tests) else 'not run/failed'}"),

@@ -33,6 +33,11 @@ def main():
         {"x": x, "u": u, "dt": dt, "tau": tau, "expected": s(mp.mpf(x) + (mp.mpf(dt) / tau) * (mp.mpf(u) - x))}
         for x, u, dt, tau in [(2, 8, 0.01, 0.2), (7.5, 2, 0.2, 0.2), (0.5, 3, 0.001, 1.5)]
     ]
+    v["decay_step"] = [
+        {"theta": th, "theta0": t0, "dt": dt, "tau": tau,
+         "expected": s(mp.mpf(t0) + (mp.mpf(th) - t0) * mp.exp(-mp.mpf(dt) / tau))}
+        for th, t0, dt, tau in [(0.85, 0.35, 0.01, 20), (0.25, 0.35, 0.01, 10), (0.6, 0.35, 3.0, 1.0), (0.3, 0.55, 0.5, 30)]
+    ]
     OUT.write_text(json.dumps(v, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {OUT.name}")
 

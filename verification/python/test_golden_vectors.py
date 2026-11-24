@@ -40,3 +40,8 @@ def test_landauer(v):
 @pytest.mark.parametrize("v", G["euler_step"])
 def test_euler_step(v):
     assert close(R.euler_step(v["x"], v["u"], v["dt"], v["tau"]), v["expected"])
+
+
+@pytest.mark.parametrize("v", G["decay_step"])
+def test_decay_step(v):
+    assert close(R.decay_step(v["theta"], v["theta0"], v["dt"], v["tau"]), v["expected"])

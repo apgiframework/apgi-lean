@@ -11,6 +11,12 @@ from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 
 import apgi_ref as R
+import registry
+
+P = registry.params()
+BAND_LO = float(P["theta_operating_lower"]["value"])
+BAND_HI = float(P["theta_operating_upper"]["value"])
+FLOOR = float(P["theta_floor"]["value"])
 
 fin = st.floats(min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False)
 au = st.floats(min_value=0.0, max_value=20.0, allow_nan=False)
@@ -55,15 +61,15 @@ def test_clamped_update_floor(theta, target, gain):
 
 
 def test_operating_range_counterexample():
-    """Lean: Apgi.operatingRange_not_invariant, witness (θ, target, gain) = (2, 0, 1)."""
-    assert R.clamped_update(2.0, 0.0, 1.0) < 2.0
+    """Lean: Apgi.operatingRange_not_invariant, witness (θ, target, gain) = (θ_lower, θ_floor, 1)."""
+    assert R.clamped_update(BAND_LO, FLOOR, 1.0) < BAND_LO
 
 
-@given(st.floats(2, 8), st.floats(2, 8), unit)
+@given(st.floats(BAND_LO, BAND_HI), st.floats(BAND_LO, BAND_HI), unit)
 def test_operating_range_invariant_of_target(theta, target, gain):
     """Lean: Apgi.operatingRange_invariant_of_target."""
     v = R.clamped_update(theta, target, gain)
-    assert 2.0 - EPS <= v <= 8.0 + EPS
+    assert BAND_LO - EPS <= v <= BAND_HI + EPS
 
 
 @given(st.floats(-5, 5), st.floats(-5, 5), st.floats(-3, 3))
@@ -86,9 +92,22 @@ def test_cusp_two_equilibria_witness():
 
 
 @given(st.floats(-10, -0.01), st.floats(-10, 10))
+def test_cusp_three_equilibria(a, theta):
+    """Lean: Apgi.cusp_three_equilibria (a < 0 ∧ 4a³ + 27θ² < 0 ⇒ three
+    distinct equilibria, each a root of x³ + a x + θ). Near-degenerate cases skipped."""
+    d = R.cusp_discriminant(a, theta)
+    assume(d < -1e-3 * max(1.0, abs(a) ** 3))
+    roots = R.cusp_equilibria(a, theta)
+    assert len(roots) == 3 and roots[0] < roots[1] < roots[2]
+    scale = max(1.0, abs(a), abs(theta))
+    for x in roots:
+        assert abs(R.cusp_dV(a, theta, x)) <= 1e-8 * scale * max(1.0, abs(x)) ** 3
+
+
+@given(st.floats(-10, -0.01), st.floats(-10, 10))
 def test_cusp_discriminant(a, theta):
-    """Sufficiency (claim CL-5, tested not proved): with a < 0, three
-    equilibria iff 4a³ + 27θ² < 0. Near-degenerate cases are skipped."""
+    """Both directions of the discriminant rule (the converse is classical and
+    not in Lean): with a < 0, three equilibria iff 4a³ + 27θ² < 0."""
     d = R.cusp_discriminant(a, theta)
     assume(abs(d) > 1e-3 * max(1.0, abs(a) ** 3))
     assert len(R.cusp_equilibria(a, theta)) == (3 if d < 0 else 1)
@@ -114,4 +133,19 @@ def test_euler_step_bounded(x, u, tau, frac):
 
 def test_euler_precondition_is_load_bearing():
     """With dt > τ the step overshoots: the Lean hypothesis is necessary."""
+    assert R.euler_step(0.0, 1.0, dt=3.0, tau=1.0) > 1.0
+
+
+@given(st.floats(BAND_LO, BAND_HI), st.floats(BAND_LO, BAND_HI), st.floats(0, 100), st.floats(0.05, 60))
+def test_decay_step_bounded(theta, theta0, dt, tau):
+    """Lean: Apgi.decay_step_mem_Icc — exact decay toward θ₀ in the band stays in the band."""
+    v = R.decay_step(theta, theta0, dt, tau)
+    assert BAND_LO - EPS <= v <= BAND_HI + EPS
+
+
+def test_decay_needs_no_step_bound():
+    """Contrast with Euler: at dt = 3τ the exact step stays between θ and θ₀
+    (Lean: Apgi.decayGain_mem_Icc has no dt ≤ τ hypothesis)."""
+    v = R.decay_step(0.0, 1.0, dt=3.0, tau=1.0)
+    assert 0.0 <= v <= 1.0
     assert R.euler_step(0.0, 1.0, dt=3.0, tau=1.0) > 1.0

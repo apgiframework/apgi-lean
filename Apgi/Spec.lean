@@ -15,22 +15,22 @@ CI fails if this file is out of date (`generate_lean.py --check`).
 namespace Apgi
 
 /-- Registry version this file was generated from. -/
-def specVersion : String := "0.1.0"
+def specVersion : String := "0.2.0"
 
 /-- SHA-256 of the specification files this file was generated from. -/
-def specHash : String := "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+def specHash : String := "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
 
-/-- `theta_floor` (AU) — SRC-NOTATION, role: state_invariant. -/
-noncomputable def θ_floor : ℝ := 1 / 2
+/-- `theta_floor` (AU) — SRC-MATHSPEC, role: state_invariant. -/
+noncomputable def θ_floor : ℝ := 0
 
 /-- `theta_baseline` (AU) — SRC-NOTATION, role: constant. -/
-noncomputable def θ_baseline : ℝ := 2
+noncomputable def θ_baseline : ℝ := 7 / 20
 
-/-- `theta_operating_lower` (AU) — SRC-INNOV-GDOC, role: UNRESOLVED. -/
-noncomputable def θ_lower : ℝ := 2
+/-- `theta_operating_lower` (AU) — SRC-NOTATION, role: regime_label. -/
+noncomputable def θ_lower : ℝ := 1 / 4
 
-/-- `theta_operating_upper` (AU) — SRC-INNOV-GDOC, role: UNRESOLVED. -/
-noncomputable def θ_upper : ℝ := 8
+/-- `theta_operating_upper` (AU) — SRC-NOTATION, role: regime_label. -/
+noncomputable def θ_upper : ℝ := 17 / 20
 
 end Apgi
 

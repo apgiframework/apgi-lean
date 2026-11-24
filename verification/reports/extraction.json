@@ -1,0 +1,594 @@
+{
+  "generated": "2026-11-24T06:07:03+00:00",
+  "tool": "extract_sources.py --corpus",
+  "source_pins": {
+    "SRC-NOTATION": {
+      "sha256": "14394d5371776696bfa50acd89874f25d6cc3bf0aaf3b7b384e8272e4c8199d8",
+      "found": true,
+      "file": "Pesochin (2026) - APGI notation appendix (Version 1.0).pdf"
+    },
+    "SRC-MATHSPEC": {
+      "sha256": "619e602a8d465aae40d92c199db2402011d5a1577ae6d28e304c25fa00fdf8ab",
+      "found": true,
+      "file": "Pesochin (2026) - APGI companion documents- Mathematical Specifications, Notation Appendix v1.0 and Protocols.pdf"
+    },
+    "SRC-DYN": {
+      "sha256": "10a964187ead4b440d4a14c2e7ae02cec7207e367ac9dfe63e38f75151e4dcbb",
+      "found": true,
+      "file": "Pesochin (2026) - APGI dynamical formulation (Version 1.0).pdf"
+    },
+    "SRC-OSF": {
+      "sha256": "52c5507c8e576b0aee86872cd695b80f819e6af70d9948b2681eb815b56d1769",
+      "found": true,
+      "file": "Pesochin (2026) - APGI OSF preregistration (Version 1.1, Amendment 1).pdf"
+    },
+    "SRC-PRED-REG": {
+      "sha256": "3a519edf419e477e414e55589ffb657e94554467028edcbf85ea6407ec0048cd",
+      "found": true,
+      "file": "Pesochin (2026) - APGI protocols and prediction registry (Version 1.0).pdf"
+    },
+    "SRC-ADVANCES": {
+      "sha256": "f27876a798cebbf4e0dcea8a305e277aeaaab502f6c0303233160abacc50725f",
+      "found": true,
+      "file": "Pesochin (2026) - APGI-Advances.pdf"
+    },
+    "SRC-PAPER1": {
+      "sha256": "3c38b1184aa3638e00f528d05a120678346b1fb78d26edd266255f11623a9d08",
+      "found": true,
+      "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf"
+    }
+  },
+  "parameters": {
+    "theta_floor": {
+      "status": "verified",
+      "param_hash": "1d2c86a5b5adb741a6faeef3074a5066302c4e9e85a86b1ee396fd238389f4c1",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 21,
+          "quote": "θ_floor = 0 unless stated",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 3,
+          "quote": "θ ≥ θ_floor (default 0) is applied after decay",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "theta_baseline": {
+      "status": "verified",
+      "param_hash": "7c63011de7c68d0a4013757eef4b559f295a2ca3787693ed56a37ba4f474ca1e",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 137,
+          "quote": "Centered on the series default θ₀ = 0.35",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.35",
+              "registry": "0.35",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 3,
+          "quote": "Stated on the excess-surprise scale (§1) AU, [0.25, 0.85]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.25",
+              "registry": "0.25",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.85",
+              "registry": "0.85",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "theta_operating_lower": {
+      "status": "verified",
+      "param_hash": "8819e3c814a89d6ce1c666762836afb2da0ee6193eeef08413f3b2e631dbfd63",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 2,
+          "quote": "the θ₀ band [0.25, 0.85] lies",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.25",
+              "registry": "0.25",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 3,
+          "quote": "Not clamped to the θ₀ band: it may leave the band transiently after δ_reset",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "theta_operating_upper": {
+      "status": "verified",
+      "param_hash": "37119b9739bc5f2d2447679d0fd0086f65a4a779b5e3885a53a5cb2cab7e2a36",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 2,
+          "quote": "the θ₀ band [0.25, 0.85] lies",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.85",
+              "registry": "0.85",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "kappa": {
+      "status": "verified",
+      "param_hash": "43f17b80c1795a1df1fcc34643fd6f8d63e7f437419940696ae92b6f83a4ae20",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 22,
+          "quote": "Sensitivity calculations span 3 × 10³ ATP/bit (whole-neocortex synaptic storage) to 10⁹ ATP/bit (spike coding)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "3 × 10³",
+              "registry": "3e3",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "10⁹",
+              "registry": "1e9",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 22,
+          "quote": "No canonical value is adopted",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "rho_res": {
+      "status": "verified",
+      "param_hash": "73908daadf6716054519c3525c63c61be1b603045697ba1730fbe93f4bb12333",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 7,
+          "quote": "ρ_res Spectral radius of W_res [0.7, 0.95]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.7",
+              "registry": "0.7",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.95",
+              "registry": "0.95",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "rho_crit": {
+      "status": "verified",
+      "param_hash": "066ad16057b2d0226482286a4db08969d64ddbc31435afa1c8f2575db82049f8",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 7,
+          "quote": "ρ_crit Criticality regime label, not the spectral radius of any matrix ≈ 1",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "beta_SM": {
+      "status": "verified",
+      "param_hash": "7e974e4c5d551c9266f3e489b80efaff5f7dcb5460be76d1c304a0b4da6b05fe",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "β_SM Somatic-marker exponential gain (distinct from β_somatic) [0.1, 1.2]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.1",
+              "registry": "0.1",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1.2",
+              "registry": "1.2",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 9,
+          "quote": "waking sub-band [0.3, 0.8]",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "beta_somatic": {
+      "status": "verified",
+      "param_hash": "cbf77bfe41c3ca51cba61bdb6ac6ce1ce748ed54a2f34c950941636a851cf894",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 9,
+          "quote": "A distinct parameter from β_SM; the two ranges are never merged [0.5, 2.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "2.5",
+              "registry": "2.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "gamma_theta": {
+      "status": "verified",
+      "param_hash": "3b99fec0905ad29f171d87a80fa068d924433ed08da57a46ca38371d4734c815",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 5,
+          "quote": "γ_θ Threshold mean-reversion rate, 1/τ_θ (s⁻¹)",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "eta_theta": {
+      "status": "verified",
+      "param_hash": "c6d308a3ab5e48f9f26711966dc2019901704a12803745261796fac7dad80dc4",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 3,
+          "quote": "η_θ Threshold-update (allostatic) learning rate; step size on the C(t) − V(t) gradient ≥ 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "lambda": {
+      "status": "verified",
+      "param_hash": "647a8c77e137b33954e49d19a948dd28f0fe1d6d19d87a6e3e557ea441559c41",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 18,
+          "quote": "where λ ∈ (0, 1) is the integration rate",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 18,
+          "quote": "λ = 1 − exp(−dt/τ_S)",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "tau_theta": {
+      "status": "verified",
+      "param_hash": "3fdac0ea7d92c11e9c998adb30d8f6a8d1fceacc6e975b21e67b7b5b7f40badf",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 5,
+          "quote": "τ_θ Threshold mean-reversion timescale > 0 (s); worked value 20 s",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "20 s",
+              "registry": "20",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-DYN",
+          "page": 15,
+          "quote": "the threshold adapts slowly (τ_θ ≈ 10–30 s)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "10",
+              "registry": "10",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "30 s",
+              "registry": "30",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "tau_S": {
+      "status": "verified",
+      "param_hash": "30eb62bf65081d4aa8dadf6068765cc4b3de031f031b6ec28e6f3e2c348af8f5",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 2,
+          "quote": "at dt = 10 ms and τ_S = 300 ms",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "300 ms",
+              "registry": "0.3",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-DYN",
+          "page": 15,
+          "quote": "Surprise accumulates rapidly (τ_S ≈ 200–500 ms",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "200",
+              "registry": "0.2",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "500 ms",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "dt": {
+      "status": "verified",
+      "param_hash": "3942a9324b709fe70ea9eee34b9d93ae2bc727148486abaffdf30779a228fbbd",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 1,
+          "quote": "worked numbers here use dt = 10 ms, which is also the reference step dt₀",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "10 ms",
+              "registry": "0.01",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 43,
+          "quote": "dt ≤ min(τ_S, τ_θ, τ_Π, τ_res)/10",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "gamma_sig": {
+      "status": "verified",
+      "param_hash": "a4da41bb06d09dbf46e799c2b683f8488134cad2bfce377d4b2cc8ceae66db04",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 4,
+          "quote": "canonical waking band [2, 7.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "2",
+              "registry": "2",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "7.5",
+              "registry": "7.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "tau_sigma": {
+      "status": "verified",
+      "param_hash": "d7c3de75f76d58d33fdedf993ce8422a25d965af2fd719c174b09297ca9c625b",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 3,
+          "quote": "not a timescale; carries the units of S AU [0.133, 0.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.133",
+              "registry": "0.133",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "bf10_threshold_pred_0B": {
+      "status": "verified",
+      "param_hash": "af6e23014dc2c7e82e2705fdae53908f9b2c453cd41c3ae018a34dbb80ad9248",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 69,
+          "quote": "pre-registered Bayesian confirmation threshold for this prediction is BF₁₀ ≥ 100",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "100",
+              "registry": "100",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-OSF",
+          "page": 69,
+          "quote": "this threshold is canonical and applies to both the summary table",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "T_body": {
+      "status": "verified",
+      "param_hash": "5b00b1e907972118cbbb251fd9e1d92ab18d7b3920e6af90c85ec9fe12092d07",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 34,
+          "quote": "k_B·T_env·ln 2 = 2.97 × 10⁻²¹ J at T_env = 310 K",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "310",
+              "registry": "310",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "landauer_310K": {
+      "status": "verified",
+      "param_hash": "ac621f6748e6e3b659ff171ed72911fb82c7198b36e24b304988a17768e9d698",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 34,
+          "quote": "k_B·T_env·ln 2 = 2.97 × 10⁻²¹ J at T_env = 310 K",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "2.97 × 10⁻²¹",
+              "registry": "2.97e-21",
+              "match": true
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

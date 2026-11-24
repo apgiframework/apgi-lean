@@ -1,7 +1,7 @@
 {
-  "schema": "apgi-units/1",
-  "note": "Base dimensions mirror Apgi/Pilot.lean `Dim`. AU is its own base dimension: it never converts to a physical unit until a calibration map is registered here.",
-  "base_dimensions": ["time", "energy", "bit", "au", "temperature", "amount"],
+  "schema": "apgi-units/2",
+  "note": "Base dimensions mirror Apgi/Pilot.lean `Dim`. AU is its own base dimension: it never converts to a physical unit until a calibration map is registered here. 'atp' counts molecules; it is deliberately not 'amount' (mol), so κ in ATP/bit can never be confused with mol ATP/bit.",
+  "base_dimensions": ["time", "energy", "bit", "au", "temperature", "amount", "atp"],
   "units": {
     "dimensionless": {},
     "AU":            {"au": 1},
@@ -12,7 +12,9 @@
     "J/K":           {"energy": 1, "temperature": -1},
     "K":             {"temperature": 1},
     "J/bit":         {"energy": 1, "bit": -1},
+    "ATP/bit":       {"atp": 1, "bit": -1},
     "mol_ATP/bit":   {"amount": 1, "bit": -1}
   },
+  "scale_to": {"ms": ["s", "0.001"], "s": ["s", "1"]},
   "calibration_maps": []
 }

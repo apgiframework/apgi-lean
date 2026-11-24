@@ -67,7 +67,7 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
         add("incomplete_parameter", incomplete, "missing value/range, unit, or version")
 
     # Lean type contracts: the registry unit must match the Lean quantity type
-    lean_types = {"Apgi.Kappa": "dimensionless", "Apgi.Threshold": "AU"}
+    lean_types = {"Apgi.Kappa": "ATP/bit", "Apgi.Threshold": "AU"}
     for p in P:
         lt = p.get("lean_type")
         if lt and dims(p.get("unit"), U) != dims(lean_types.get(lt), U):
@@ -108,6 +108,12 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
         if rel > float(L.get("rel_tol", "1e-9")):
             add("derived_mismatch", ["landauer_310K"],
                 f"registry {reg:.4e} J vs k_B·T·ln2 = {truth:.4e} J (rel err {rel:.2%})", "P0")
+    for p in P:
+        base = pmap.get(p.get("reciprocal_of") or "")
+        if base and p.get("value") is not None and base.get("value") is not None:
+            if Fraction(p["value"]) != 1 / Fraction(base["value"]):
+                add("derived_mismatch", [p["id"], base["id"]],
+                    f"{p['id']} = {p['value']} but 1/{base['id']} = {1 / Fraction(base['value'])}", "P0")
 
     # preconditions (plan edit C4)
     def bound(pid: str, side: str):
@@ -126,6 +132,9 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
             lhs_hi, lhs_lo = bound(pre["param"], "hi"), bound(pre["param"], "lo")
             if "param_rhs" in pre:
                 rhs_lo, rhs_hi = bound(pre["param_rhs"], "lo"), bound(pre["param_rhs"], "hi")
+                k = Fraction(pre.get("scale", "1"))
+                rhs_lo = rhs_lo * k if rhs_lo is not None else None
+                rhs_hi = rhs_hi * k if rhs_hi is not None else None
                 names = [pre["param"], pre["param_rhs"]]
             else:
                 rhs_lo = rhs_hi = Fraction(pre["value"])
@@ -146,17 +155,52 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
     if eq:
         dk, dS, dt = (dims(eq["units"][x], U) for x in ("k", "S", "theta"))
         if dS != dt or dk is None or any((dk.get(b, 0) + dS.get(b, 0)) for b in set(dk) | set(dS)):
-            add("dimension_mismatch", ["k_sigmoid"], "k·(S−θ) is not dimensionless", "P0")
+            add("dimension_mismatch", ["gamma_sig"], "γ_sig·(S−θ) is not dimensionless", "P0")
 
-    # pinned sources
-    used = {p["source"] for p in P} | {e["source"] for e in E}
+    # pinned sources (registry, equations, and every evidence quote)
+    used = {p["source"] for p in P} | {e["source"] for e in E} | {
+        ev["source"] for p in P for ev in (p.get("evidence") or [])}
+    for s in sorted(used - set(src_ids)):
+        add("unknown_source", [], f"source {s!r} is cited but not in source-manifest", "P0")
     unpinned = sorted(s for s in used if s in src_ids and not src_ids[s].get("sha256") and src_ids[s]["kind"] != "external")
     if unpinned:
         add("unpinned_source", [], f"no sha256 for {', '.join(unpinned)}")
 
+    # 'extracted' must be backed by a verified extraction report for this exact
+    # value, range, unit and evidence, against the currently pinned sources.
+    found += extraction_check(P, src_ids)
+
     # traceability
     found += traceability(E, C)
     return found
+
+
+def extraction_check(P, src_ids) -> list[dict]:
+    from extract_sources import param_hash  # local import: avoids a cycle at module load
+    path = ROOT / "verification" / "reports" / "extraction.json"
+    report = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"parameters": {}, "source_pins": {}}
+    pins = report.get("source_pins", {})
+    out = []
+    for p in P:
+        if p.get("verification") != "extracted":
+            continue
+        entry = report["parameters"].get(p["id"])
+        why = None
+        if entry is None:
+            why = "no entry in extraction.json"
+        elif entry["status"] != "verified":
+            why = "extraction failed"
+        elif entry["param_hash"] != param_hash(p):
+            why = "registry entry changed since extraction (re-run extract_sources.py --corpus DIR --write)"
+        else:
+            for ev in p.get("evidence") or []:
+                pin = pins.get(ev["source"], {})
+                if not pin.get("found") or pin.get("sha256") != src_ids.get(ev["source"], {}).get("sha256"):
+                    why = f"{ev['source']} pin in extraction.json does not match source-manifest"
+                    break
+        if why:
+            out.append({"check": "extraction_unverified", "params": [p["id"]], "detail": why, "severity": "P1"})
+    return out
 
 
 def lean_decls() -> set[str]:

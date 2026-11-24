@@ -28,6 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Production code under test (E21), pinned to the commit recorded in
+      # specification/known-conflicts.json -> production.commit.
+      - uses: actions/checkout@v7
+        with:
+          repository: apgiframework/apgi-implementation
+          ref: a106d9875bcfe0a4adab4e63fc94e8ed985d238b
+          path: apgi-implementation
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -36,9 +43,11 @@ jobs:
         run: python verification/python/generate_lean.py --check
       - name: Consistency check (fails on unacknowledged or stale conflicts)
         run: python verification/python/check_consistency.py
-      - name: Pytest (twins, golden vectors, seeded conflicts)
+      - name: Pytest (twins, golden vectors, seeded conflicts, production cross-check)
         working-directory: verification/python
-        run: python -m pytest -q --junitxml=../reports/junit.xml
+        env:
+          APGI_IMPL_PATH: ${{ github.workspace }}/apgi-implementation
+        run: python -m pytest -q -rxs --junitxml=../reports/junit.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:

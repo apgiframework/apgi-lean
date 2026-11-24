@@ -10,7 +10,7 @@ import math
 
 import numpy as np
 
-THETA_FLOOR = 0.5  # AU, theta_floor; test_conflicts checks this against the registry
+THETA_FLOOR = 0.0  # AU, theta_floor (Math Spec §4.5 default); test_conflicts checks this against the registry
 K_B = 1.380649e-23  # J/K, exact (SI 2019)
 
 
@@ -73,6 +73,12 @@ def convex_update(x: float, u: float, gain: float) -> float:
 def euler_step(x: float, u: float, dt: float, tau: float) -> float:
     """EQ-EULER-1. Lean: Apgi.euler_step_mem_Icc (requires 0 ≤ dt ≤ τ)."""
     return x + (dt / tau) * (u - x)
+
+
+def decay_step(theta: float, theta0: float, dt: float, tau: float) -> float:
+    """EQ-DECAY-1 (Math Spec Eq. 32): exact step of dθ/dt = −(θ − θ₀)/τ.
+    Lean: Apgi.decay_step_mem_Icc (bounded for every dt ≥ 0)."""
+    return theta0 + (theta - theta0) * math.exp(-(dt / tau))
 
 
 def landauer(T: float, k_B: float = K_B) -> float:

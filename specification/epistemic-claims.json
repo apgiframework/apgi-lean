@@ -4,12 +4,13 @@
   "rule": "A Lean proof establishes a mathematical consequence of a definition. It is never evidence that APGI describes the brain. 'empirically-supported' requires a cited dataset and a pre-registered prediction ID.",
   "claims": [
     {"id": "CL-1", "text": "Raising θ cannot make ignition easier at fixed S.", "status": "proved", "evidence": ["Apgi.ignites_antitone_threshold", "Apgi.ignitionProb_antitone_threshold"], "equations": ["EQ-IGN-1", "EQ-IGN-2"]},
-    {"id": "CL-2", "text": "The clamped update preserves the 0.5 AU floor.", "status": "proved", "evidence": ["Apgi.clampedUpdate_floor"], "equations": ["EQ-THR-1"]},
-    {"id": "CL-3", "text": "[2, 8] AU is not an invariant of the clamped update for unrestricted targets; it is invariant when targets lie in [2, 8] and 0 ≤ g ≤ 1.", "status": "proved", "evidence": ["Apgi.operatingRange_not_invariant", "Apgi.operatingRange_invariant_of_target"], "equations": ["EQ-THR-1"]},
+    {"id": "CL-2", "text": "The clamped update preserves the positivity floor θ_floor (0 AU by default).", "status": "proved", "evidence": ["Apgi.clampedUpdate_floor"], "equations": ["EQ-THR-1"]},
+    {"id": "CL-3", "text": "The θ₀ band [0.25, 0.85] AU is not an invariant of the clamped update for unrestricted targets; it is invariant when targets lie in the band and 0 ≤ g ≤ 1. Consistent with the Notation Appendix: θₜ may leave the band transiently.", "status": "proved", "evidence": ["Apgi.operatingRange_not_invariant", "Apgi.operatingRange_invariant_of_target"], "equations": ["EQ-THR-1"]},
     {"id": "CL-4", "text": "a < 0 is necessary for cusp bistability (and hence hysteresis).", "status": "proved", "evidence": ["Apgi.cusp_unique_equilibrium"], "equations": ["EQ-CUSP-1"]},
-    {"id": "CL-5", "text": "a < 0 and 4a³ + 27θ² < 0 together are sufficient for three equilibria.", "status": "tested", "evidence": ["test_twins.py::test_cusp_discriminant"], "equations": ["EQ-CUSP-1"]},
+    {"id": "CL-5", "text": "a < 0 and 4a³ + 27θ² < 0 together are sufficient for three distinct equilibria.", "status": "proved", "evidence": ["Apgi.cusp_three_equilibria"], "equations": ["EQ-CUSP-1"], "note": "Moved from tested to proved; the Hypothesis twin test_cusp_three_equilibria checks the float64 realisation."},
     {"id": "CL-6", "text": "Forward-Euler relaxation stays in bounds when Δt ≤ τ.", "status": "proved", "evidence": ["Apgi.euler_step_mem_Icc"], "equations": ["EQ-EULER-1"]},
     {"id": "CL-7", "text": "APGI's hysteresis prediction (Innovation 4) holds in human data.", "status": "unresolved", "evidence": [], "equations": ["EQ-CUSP-1"]},
-    {"id": "CL-8", "text": "κ ≈ 1,700 (metabolic overhead relative to Landauer).", "status": "assumed", "evidence": [], "equations": ["EQ-LAND-1"], "note": "No derivation registered; parameters.json kappa.derivation is null."}
+    {"id": "CL-8", "text": "κ (ATP per bit of ignition-event information) has no canonical value; published sensitivity calculations span 3 × 10³ to 10⁹ ATP/bit.", "status": "assumed", "evidence": [], "equations": ["EQ-LAND-1"], "note": "Replaces the draft claim 'κ ≈ 1,700, dimensionless overhead'. Uncalibrated by the corpus's own statement (Notation Appendix p22)."},
+    {"id": "CL-9", "text": "The exact exponential decay (Math Spec Eq. 32) keeps θ inside any interval that contains θ and θ₀, for every step dt ≥ 0, with no step-size condition.", "status": "proved", "evidence": ["Apgi.decayGain_mem_Icc", "Apgi.decay_step_mem_Icc"], "equations": ["EQ-DECAY-1"]}
   ]
 }

@@ -1,13 +1,13 @@
 {
-  "generated": "2026-11-24T04:39:31+00:00",
-  "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4",
-  "spec_lean_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4",
-  "spec_version": "0.1.0",
+  "generated": "2026-11-24T06:15:57+00:00",
+  "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e",
+  "spec_lean_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e",
+  "spec_version": "0.2.0",
   "lean_build": "passed",
   "python_tests": {
-    "passed": 38,
+    "passed": 56,
     "failed": 0,
-    "total": 38
+    "total": 61
   },
   "theorems": [
     {
@@ -17,7 +17,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.convex_update_mem_Icc",
@@ -26,7 +26,7 @@
       "equations": [
         "EQ-UPD-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.cuspV_hasDerivAt",
@@ -35,7 +35,16 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+    },
+    {
+      "name": "Apgi.cusp_three_equilibria",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.cusp_two_equilibria_witness",
@@ -44,7 +53,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.cusp_unique_equilibrium",
@@ -53,7 +62,25 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+    },
+    {
+      "name": "Apgi.decayGain_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DECAY-1"
+      ],
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+    },
+    {
+      "name": "Apgi.decay_step_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DECAY-1"
+      ],
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.euler_step_mem_Icc",
@@ -62,7 +89,7 @@
       "equations": [
         "EQ-EULER-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.ignites_antitone_threshold",
@@ -71,7 +98,7 @@
       "equations": [
         "EQ-IGN-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.ignites_monotone_precision",
@@ -80,7 +107,7 @@
       "equations": [
         "EQ-PREC-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.ignitionProb_antitone_threshold",
@@ -89,7 +116,7 @@
       "equations": [
         "EQ-IGN-2"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.operatingRange_invariant_of_target",
@@ -98,7 +125,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     },
     {
       "name": "Apgi.operatingRange_not_invariant",
@@ -107,7 +134,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
     }
   ],
   "claims": [
@@ -137,7 +164,7 @@
     },
     {
       "id": "CL-2",
-      "text": "The clamped update preserves the 0.5 AU floor.",
+      "text": "The clamped update preserves the positivity floor θ_floor (0 AU by default).",
       "status": "proved",
       "evidence": [
         "Apgi.clampedUpdate_floor"
@@ -155,7 +182,7 @@
     },
     {
       "id": "CL-3",
-      "text": "[2, 8] AU is not an invariant of the clamped update for unrestricted targets; it is invariant when targets lie in [2, 8] and 0 ≤ g ≤ 1.",
+      "text": "The θ₀ band [0.25, 0.85] AU is not an invariant of the clamped update for unrestricted targets; it is invariant when targets lie in the band and 0 ≤ g ≤ 1. Consistent with the Notation Appendix: θₜ may leave the band transiently.",
       "status": "proved",
       "evidence": [
         "Apgi.operatingRange_not_invariant",
@@ -196,21 +223,22 @@
     },
     {
       "id": "CL-5",
-      "text": "a < 0 and 4a³ + 27θ² < 0 together are sufficient for three equilibria.",
-      "status": "tested",
+      "text": "a < 0 and 4a³ + 27θ² < 0 together are sufficient for three distinct equilibria.",
+      "status": "proved",
       "evidence": [
-        "test_twins.py::test_cusp_discriminant"
+        "Apgi.cusp_three_equilibria"
       ],
       "equations": [
         "EQ-CUSP-1"
       ],
+      "note": "Moved from tested to proved; the Hypothesis twin test_cusp_three_equilibria checks the float64 realisation.",
       "evidence_state": [
         {
-          "ref": "test_twins.py::test_cusp_discriminant",
+          "ref": "Apgi.cusp_three_equilibria",
           "state": "passed"
         }
       ],
-      "reported_status": "tested"
+      "reported_status": "proved"
     },
     {
       "id": "CL-6",
@@ -243,42 +271,65 @@
     },
     {
       "id": "CL-8",
-      "text": "κ ≈ 1,700 (metabolic overhead relative to Landauer).",
+      "text": "κ (ATP per bit of ignition-event information) has no canonical value; published sensitivity calculations span 3 × 10³ to 10⁹ ATP/bit.",
       "status": "assumed",
       "evidence": [],
       "equations": [
         "EQ-LAND-1"
       ],
-      "note": "No derivation registered; parameters.json kappa.derivation is null.",
+      "note": "Replaces the draft claim 'κ ≈ 1,700, dimensionless overhead'. Uncalibrated by the corpus's own statement (Notation Appendix p22).",
       "evidence_state": [],
       "reported_status": "assumed"
+    },
+    {
+      "id": "CL-9",
+      "text": "The exact exponential decay (Math Spec Eq. 32) keeps θ inside any interval that contains θ and θ₀, for every step dt ≥ 0, with no step-size condition.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.decayGain_mem_Icc",
+        "Apgi.decay_step_mem_Icc"
+      ],
+      "equations": [
+        "EQ-DECAY-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.decayGain_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.decay_step_mem_Icc",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
     }
   ],
   "pilot_criteria": [
     {
       "criterion": "Every canonical parameter has a source identifier, unit, version, and documented range",
       "met": false,
-      "evidence": "5 incomplete parameter(s); sources unpinned"
+      "evidence": "all parameters complete; no sha256 for SRC-INNOV-GDOC"
     },
     {
       "criterion": "Known discrepancies produce explicit failures",
       "met": true,
-      "evidence": "7 open conflicts tracked; seeded suite passed"
+      "evidence": "1 open conflicts tracked; seeded suite passed"
     },
     {
       "criterion": "Lean theorems compile without sorry or unapproved axioms",
       "met": true,
-      "evidence": "lake build --wfail: passed; 11/11 theorems axiom-audited via #guard_msgs"
+      "evidence": "lake build --wfail: passed; 14/14 theorems axiom-audited via #guard_msgs"
     },
     {
       "criterion": "Mathematical results are linked to exact specification revisions",
       "met": true,
-      "evidence": "Spec.lean hash matches registry 020a8b9b1d3f"
+      "evidence": "Spec.lean hash matches registry e37ebd033e84"
     },
     {
       "criterion": "Python tests pass the APGI numerical tolerances (1e-9)",
       "met": true,
-      "evidence": "5/5 golden-vector tests passed"
+      "evidence": "6/6 golden-vector tests passed"
     },
     {
       "criterion": "Continuous integration produces a reproducible verification report",

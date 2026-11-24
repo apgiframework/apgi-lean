@@ -9,6 +9,9 @@ public import Mathlib.Tactic.LinearCombination
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Tactic.Positivity
 public import Mathlib.Tactic.NormNum
+public import Mathlib.Topology.Order.IntermediateValue
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Tactic
 
 /-!
 # APGI Lean pilot
@@ -46,8 +49,8 @@ theorem ignites_monotone_precision {prec₁ prec₂ ε θ : ℝ}
     Ignites (prec₂ * |ε|) θ :=
   lt_of_lt_of_le hI (mul_le_mul_of_nonneg_right h (abs_nonneg ε))
 
-/-- Probabilistic ignition. `k` is the sigmoid steepness (`k_sigmoid`,
-    unit 1/AU), not the update gain. -/
+/-- Probabilistic ignition propensity. `k` is the sigmoid steepness γ_sig = 1/τ_σ
+    (`gamma_sig`, unit 1/AU), not the update gain. -/
 noncomputable def ignitionProb (k S θ : ℝ) : ℝ :=
   1 / (1 + Real.exp (-k * (S - θ)))
 
@@ -62,14 +65,16 @@ theorem ignitionProb_antitone_threshold {k S θ₁ θ₂ : ℝ}
 
 /-! ## Proof 2 — Threshold semantics: floor versus operating range (EQ-THR-1)
 Two separate types force the specification to say which one is a state
-invariant. See known conflict KC-THETA-ROLE. -/
+invariant. KC-THETA-ROLE is resolved: the floor is the state invariant and
+the θ₀ band is a regime label (Notation Appendix v1.1: θₜ "may leave the band
+transiently after δ_reset"). -/
 
 /-- Every reachable threshold state respects the floor. -/
 structure ThresholdState where
   value : ℝ
   floor : θ_floor ≤ value
 
-/-- The healthy operating regime. -/
+/-- The canonical θ₀ band (a regime label, not a state invariant). -/
 structure OperatingThreshold where
   value : ℝ
   lower : θ_lower ≤ value
@@ -87,14 +92,15 @@ theorem clampedUpdate_floor (θ target gain : ℝ) :
     θ_floor ≤ clampedUpdate θ target gain :=
   le_max_left _ _
 
-/-- The operating range is NOT an invariant of the clamped update once the
-    target may fall below 2 AU. The specification must therefore declare
-    [2, 8] a regime label, or restrict the admissible targets
-    (see `operatingRange_invariant_of_target`). -/
+/-- The band is NOT an invariant of the clamped update once the target may
+    fall below its lower bound: start at the lower bound and move fully to the
+    floor. Stated with the registry constants, so it holds for any band that
+    lies strictly above the floor. This is why the band is a regime label
+    (see `operatingRange_invariant_of_target` for the restricted case). -/
 theorem operatingRange_not_invariant :
     ∃ θ target gain : ℝ, θ_lower ≤ θ ∧ θ ≤ θ_upper ∧ 0 ≤ gain ∧ gain ≤ 1 ∧
       clampedUpdate θ target gain < θ_lower := by
-  refine ⟨2, 0, 1, ?_, ?_, ?_, ?_, ?_⟩ <;>
+  refine ⟨θ_lower, θ_floor, 1, le_rfl, ?_, ?_, ?_, ?_⟩ <;>
     norm_num [clampedUpdate, θ_floor, θ_lower, θ_upper, max_lt_iff]
 
 /-! ## Proof 3 — Cusp potential, canonical sign convention (+θ·x) (EQ-CUSP-1) -/
@@ -112,8 +118,7 @@ theorem cuspV_hasDerivAt (a θ x : ℝ) :
 
 /-- With a non-negative splitting factor the equilibrium is unique.
     So a < 0 is NECESSARY for bistability, and therefore for hysteresis.
-    It is not sufficient: three equilibria also need 4a³ + 27θ² < 0
-    (classical cubic discriminant; tested in Python, not proved here). -/
+    It is not sufficient on its own: see `cusp_three_equilibria`. -/
 theorem cusp_unique_equilibrium {a θ x₁ x₂ : ℝ} (ha : 0 ≤ a)
     (h₁ : x₁ ^ 3 + a * x₁ + θ = 0) (h₂ : x₂ ^ 3 + a * x₂ + θ = 0) :
     x₁ = x₂ := by
@@ -130,6 +135,52 @@ theorem cusp_two_equilibria_witness :
     ∃ a θ x₁ x₂ : ℝ, a < 0 ∧ x₁ ≠ x₂ ∧
       x₁ ^ 3 + a * x₁ + θ = 0 ∧ x₂ ^ 3 + a * x₂ + θ = 0 :=
   ⟨-1, 0, 0, 1, by norm_num, by norm_num, by norm_num, by norm_num⟩
+
+/-- SUFFICIENCY (claim CL-5): a negative splitting factor together with a
+    negative discriminant 4a³ + 27θ² < 0 gives three distinct equilibria.
+    With c = √(−a/3) the critical points are ±c; the discriminant condition is
+    exactly |θ| < 2c³, so dV/dx changes sign on (−M, −c), (−c, c) and (c, M),
+    and the intermediate value theorem supplies one root in each. -/
+theorem cusp_three_equilibria {a θ : ℝ} (ha : a < 0)
+    (hd : 4 * a ^ 3 + 27 * θ ^ 2 < 0) :
+    ∃ x₁ x₂ x₃ : ℝ, x₁ < x₂ ∧ x₂ < x₃ ∧
+      x₁ ^ 3 + a * x₁ + θ = 0 ∧ x₂ ^ 3 + a * x₂ + θ = 0 ∧
+      x₃ ^ 3 + a * x₃ + θ = 0 := by
+  set c := Real.sqrt (-a / 3) with hc
+  have hc2 : c ^ 2 = -a / 3 := Real.sq_sqrt (by linarith)
+  have hcpos : 0 < c := Real.sqrt_pos.2 (by linarith)
+  have ha' : a = -3 * c ^ 2 := by linarith
+  have h1 : 27 * θ ^ 2 < 108 * c ^ 6 := by
+    have h := hd
+    rw [ha'] at h
+    nlinarith [h]
+  have hθ : |θ| < 2 * c ^ 3 :=
+    abs_lt_of_sq_lt_sq (by nlinarith [h1]) (by positivity)
+  obtain ⟨hθl, hθr⟩ := abs_lt.1 hθ
+  set f : ℝ → ℝ := fun x => x ^ 3 + a * x + θ with hf
+  have hcont : Continuous f := by fun_prop
+  have hfm : 0 < f (-c) := by simp only [hf]; rw [ha']; nlinarith
+  have hfp : f c < 0 := by simp only [hf]; rw [ha']; nlinarith
+  set M := 2 * c + |θ| + 1 with hM
+  have habs : 0 ≤ |θ| := abs_nonneg θ
+  have hMc : c < M := by linarith
+  have hMsq : 1 ≤ M ^ 2 - 3 * c ^ 2 := by nlinarith
+  have hMpos : 0 < M := by linarith
+  have hfM : 0 < f M := by
+    simp only [hf]; rw [ha']
+    have : M ≤ M * (M ^ 2 - 3 * c ^ 2) := by nlinarith
+    nlinarith [neg_abs_le θ]
+  have hfnM : f (-M) < 0 := by
+    simp only [hf]; rw [ha']
+    have : M ≤ M * (M ^ 2 - 3 * c ^ 2) := by nlinarith
+    nlinarith [le_abs_self θ]
+  obtain ⟨x₁, ⟨h1l, h1r⟩, hx₁⟩ :=
+    intermediate_value_Ioo (by linarith) hcont.continuousOn ⟨hfnM, hfm⟩
+  obtain ⟨x₂, ⟨h2l, h2r⟩, hx₂⟩ :=
+    intermediate_value_Ioo' (by linarith) hcont.continuousOn ⟨hfp, hfm⟩
+  obtain ⟨x₃, ⟨h3l, h3r⟩, hx₃⟩ :=
+    intermediate_value_Ioo hMc.le hcont.continuousOn ⟨hfp, hfM⟩
+  exact ⟨x₁, x₂, x₃, by linarith, by linarith, hx₁, hx₂, hx₃⟩
 
 /-! ## Proof 4 — Bounded discrete updates (EQ-UPD-1, EQ-EULER-1)
 `gain` replaces the draft's α, which collides with sigmoid steepness. -/
@@ -155,10 +206,42 @@ theorem euler_step_mem_Icc {lo hi x u dt τ : ℝ}
     x + (dt / τ) * (u - x) ∈ Set.Icc lo hi :=
   convex_update_mem_Icc hx hu (div_nonneg hdt0 hτ.le) ((div_le_one hτ).2 hdt)
 
-/-- Restricting targets to [2, 8] AU (with 0 ≤ gain ≤ 1) makes the operating
-    range invariant: the clamp at the floor never binds. This is the exact
-    condition the specification must adopt if [2, 8] is to be a state
-    invariant rather than a regime label. -/
+/-! ### Exact exponential decay (EQ-DECAY-1, Math Spec Eq. 32)
+The corpus integrates threshold relaxation exactly rather than by forward
+Euler, so its boundedness needs no step-size condition. -/
+
+/-- One exact step of dθ/dt = −(θ − θ₀)/τ. -/
+noncomputable def decayStep (θ θ₀ dt τ : ℝ) : ℝ :=
+  θ₀ + (θ - θ₀) * Real.exp (-(dt / τ))
+
+/-- The exact-decay gain 1 − e^{−dt/τ} lies in [0, 1] for every dt ≥ 0. -/
+theorem decayGain_mem_Icc {dt τ : ℝ} (hτ : 0 < τ) (hdt : 0 ≤ dt) :
+    1 - Real.exp (-(dt / τ)) ∈ Set.Icc (0 : ℝ) 1 := by
+  have h0 : 0 ≤ dt / τ := div_nonneg hdt hτ.le
+  have hle : Real.exp (-(dt / τ)) ≤ 1 := Real.exp_le_one_iff.2 (by linarith)
+  have hpos : 0 < Real.exp (-(dt / τ)) := Real.exp_pos _
+  rw [Set.mem_Icc]
+  constructor <;> linarith
+
+/-- Exact decay toward a θ₀ inside an interval keeps θ inside it, for any
+    dt ≥ 0. With the θ₀ band as the interval: between ignition events the
+    band is invariant; only δ_reset and the allostatic term can leave it. -/
+theorem decay_step_mem_Icc {lo hi θ θ₀ dt τ : ℝ}
+    (hθ : θ ∈ Set.Icc lo hi) (h0 : θ₀ ∈ Set.Icc lo hi)
+    (hτ : 0 < τ) (hdt : 0 ≤ dt) :
+    decayStep θ θ₀ dt τ ∈ Set.Icc lo hi := by
+  have hg := decayGain_mem_Icc hτ hdt
+  rw [Set.mem_Icc] at hg
+  have h := convex_update_mem_Icc hθ h0 hg.1 hg.2
+  have e : decayStep θ θ₀ dt τ = θ + (1 - Real.exp (-(dt / τ))) * (θ₀ - θ) := by
+    unfold decayStep; ring
+  rw [e]
+  exact h
+
+/-- Restricting targets to the band (with 0 ≤ gain ≤ 1) makes it invariant:
+    the clamp at the floor never binds. The corpus does not adopt this
+    restriction (the band is a regime label); the theorem records exactly
+    what adopting it would require. -/
 theorem operatingRange_invariant_of_target {θ target gain : ℝ}
     (hθ : θ ∈ Set.Icc θ_lower θ_upper) (ht : target ∈ Set.Icc θ_lower θ_upper)
     (hg0 : 0 ≤ gain) (hg1 : gain ≤ 1) :
@@ -178,6 +261,8 @@ structure Dim where
   energy : ℤ := 0
   bit : ℤ := 0
   au : ℤ := 0
+  /-- Molecule count (ATP). Deliberately not `amount` (mol). -/
+  atp : ℤ := 0
 deriving DecidableEq, Repr
 
 structure Qty (d : Dim) where
@@ -186,17 +271,22 @@ structure Qty (d : Dim) where
 noncomputable instance {d : Dim} : Add (Qty d) := ⟨fun x y => ⟨x.val + y.val⟩⟩
 
 noncomputable def Qty.mul {d₁ d₂ : Dim} (x : Qty d₁) (y : Qty d₂) :
-    Qty ⟨d₁.time + d₂.time, d₁.energy + d₂.energy, d₁.bit + d₂.bit, d₁.au + d₂.au⟩ :=
+    Qty ⟨d₁.time + d₂.time, d₁.energy + d₂.energy, d₁.bit + d₂.bit, d₁.au + d₂.au,
+      d₁.atp + d₂.atp⟩ :=
   ⟨x.val * y.val⟩
 
 def dimensionless : Dim := {}
 def perSecond : Dim := { time := -1 }
 def auDim : Dim := { au := 1 }
 def joulePerBit : Dim := { energy := 1, bit := -1 }
+def atpPerBit : Dim := { atp := 1, bit := -1 }
 
-/-- κ (`kappa` in parameters.json): dimensionless overhead factor.
-    Its value lives in the registry, not here. -/
-abbrev Kappa := Qty dimensionless
+/-- κ (`kappa` in parameters.json): ATP per bit of ignition-event information
+    (Notation Appendix §11). Uncalibrated: no value lives here or in the registry. -/
+abbrev Kappa := Qty atpPerBit
+/-- R_L: the dimensionless erasure-overhead ratio against the Landauer floor.
+    Formerly (and wrongly) also written κ. -/
+abbrev OverheadRatio := Qty dimensionless
 abbrev Threshold := Qty auDim
 
 /-! Positive control: same-dimension addition elaborates. -/
@@ -205,7 +295,13 @@ example (k₁ k₂ : Kappa) : (k₁ + k₂).val = k₁.val + k₂.val := rfl
 /-! Negative cases are tests, not comments: each forbidden mix must FAIL to
 elaborate. `fail_if_success` turns an unexpected success into a build error. -/
 
-/-- κ (dimensionless) + a rate (1/s) is rejected. -/
+/-- κ (ATP/bit) + the dimensionless overhead ratio R_L is rejected: the corpus
+    keeps the two quantities apart (Notation Appendix §11). -/
+example (_k : Kappa) (_r : OverheadRatio) : True := by
+  fail_if_success exact (fun _ => trivial) (_k + _r)
+  trivial
+
+/-- κ (ATP/bit) + a rate (1/s) is rejected. -/
 example (_k : Kappa) (_r : Qty perSecond) : True := by
   fail_if_success exact (fun _ => trivial) (_k + _r)
   trivial
@@ -215,7 +311,7 @@ example (_θ : Threshold) (_e : Qty joulePerBit) : True := by
   fail_if_success exact (fun _ => trivial) (_θ + _e)
   trivial
 
-/-- A threshold (AU) + κ (dimensionless) is rejected: AU has no calibration map. -/
+/-- A threshold (AU) + κ (ATP/bit) is rejected: AU has no calibration map. -/
 example (_θ : Threshold) (_k : Kappa) : True := by
   fail_if_success exact (fun _ => trivial) (_θ + _k)
   trivial
@@ -272,3 +368,15 @@ fails the build. -/
 /-- info: 'Apgi.operatingRange_invariant_of_target' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
 #print axioms Apgi.operatingRange_invariant_of_target
+
+/-- info: 'Apgi.cusp_three_equilibria' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.cusp_three_equilibria
+
+/-- info: 'Apgi.decayGain_mem_Icc' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.decayGain_mem_Icc
+
+/-- info: 'Apgi.decay_step_mem_Icc' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.decay_step_mem_Icc

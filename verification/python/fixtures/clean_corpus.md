@@ -1,8 +1,13 @@
-<!-- Clean control: canonical forms. extract_sources.py must flag NOTHING here. -->
+<!-- Clean control: canonical forms (published corpus, release v1.1). extract_sources.py must flag NOTHING here. -->
 At 310 K the Landauer limit is 2.97 × 10⁻²¹ J per bit.
 The cusp potential is V(x) = x⁴/4 + a·x²/2 + θₜ·x.
-The overhead κ ≈ 1,700 is dimensionless.
-Reservoir stability requires ρ_crit, the spectral radius, below 1.
+κ is the ATP cost per bit of event information; it is uncalibrated and has no canonical value.
+The erasure-overhead ratio R_L compares event energy with the Landauer floor.
+Reservoir stability requires ρ_res, the spectral radius of W_res, to lie in [0.7, 0.95].
+ρ_crit is a regime label, not a spectral radius.
 Pred 0.B is confirmed when BF₁₀ ≥ 100 in favour of ignition.
-The threshold moves toward its target with gain g; the sigmoid steepness is k.
+The threshold moves toward its target with gain g; the allostatic learning rate is η_θ.
+The threshold mean-reversion rate is γ_θ = 1/τ_θ.
+The sigmoid steepness γ_sig = 1/τ_σ carries units of 1/AU.
 When θₜ rises, fewer signals cross into awareness.
+Ignition is sampled from the propensity Bₜ through the hazard r_max·Bₜ.

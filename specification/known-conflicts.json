@@ -1,29 +1,59 @@
 {
-  "schema": "apgi-known-conflicts/1",
-  "rule": "check_consistency.py fails on any conflict it detects that is NOT listed here with status 'open'. Each entry listed here must still be detected (regression), until its status is set to 'resolved' together with the registry fix.",
+  "schema": "apgi-known-conflicts/2",
+  "rule": "check_consistency.py fails on any conflict it detects that is NOT listed here with status 'open'. Each entry listed here must still be detected (regression), until its status is set to 'resolved' together with the registry fix. Resolved entries keep their resolution for traceability.",
   "conflicts": [
-    {"id": "KC-THETA-ROLE", "check": "unresolved_role", "params": ["theta_operating_lower", "theta_operating_upper"], "status": "open", "severity": "P0",
-     "summary": "[2, 8] AU is not declared a state invariant or a regime label. Lean proves it cannot be an invariant for targets below 2 AU."},
-    {"id": "KC-BF10-0B", "check": "candidate_disagreement", "params": ["bf10_threshold_pred_0B"], "status": "open", "severity": "P0",
-     "summary": "Pred 0.B Bayes-factor threshold: registry ≥100 vs OSF v2 ≥10."},
-    {"id": "KC-LAMBDA", "check": "unresolved_role", "params": ["lambda"], "status": "open", "severity": "P0",
-     "summary": "Bare λ vs λ_θ: distinct parameter or drifted spelling."},
-    {"id": "KC-KAPPA-DERIV", "check": "missing_derivation", "params": ["kappa"], "status": "open", "severity": "P1",
-     "summary": "κ ≈ 1,700 has no registered derivation."},
-    {"id": "KC-INCOMPLETE", "check": "incomplete_parameter", "params": ["lambda_theta", "lambda", "tau_theta", "dt", "k_sigmoid", "bf10_threshold_pred_0B"], "status": "open", "severity": "P1",
-     "summary": "Parameters missing a value/range or unit."},
-    {"id": "KC-PRECOND-EULER", "check": "precondition_unverifiable", "params": ["dt", "tau_theta"], "status": "open", "severity": "P1",
-     "summary": "Δt ≤ τ_θ cannot be checked: neither value is registered."},
+    {"id": "KC-THETA-ROLE", "check": "unresolved_role", "params": ["theta_operating_lower", "theta_operating_upper"], "status": "resolved", "severity": "P0",
+     "summary": "Role of the θ operating range.",
+     "resolution": "Regime label. Notation Appendix v1.1 p3: θₜ is 'not clamped to the θ₀ band: it may leave the band transiently after δ_reset'. The band is [0.25, 0.85] AU on the excess-surprise scale; the draft [2, 8] AU does not occur in the published corpus. Lean: operatingRange_not_invariant (still holds for the new bounds) and decay_step_mem_Icc (the band is invariant under pure decay toward θ₀ in the band)."},
+    {"id": "KC-BF10-0B", "check": "candidate_disagreement", "params": ["bf10_threshold_pred_0B"], "status": "resolved", "severity": "P0",
+     "summary": "Pred 0.B Bayes-factor threshold: ≥100 vs ≥10.",
+     "resolution": "BF₁₀ ≥ 100. OSF pre-registration v1.1 Amendment 1 p69 declares it canonical for the summary table and the section; ≥10 occurs nowhere in the published corpus (the 'OSF v2' figure came from a draft)."},
+    {"id": "KC-LAMBDA", "check": "unresolved_role", "params": ["lambda"], "status": "resolved", "severity": "P0",
+     "summary": "Bare λ vs λ_θ.",
+     "resolution": "Distinct. Bare λ is the leaky-integrator rate λ = 1 − exp(−dt/τ_S) ∈ (0, 1) (Math Spec p18). λ_θ does not occur in the published corpus: the threshold rate is γ_θ = 1/τ_θ and the learning rate is η_θ. lambda_theta retired; corpus pattern KC-LAMBDA-THETA guards against reintroduction."},
+    {"id": "KC-KAPPA-DERIV", "check": "missing_derivation", "params": ["kappa"], "status": "resolved", "severity": "P1",
+     "summary": "κ ≈ 1,700 has no registered derivation.",
+     "resolution": "Withdrawn. Notation Appendix p22: κ is in ATP/bit, uncalibrated, 'No canonical value is adopted'; sensitivity span 3 × 10³ to 10⁹ ATP/bit. The 1.7 × 10³ figure in APGI-Advances is a dimensionless overhead ratio under the deprecated meaning of κ (corpus pattern KC-KAPPA-OVERHEAD)."},
+    {"id": "KC-INCOMPLETE", "check": "incomplete_parameter", "params": ["lambda_theta", "lambda", "tau_theta", "dt", "k_sigmoid", "bf10_threshold_pred_0B"], "status": "resolved", "severity": "P1",
+     "summary": "Parameters missing a value/range or unit.",
+     "resolution": "All filled from the pinned corpus (spec 0.2.0)."},
+    {"id": "KC-PRECOND-EULER", "check": "precondition_unverifiable", "params": ["dt", "tau_theta"], "status": "resolved", "severity": "P1",
+     "summary": "Δt ≤ τ_θ cannot be checked: neither value is registered.",
+     "resolution": "dt = 10 ms, τ_θ ∈ [10, 30] s, τ_S ∈ [0.2, 0.5] s: dt ≤ τ/10 holds for both, so euler_step_mem_Icc applies."},
     {"id": "KC-UNPINNED", "check": "unpinned_source", "params": [], "status": "open", "severity": "P1",
-     "summary": "Source documents have no sha256 pin yet."}
+     "summary": "Used source without a sha256 pin.",
+     "note": "Narrowed to SRC-INNOV-GDOC, the only remaining unpublished source; it carries the cusp potential EQ-CUSP-1, which the published corpus does not contain."}
   ],
   "corpus_patterns": [
     {"id": "KC-LANDAUER-287", "pattern": "2[.,]87\\s*[×x]\\s*10\\s*(?:⁻²¹|\\^?-21|−21|-21)", "severity": "P0", "summary": "Landauer at 310 K is 2.967×10⁻²¹ J. 2.871×10⁻²¹ J is the 300 K value: the corpus used room temperature, not body temperature."},
-    {"id": "KC-CUSP-SIGN", "pattern": "[−-]\\s*θ[ₜt_]?\\s*[·*⋅]?\\s*x", "severity": "P0", "summary": "Cusp linear term must be +θₜ·x."},
-    {"id": "KC-KAPPA-UNITS", "pattern": "κ[^\\n]{0,40}mol\\s*ATP\\s*/\\s*bit", "severity": "P0", "summary": "κ is dimensionless, not mol ATP/bit."},
-    {"id": "KC-RHO-KAPPA", "pattern": "κ[^\\n]{0,30}spectral\\s+radius|spectral\\s+radius[^\\n]{0,30}κ", "severity": "P1", "summary": "Spectral radius is ρ_crit, not κ."},
-    {"id": "KC-BF10-10", "pattern": "Pred\\s*0\\.B[^\\n]{0,120}BF[₁1][₀0]\\s*[≥>]=?\\s*10(?!\\d)", "severity": "P0", "summary": "Pred 0.B threshold drift (≥10 vs ≥100)."},
-    {"id": "KC-ALPHA-GAIN", "pattern": "α[^\\n]{0,30}(?:update\\s+gain|learning\\s+rate)", "severity": "P1", "summary": "α collides with sigmoid steepness; use `gain`/k."},
-    {"id": "KC-BT-NOTATION", "pattern": "\\bB[ₜt]\\b(?![a-z])", "severity": "P1", "summary": "Bₜ is UI shorthand only; theory uses θₜ."}
+    {"id": "KC-CUSP-SIGN", "pattern": "[−-]\\s*θ[ₜt_]?\\s*[·*⋅]?\\s*x(?![a-zA-Z_])", "severity": "P0", "summary": "Cusp linear term must be +θₜ·x."},
+    {"id": "KC-KAPPA-UNITS", "pattern": "κ[^\\n]{0,40}mol\\s*ATP\\s*/\\s*bit", "severity": "P0", "summary": "κ is a molecule count per bit (ATP/bit), not mol ATP/bit."},
+    {"id": "KC-KAPPA-OVERHEAD", "pattern": "κ\\s*=\\s*\\d+\\s*÷|overhead\\s*≈\\s*1[.,]7\\s*×\\s*10\\s*³", "severity": "P1", "summary": "κ is ATP/bit and uncalibrated (Notation Appendix §11). A dimensionless overhead relative to the Landauer floor is R_L, not κ."},
+    {"id": "KC-RHO-KAPPA", "pattern": "κ[^\\n]{0,30}(?<!never a )(?<!not a )spectral\\s+radius|spectral\\s+radius[^\\n]{0,30}κ(?!\\s*_)", "severity": "P1", "summary": "Spectral radius is ρ_res, not κ. (Negations such as 'κ is never a spectral radius' are canonical and not flagged.)"},
+    {"id": "KC-RHO-CRIT-SR", "pattern": "ρ\\s*_?\\s*crit\\s*,?\\s*(?:the|is\\s+the)\\s+spectral\\s+radius", "severity": "P1", "summary": "ρ_crit is a criticality regime label (≈ 1); the reservoir spectral radius is ρ_res."},
+    {"id": "KC-BF10-10", "pattern": "Pred\\s*0\\.B[^\\n]{0,120}BF\\s*[₁1]\\s*[₀0]\\s*[≥>]=?\\s*10(?!\\d)", "severity": "P0", "summary": "Pred 0.B threshold drift (≥10 vs canonical ≥100)."},
+    {"id": "KC-ALPHA-GAIN", "pattern": "α(?!\\s*[_⁺⁻₊₋])[^\\n]{0,30}(?:update\\s+gain|learning\\s+rate)", "severity": "P1", "summary": "Bare α collides with sigmoid notation; use gain g, η_θ or γ_θ. (Decorated α⁺/α⁻, α_Π, α_EMA are corpus symbols.)"},
+    {"id": "KC-LAMBDA-THETA", "pattern": "λ\\s*_\\s*θ|λθ", "severity": "P1", "summary": "λ_θ is not a corpus symbol: use γ_θ = 1/τ_θ (mean reversion) or η_θ (allostatic learning rate)."},
+    {"id": "KC-GAMMA-SIG-UNIT", "pattern": "γ\\s*_?\\s*sig(?:(?!\\.\\s)[^;]){0,160}\\(dimensionless\\)", "severity": "P1", "summary": "γ_sig = 1/τ_σ and τ_σ carries the units of S (AU), so γ_sig is 1/AU, not dimensionless."}
+  ],
+  "production": {
+    "repository": "apgiframework/apgi-implementation",
+    "commit": "a106d9875bcfe0a4adab4e63fc94e8ed985d238b",
+    "tests": "verification/python/test_production.py (strict xfail while a divergence is open)",
+    "divergences": [
+      {"id": "PD-DT", "status": "open", "severity": "P0", "where": "config.py CONFIG['dt'] = 0.5",
+       "summary": "Default step 0.5 s violates the spec's own rule dt ≤ min(τ)/10 (τ_S ≥ 0.2 s gives ≤ 0.02 s); reference step dt₀ is 10 ms."},
+      {"id": "PD-TAU-THETA", "status": "open", "severity": "P0", "where": "config.py CONFIG['kappa'] = 0.15 with dt = 0.5",
+       "summary": "Per-step decay exponent 0.15 at dt = 0.5 s implies τ_θ ≈ 3.3 s; the published range is 10–30 s."},
+      {"id": "PD-KAPPA-SYMBOL", "status": "open", "severity": "P1", "where": "config.py 'kappa', core/threshold.py threshold_decay(kappa=…), 'kappa_meta'",
+       "summary": "κ names the decay exponent (γ_θ·dt) and a cost gain; the Notation Appendix reserves bare κ for ATP/bit and deprecates κ_meta."},
+      {"id": "PD-FLOOR", "status": "open", "severity": "P1", "where": "core/allostatic.py update_threshold_euler(theta_min=0.1)",
+       "summary": "Default threshold floor 0.1; the Mathematical Specification default θ_floor is 0."},
+      {"id": "PD-HAZARD", "status": "open", "severity": "P1", "where": "core/ignition.py sample_ignition_state; pipeline.py lines 1045, 1205",
+       "summary": "Per-step Bernoulli(P) ignition sampling, which release v1.1 supersedes with the dt-invariant hazard 1 − exp(−r_max·Bₜ·dt)."}
+    ]
+  },
+  "retired_patterns": [
+    {"id": "KC-BT-NOTATION", "pattern": "\\bB[ₜt]\\b(?![a-z])", "reason": "Built on a draft assumption that Bₜ was UI shorthand for θₜ. In the published corpus Bₜ is the canonical ignition propensity / event indicator (Math Spec §5, Eq. 26), so the pattern produced 91 false positives across 10 documents."}
   ]
 }

@@ -65,19 +65,45 @@ def test_kappa_as_mol_atp_per_bit_is_rejected(tmp_path, monkeypatch):
     assert any(f["check"] == "lean_type_mismatch" and f["params"] == ["kappa"] for f in r["unacknowledged"])
 
 
+def test_kappa_as_dimensionless_overhead_is_rejected(tmp_path, monkeypatch):
+    """The draft registry's κ (dimensionless overhead) contradicts Notation Appendix §11."""
+    r = run_mutated(tmp_path, monkeypatch, lambda P, d: P["kappa"].update(unit="dimensionless"))
+    assert any(f["check"] == "lean_type_mismatch" and f["params"] == ["kappa"] for f in r["unacknowledged"])
+
+
+def test_gamma_theta_must_be_reciprocal_of_tau_theta(tmp_path, monkeypatch):
+    r = run_mutated(tmp_path, monkeypatch, lambda P, d: P["tau_theta"].update(value="25"))
+    assert any(f["check"] == "derived_mismatch" and "gamma_theta" in f["params"] for f in r["unacknowledged"])
+
+
+def test_bf10_disagreement_would_reopen(tmp_path, monkeypatch):
+    """Reintroducing the ≥10 candidate must fail: KC-BF10-0B is resolved, not open."""
+    def bad(P, d):
+        P["bf10_threshold_pred_0B"]["candidates"] = [{"value": "100", "source": "SRC-OSF"},
+                                                     {"value": "10", "source": "SRC-OSF"}]
+    r = run_mutated(tmp_path, monkeypatch, bad)
+    assert any(f["check"] == "candidate_disagreement" for f in r["unacknowledged"])
+
+
+def test_edited_value_invalidates_extraction(tmp_path, monkeypatch):
+    """An 'extracted' value edited without re-running extraction is flagged."""
+    r = run_mutated(tmp_path, monkeypatch, lambda P, d: P["theta_baseline"].update(value="0.4"))
+    assert any(f["check"] == "extraction_unverified" and f["params"] == ["theta_baseline"] for f in r["unacknowledged"])
+
+
 def test_symbol_collision_is_rejected(tmp_path, monkeypatch):
     """ρ/κ collision: giving ρ_crit the symbol κ must fail."""
     r = run_mutated(tmp_path, monkeypatch, lambda P, d: P["rho_crit"].update(symbol="κ"))
     assert any(f["check"] == "symbol_collision" for f in r["unacknowledged"])
 
 
-def test_resolving_theta_role_makes_entry_stale(tmp_path, monkeypatch):
-    """Resolving the θ conflict forces known-conflicts.json to be updated too."""
-    def fix(P, d):
-        P["theta_operating_lower"]["role"] = "regime_label"
-        P["theta_operating_upper"]["role"] = "regime_label"
-    r = run_mutated(tmp_path, monkeypatch, fix)
-    assert "KC-THETA-ROLE" in r["stale_known_conflicts"]
+def test_unresolving_theta_role_is_rejected(tmp_path, monkeypatch):
+    """KC-THETA-ROLE is resolved (regime label); reverting the role must fail loudly."""
+    def revert(P, d):
+        P["theta_operating_lower"]["role"] = "UNRESOLVED"
+        P["theta_operating_upper"]["role"] = "UNRESOLVED"
+    r = run_mutated(tmp_path, monkeypatch, revert)
+    assert any(f["check"] == "unresolved_role" for f in r["unacknowledged"])
 
 
 def test_euler_precondition_violation(tmp_path, monkeypatch):
@@ -104,6 +130,34 @@ def test_seeded_corpus_all_detected():
 
 def test_clean_corpus_no_false_positives():
     assert X.scan([str(HERE / "fixtures" / "clean_corpus.md")]) == []
+
+
+def test_retired_patterns_are_inactive():
+    """KC-BT-NOTATION flagged the canonical Bₜ 91 times in the published corpus."""
+    active = {p["id"] for p in KNOWN["corpus_patterns"]}
+    assert all(r["id"] not in active for r in KNOWN.get("retired_patterns", []))
+
+
+def test_line_wrapped_defect_is_found(tmp_path):
+    """Scanning runs on collapsed page text, so a PDF line break cannot hide a defect."""
+    f = tmp_path / "wrapped.txt"
+    f.write_text("the Landauer limit is 2.87 ×\n10⁻²¹ J per bit\n", encoding="utf-8")
+    assert {h["id"] for h in X.scan([str(f)])} == {"KC-LANDAUER-287"}
+
+
+@pytest.mark.parametrize("text, unit, expected", [
+    ("10⁹", None, "1000000000"), ("3 × 10³", None, "3000"), ("2.97 × 10⁻²¹", None, "2.97e-21"),
+    ("10 ms", "s", "0.01"), ("300 ms", "s", "0.3"), ("0.35", "AU", "0.35"), ("100", None, "100")])
+def test_parse_quantity(text, unit, expected):
+    from fractions import Fraction
+    assert X.parse_quantity(text, unit) == Fraction(expected)
+
+
+def test_every_parameter_cites_known_sources():
+    src = {s["id"] for s in registry.load("source-manifest.json")["sources"]}
+    for p in registry.load("parameters.json")["parameters"]:
+        for ev in p.get("evidence") or []:
+            assert ev["source"] in src, (p["id"], ev["source"])
 
 
 def test_spec_lean_in_sync():

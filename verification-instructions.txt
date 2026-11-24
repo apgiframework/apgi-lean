@@ -165,7 +165,7 @@ Negative cases are tests, not comments. Each forbidden unit mix must be shown to
 6. Implementation sequence and acceptance criteria
 Implementation checklist
 
-10 of 17 complete, 5 partial, 2 not started. Status as of 2026-11-23; the generated verification report is authoritative.
+16 of 17 complete, 1 partial, 0 not started. Status as of 2026-11-24 (branch corpus-v1-registry, spec 0.2.0); the generated verification report is authoritative.
 
 
 Phase 0 — Environment
@@ -175,20 +175,20 @@ Phase 0 — Environment
 P0
 
 Phase 1 — Specification
-[~] Identify the authoritative parameter registry and source revisions
-    Registry built. Source documents still lack sha256 pins (KC-UNPINNED).
+[x] Identify the authoritative parameter registry and source revisions
+    Seven published sources (Zenodo release v1.1, 2026-10-22) pinned by sha256. Only the unpublished Innovations draft, which alone carries the cusp potential, stays unpinned (KC-UNPINNED, narrowed).
 
 
 P0
 
-[~] Resolve θₜ baseline, operating range, and floor semantics
-    Floor (0.5 AU) and baseline (2.0 AU) registered. Role of [2, 8] awaits the author (KC-THETA-ROLE); Lean has proved both options' consequences.
+[x] Resolve θₜ baseline, operating range, and floor semantics
+    Resolved from the corpus: floor 0 AU (state invariant), θ₀ = 0.35 AU, band [0.25, 0.85] AU as a regime label (Notation Appendix p3: θₜ may leave the band after δ_reset). The draft values 0.5 / 2.0 / [2, 8] occur nowhere in the published corpus.
 
 
 P0
 
-[~] Resolve κ, λ, λ_θ, β_som, and BF₁₀ discrepancies
-    κ unit resolved (dimensionless), derivation missing. β_som registered. λ vs λ_θ and Pred 0.B BF₁₀ (≥100 vs ≥10) await the author.
+[x] Resolve κ, λ, λ_θ, β_som, and BF₁₀ discrepancies
+    κ: ATP/bit, uncalibrated, no canonical value (span 3 × 10³ to 10⁹). λ: leaky-integrator rate, distinct; λ_θ retired (γ_θ = 1/τ_θ, η_θ). β_som split into β_SM and β_somatic. Pred 0.B: BF₁₀ ≥ 100 (OSF p69, declared canonical).
 
 
 P0
@@ -200,8 +200,8 @@ P0
 
 
 Phase 2 — Automated checks
-[~] Implement independent extraction of document values
-    Defect-pattern extraction works on .md/.txt/.docx. Numeric value extraction per parameter is not yet built.
+[x] Implement independent extraction of document values
+    PDF support; page-level scanning survives line wraps; per-parameter evidence verification against the sha256-pinned files (20 of 20 parameters verified, verification/reports/extraction.json).
 
 
 P0
@@ -263,20 +263,22 @@ P1
 
 P1
 
-[~] Add continuous integration and traceable reports
-    Workflow and report generator written; first CI run pending.
+[x] Add continuous integration and traceable reports
+    CI run #2 (9f03e1d) green on all three jobs. CI now also checks the production package at a pinned commit (test_production.py).
 
 
 P1
 
 
 Phase 5 — Decision
-[ ] Measure defects detected and maintenance effort
+[x] Measure defects detected and maintenance effort
+    See the defect log below.
 
 
 P2
 
-[ ] Decide whether to extend formalization to L0–L4 components
+[~] Decide whether to extend formalization to L0–L4 components
+    Data recorded below; the decision is the author's.
     Extend Lean beyond the pilot only if it finds at least one defect that the Python tests missed. This threshold is recorded before the pilot ends.
 
 
@@ -319,8 +321,33 @@ The first milestone should be the automatic detection of the θₜ and notation 
 
 Do not expand to full L0–L4 verification until the pilot demonstrates that formalization catches defects ordinary tests would miss.
 
-Final assessment: design 85/100; implementation 60/100 (5 of 7 pilot criteria met locally). Re-rate after the first green CI run and resolution of the P0 author decisions. This is a rating of engineering suitability, not of APGI's scientific validity.
+Final assessment (2026-11-24): design 88/100; implementation 85/100. All P0 specification conflicts are resolved from the pinned corpus; 6 of 7 pilot criteria are met locally, the seventh (criterion 1) waits only on pinning the unpublished Innovations draft or moving the cusp potential into the published corpus. This is a rating of engineering suitability, not of APGI's scientific validity.
 
 The strongest result would be a system in which every major APGI claim can be traced through:
 
 Source → Canonical definition → Mathematical proof or test → Python implementation → Empirical evidence → Verification status.
+
+9. Phase 5 defect log (2026-11-24)
+Pre-registered rule: extend Lean beyond the pilot only if it found at least one defect the Python tests missed. The rule is a necessary condition, not a sufficient one.
+
+Found by Lean, before any Python test existed
+- L1. [2, 8] AU is not an invariant of the clamped update (operatingRange_not_invariant). The published Notation Appendix agrees: the band is a regime label.
+
+Found by corpus extraction (extract_sources.py --corpus), missed by Lean and by the Python tests, because both checked the registry against itself
+- E1. θ scale: registry floor 0.5 / θ₀ 2.0 / band [2, 8] vs corpus 0 / 0.35 / [0.25, 0.85] AU.
+- E2. κ: registry "≈ 1,700, dimensionless overhead" vs corpus "ATP/bit, uncalibrated, no canonical value".
+- E3. ρ_crit conflated with the reservoir radius ρ_res.
+- E4. β_som ambiguous; the corpus defines β_SM [0.1, 1.2] and β_somatic [0.5, 2.5] and forbids merging them.
+- E5. λ_θ does not occur in the corpus (γ_θ = 1/τ_θ and η_θ do).
+- E6. Pred 0.B "≥ 10" does not occur in the corpus (≥ 100, declared canonical).
+- E7. Corpus pattern KC-BT-NOTATION was itself wrong: 91 false positives on the canonical Bₜ. Retired.
+- E8. Corpus defect: Math Spec p4 calls γ_sig dimensionless; p3 gives τ_σ the units of S, so γ_sig is 1/AU.
+- E9. Corpus defect: APGI-Advances p13 uses κ as a dimensionless overhead (100 ÷ 0.06), the deprecated meaning.
+
+Found by the production cross-check (test_production.py, apgi-implementation a106d98)
+- PD-DT dt = 0.5 s breaks the spec's dt ≤ min(τ)/10; PD-TAU-THETA implied τ_θ ≈ 3.3 s vs 10–30 s; PD-KAPPA-SYMBOL κ names a decay exponent; PD-FLOOR floor 0.1 vs 0; PD-HAZARD per-step Bernoulli instead of the v1.1 hazard.
+
+Reading of the evidence
+- The rule's condition is met by one defect (L1), and that defect concerned meaning, not arithmetic.
+- Fourteen of fifteen defects came from comparing the registry with pinned sources and with production code. That is where further effort pays.
+- Lean's continuing value is the theorems that pin down what the corpus asserts: cusp sufficiency (now proved), and exact decay needing no step-size bound (decay_step_mem_Icc). A targeted next candidate would be dt-invariance of the hazard sampler, which bears directly on PD-HAZARD. Full L0–L4 formalization is not supported by this yield.
