@@ -20,9 +20,10 @@
     {"id": "KC-PRECOND-EULER", "check": "precondition_unverifiable", "params": ["dt", "tau_theta"], "status": "resolved", "severity": "P1",
      "summary": "Δt ≤ τ_θ cannot be checked: neither value is registered.",
      "resolution": "dt = 10 ms, τ_θ ∈ [10, 30] s, τ_S ∈ [0.2, 0.5] s: dt ≤ τ/10 holds for both, so euler_step_mem_Icc applies."},
-    {"id": "KC-UNPINNED", "check": "unpinned_source", "params": [], "status": "open", "severity": "P1",
+    {"id": "KC-UNPINNED", "check": "unpinned_source", "params": [], "status": "resolved", "severity": "P1",
      "summary": "Used source without a sha256 pin.",
-     "note": "Narrowed to SRC-INNOV-GDOC, the only remaining unpublished source; it carries the cusp potential EQ-CUSP-1, which the published corpus does not contain."}
+     "resolution": "SRC-INNOV-GDOC retired (task 7, option B). EQ-CUSP-1 now rests on §7.7 of the v1.2 Mathematical Specification draft, pinned by sha256 as SRC-MATHSPEC-V12D until the v1.2 release replaces it with the published PDF."},
+    {"id": "KC-PRECOND-TAU-PI", "check": "precondition_unverifiable", "params": ["dt", "dt_reservoir", "tau_Pi"], "status": "open", "severity": "P1", "summary": "The step rule dt ≤ τ_Π/10 cannot be checked: the corpus states only τ_Π > 0.", "note": "Math Spec p6 and Notation Appendix p16 define τ_Π without a value or range, but both state dt ≤ min(τ_S, τ_θ, τ_Π)/10. Resolve in the v1.2 release by stating a τ_Π range (or a lower bound), then re-run extraction."}
   ],
   "corpus_patterns": [
     {"id": "KC-LANDAUER-287", "pattern": "2[.,]87\\s*[×x]\\s*10\\s*(?:⁻²¹|\\^?-21|−21|-21)", "severity": "P0", "summary": "Landauer at 310 K is 2.967×10⁻²¹ J. 2.871×10⁻²¹ J is the 300 K value: the corpus used room temperature, not body temperature."},
@@ -34,23 +35,37 @@
     {"id": "KC-BF10-10", "pattern": "Pred\\s*0\\.B[^\\n]{0,120}BF\\s*[₁1]\\s*[₀0]\\s*[≥>]=?\\s*10(?!\\d)", "severity": "P0", "summary": "Pred 0.B threshold drift (≥10 vs canonical ≥100)."},
     {"id": "KC-ALPHA-GAIN", "pattern": "α(?!\\s*[_⁺⁻₊₋])[^\\n]{0,30}(?:update\\s+gain|learning\\s+rate)", "severity": "P1", "summary": "Bare α collides with sigmoid notation; use gain g, η_θ or γ_θ. (Decorated α⁺/α⁻, α_Π, α_EMA are corpus symbols.)"},
     {"id": "KC-LAMBDA-THETA", "pattern": "λ\\s*_\\s*θ|λθ", "severity": "P1", "summary": "λ_θ is not a corpus symbol: use γ_θ = 1/τ_θ (mean reversion) or η_θ (allostatic learning rate)."},
+    {"id": "KC-CTHETA-UNIT", "pattern": "c\\s*_?\\s*θ\\**\\s*\\|?\\s*Threshold-update cost coefficient[\\s|]*n/a", "severity": "P1", "summary": "c_θ is in AU (Math Spec p8, Notation Appendix p13); the Notation Appendix parameter table (Table 20, p37) lists it as n/a."},
     {"id": "KC-GAMMA-SIG-UNIT", "pattern": "γ\\s*_?\\s*sig(?:(?!\\.\\s)[^;]){0,160}\\(dimensionless\\)", "severity": "P1", "summary": "γ_sig = 1/τ_σ and τ_σ carries the units of S (AU), so γ_sig is 1/AU, not dimensionless."}
   ],
   "production": {
     "repository": "apgiframework/apgi-implementation",
-    "commit": "a106d9875bcfe0a4adab4e63fc94e8ed985d238b",
+    "commit": "770316932d5981ecd62f8c7fadbef7b0f6a27f55",
+    "branch": "fix/spec-alignment",
     "tests": "verification/python/test_production.py (strict xfail while a divergence is open)",
     "divergences": [
-      {"id": "PD-DT", "status": "open", "severity": "P0", "where": "config.py CONFIG['dt'] = 0.5",
-       "summary": "Default step 0.5 s violates the spec's own rule dt ≤ min(τ)/10 (τ_S ≥ 0.2 s gives ≤ 0.02 s); reference step dt₀ is 10 ms."},
-      {"id": "PD-TAU-THETA", "status": "open", "severity": "P0", "where": "config.py CONFIG['kappa'] = 0.15 with dt = 0.5",
-       "summary": "Per-step decay exponent 0.15 at dt = 0.5 s implies τ_θ ≈ 3.3 s; the published range is 10–30 s."},
-      {"id": "PD-KAPPA-SYMBOL", "status": "open", "severity": "P1", "where": "config.py 'kappa', core/threshold.py threshold_decay(kappa=…), 'kappa_meta'",
-       "summary": "κ names the decay exponent (γ_θ·dt) and a cost gain; the Notation Appendix reserves bare κ for ATP/bit and deprecates κ_meta."},
-      {"id": "PD-FLOOR", "status": "open", "severity": "P1", "where": "core/allostatic.py update_threshold_euler(theta_min=0.1)",
-       "summary": "Default threshold floor 0.1; the Mathematical Specification default θ_floor is 0."},
-      {"id": "PD-HAZARD", "status": "open", "severity": "P1", "where": "core/ignition.py sample_ignition_state; pipeline.py lines 1045, 1205",
-       "summary": "Per-step Bernoulli(P) ignition sampling, which release v1.1 supersedes with the dt-invariant hazard 1 − exp(−r_max·Bₜ·dt)."}
+      {"id": "PD-DT", "status": "resolved", "severity": "P0", "where": "config.py CONFIG['dt'] = 0.5",
+       "summary": "Default step 0.5 s violates the spec's own rule dt ≤ min(τ)/10 (τ_S ≥ 0.2 s gives ≤ 0.02 s); reference step dt₀ is 10 ms.",
+       "resolution": "config.py dt = 0.01 s (dt₀); configs/{dev,prod,staging}.toml likewise. dt ≤ min(τ_S, τ_θ, τ_Π)/10 now holds (0.01 ≤ 0.03)."},
+      {"id": "PD-TAU-THETA", "status": "resolved", "severity": "P0", "where": "config.py CONFIG['kappa'] = 0.15 with dt = 0.5",
+       "summary": "Per-step decay exponent 0.15 at dt = 0.5 s implies τ_θ ≈ 3.3 s; the published range is 10–30 s.",
+       "resolution": "config.py stores tau_theta = 20 s; the per-step exponent is computed as dt/τ_θ (config.decay_exponent), never stored. λ is rescaled through lam_from_tau_s and η_θ per step to 0.2 s⁻¹ × dt; the continuous threshold ODE now receives the rate η_θ/dt and τ_θ = 20 s (it fell back to 1000 s)."},
+      {"id": "PD-KAPPA-SYMBOL", "status": "resolved", "severity": "P1", "where": "config.py 'kappa', core/threshold.py threshold_decay(kappa=…), 'kappa_meta'",
+       "summary": "κ names the decay exponent (γ_θ·dt) and a cost gain; the Notation Appendix reserves bare κ for ATP/bit and deprecates κ_meta.",
+       "resolution": "config 'kappa' removed (tau_theta instead); threshold_decay(decay_exponent=…); 'kappa_meta'/'kappa_units' renamed r_l/r_l_units (R_L, Notation Appendix §11) in config, schema and core.thermodynamics/core.threshold; allostatic_threshold_ode(kappa_meta=…) renamed c_theta. Old names stay as aliases emitting APGIDeprecationWarning for one release (core/deprecation.py). Remaining bare-κ uses are tracked as PD-KAPPA-RESIDUAL."},
+      {"id": "PD-FLOOR", "status": "resolved", "severity": "P1", "where": "core/allostatic.py update_threshold_euler(theta_min=0.1)",
+       "summary": "Default threshold floor 0.1; the Mathematical Specification default θ_floor is 0.",
+       "resolution": "core/allostatic.py update_threshold_euler(theta_min=0.0)."},
+      {"id": "PD-HAZARD", "status": "resolved", "severity": "P1", "where": "core/ignition.py sample_ignition_state; pipeline.py lines 1045, 1205",
+       "summary": "Per-step Bernoulli(P) ignition sampling, which release v1.1 supersedes with the dt-invariant hazard 1 − exp(−r_max·Bₜ·dt).",
+       "resolution": "core/ignition.py hazard_probability(B, dt, r_max) and sample_ignition_state(p, rng, dt=, r_max=); pipeline.py samples through the hazard at both call sites; CONFIG r_max = 100 s⁻¹ (= 1/dt₀, a placeholder until fitted). The per-step Bernoulli path remains only as a deprecated fallback."},
+      {"id": "PD-TAU-S", "status": "resolved", "severity": "P1", "where": "config.py CONFIG['tau_s'] = 5.0; configs/*.toml",
+       "summary": "Signal timescale τ_S = 5 s lay outside the published 200–500 ms (Notation Appendix p2, Dynamical Formulation p15). Found while rescaling for PD-DT.",
+       "resolution": "tau_s = 0.3 s (worked value) in config.py and the three deployment profiles; lam = 1 − exp(−dt/τ_S) recomputed."},
+      {"id": "PD-CLIP", "status": "open", "severity": "P2", "where": "config.py CONFIG['theta_clip_min'] = 0.1; pipeline.py θ clip",
+       "summary": "The pipeline clips θ to [0.1, 20] AU, citing 'MathSpec §15'; Math Spec v1.1 states no such clip, and its floor default is θ_floor = 0 (§4.5). Decide whether 0.1 AU is a study-stated floor (then document it) or set it to 0."},
+      {"id": "PD-KAPPA-RESIDUAL", "status": "open", "severity": "P2", "where": "core/dynamics.py, core/preprocessing.py update_prediction(kappa=…) (learning rate); engine/somatic.py kappa (relaxation rate); engine/latent_state.py, estimation/*.py KAPPA (per-step decay); analysis/stability.py compute_jacobian_discrete(kappa=…); energy/bold_calibration.py *kappa_meta* names",
+       "summary": "Bare κ and κ_meta still name non-ATP/bit quantities outside the PD-KAPPA-SYMBOL scope. energy/thermodynamics.py's kappa (ATP/bit) is the correct use and stays."}
     ]
   },
   "retired_patterns": [

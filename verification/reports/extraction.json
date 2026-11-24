@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T06:07:03+00:00",
+  "generated": "2026-11-24T19:52:36+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -36,6 +36,11 @@
       "sha256": "3c38b1184aa3638e00f528d05a120678346b1fb78d26edd266255f11623a9d08",
       "found": true,
       "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf"
+    },
+    "SRC-MATHSPEC-V12D": {
+      "sha256": "a151d52d97f78628573aa30539835d92faff94d5f0da6aee3d5d71285544e0ca",
+      "found": true,
+      "file": "APGI-Mathematical-Specifications.md"
     }
   },
   "parameters": {
@@ -446,7 +451,7 @@
     },
     "dt": {
       "status": "verified",
-      "param_hash": "3942a9324b709fe70ea9eee34b9d93ae2bc727148486abaffdf30779a228fbbd",
+      "param_hash": "abaeb833c87d3086788e6ff53a58f8a7dbecf1725bab74aeb366a80574882b94",
       "evidence": [
         {
           "source": "SRC-MATHSPEC",
@@ -466,6 +471,13 @@
           "source": "SRC-MATHSPEC",
           "page": 43,
           "quote": "dt ≤ min(τ_S, τ_θ, τ_Π, τ_res)/10",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 16,
+          "quote": "dt ≤ min(τ_S, τ_θ, τ_Π)/10; ≤ min(τ_S, τ_θ, τ_Π, τ_res)/10 when the reservoir is active",
           "status": "found",
           "values": []
         }
@@ -584,6 +596,572 @@
               "field": "value",
               "document": "2.97 × 10⁻²¹",
               "registry": "2.97e-21",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "r_max": {
+      "status": "verified",
+      "param_hash": "009e5c89a25002724be5df9035d55559443e0fd1e67a2fd6c615fa1ccca3b275",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 22,
+          "quote": "with r_max the maximal event rate in s⁻¹",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 13,
+          "quote": "r_max Maximal ignition rate in the dt-invariant per-step hazard (§2) s⁻¹, fitted",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "delta_reset": {
+      "status": "verified",
+      "param_hash": "b32770a080d25f01f62cbbfa57f26001eb7719af071b4c8d4530bac0b4070002",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 3,
+          "quote": "δ_reset Post-ignition threshold increment ≥ 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "rho_retain": {
+      "status": "verified",
+      "param_hash": "3e4839336989fbe4ea9bee7df240568bcc883c3e80b5588bbd613931c6f19d98",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 5,
+          "quote": "ρ_retain Post-ignition signal retention factor S ← ρ_retain·S [0, 1]; canonical [0.1, 0.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 37,
+          "quote": "ρ_retain Post-ignition retention n/a [0.1, 0.5]",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "ne_subdominance_bound": {
+      "status": "verified",
+      "param_hash": "c3c9bc77345332d7853ca76e53b8b3d558480ca4fabd665b1c1be50de249b6a2",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 14,
+          "quote": "Implementations must enforce the hard clamp |γ_NE|·g_NE ≤ 0.5 at every time step",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 9,
+          "quote": "If |γ_NE|·g_NE(t) > 0.5, rescale g_NE(t) ← 0.5/|γ_NE| before θ_eff,ₜ is computed, which keeps 1 + γ_NE·g_NE ∈ [0.5, 1.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "tau_Pi": {
+      "status": "verified",
+      "param_hash": "09ac9cec999c12812e2a4ae7487e941dfe4687e7d8fba77609d4f5bb050d75fe",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 6,
+          "quote": "τ_Π Precision decay timescale > 0 (s)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 16,
+          "quote": "τ_Π Precision decay timescale in the Π ODE s",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "tau_res": {
+      "status": "verified",
+      "param_hash": "46fe6bbb1835aa4bf5db4e9522f13fd85f1dd4e486d2a002da0c86623c7c1e76",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 15,
+          "quote": "τ_res = 1/α_res. Time-varying τ_res(t) implements liquid time-constant dynamics",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 15,
+          "quote": "Hasani et al., 2022) 10 ms – 2 s",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "10",
+              "registry": "0.01",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "2 s",
+              "registry": "2",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 26,
+          "quote": "with the reservoir active τ_res down to 10 ms this means dt ≤ 1 ms",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "10 ms",
+              "registry": "0.01",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "dt_reservoir": {
+      "status": "verified",
+      "param_hash": "f0cf3b9147e357035e1c1983d9c8fff9f9e3ec532b8c8b97935e8c81b7958967",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 26,
+          "quote": "with the reservoir active τ_res down to 10 ms this means dt ≤ 1 ms",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "1 ms",
+              "registry": "0.001",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "alpha_Pi": {
+      "status": "verified",
+      "param_hash": "7494c2e24c4989a41010642834f47d9342b197d094d1b03f3e9eea3ac9f5f7a0",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 6,
+          "quote": "α_Π Precision drive coefficient from |ε| ≥ 0 (s⁻¹)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "C_down": {
+      "status": "verified",
+      "param_hash": "a7765216fc7d95a7d1bb15106f5ff40fa44ee7c90d7b8c975ef7458467dc7afe",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 6,
+          "quote": "C_down, C_up Cross-level coupling strengths (precision ODE) ≥ 0 (s⁻¹)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 32,
+          "quote": "C_down/C_up are precision rates in s⁻¹",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "C_up": {
+      "status": "verified",
+      "param_hash": "95296bd8a1c64da69a2b9f4caafff352b3b85eda02616fccb7ce3a3c496f1de0",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 6,
+          "quote": "C_down, C_up Cross-level coupling strengths (precision ODE) ≥ 0 (s⁻¹)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 32,
+          "quote": "C_down/C_up are precision rates in s⁻¹",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "alpha_plus": {
+      "status": "verified",
+      "param_hash": "acb2c4ec73849b948b2bfd096007e88e2a2337ad007ed6fa4fc3a7e34b911344",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "α⁺, α⁻ Positive- / negative-valence amplitude gains for Ψ [0.5, 2.0]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "2.0",
+              "registry": "2.0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 17,
+          "quote": "α⁺, α⁻ ∈ [0.5, 2.0] valence-specific amplitude gain",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "2.0",
+              "registry": "2.0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "alpha_minus": {
+      "status": "verified",
+      "param_hash": "c548a9b0929192a1b51ebf9d0ba135e47f4ab730f64bf404101ec48efd9c3a93",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "α⁺, α⁻ Positive- / negative-valence amplitude gains for Ψ [0.5, 2.0]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "2.0",
+              "registry": "2.0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "gamma_plus": {
+      "status": "verified",
+      "param_hash": "aa983ce3a7a3c657bd9ebd3de5313a010df566013897287e800e2a19d444a072",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "γ⁺, γ⁻ Positive- / negative-valence saturation steepness [1.0, 5.0]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "1.0",
+              "registry": "1.0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "5.0",
+              "registry": "5.0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 18,
+          "quote": "γ⁺, γ⁻ ∈ [1.0, 5.0] saturation steepness",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "1.0",
+              "registry": "1.0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "5.0",
+              "registry": "5.0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "gamma_minus": {
+      "status": "verified",
+      "param_hash": "927d391048e5d6f731899b4f80bc4e5a78a27476a5e53e647d87a3cfe7de323d",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "γ⁺, γ⁻ Positive- / negative-valence saturation steepness [1.0, 5.0]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "1.0",
+              "registry": "1.0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "5.0",
+              "registry": "5.0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "beta_DA": {
+      "status": "verified",
+      "param_hash": "53463714c6bc14c2446cbdad5c368380ed92688ec60f73213ffb8efb1108f7ec",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 3,
+          "quote": "β_DA(t) Dopaminergic additive bias on interoceptive error ℝ",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 9,
+          "quote": "Dopaminergic additive bias on the interoceptive error. Additive, never a precision multiplier",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "c_theta": {
+      "status": "verified",
+      "param_hash": "0ca59a50f83d5101cd2951a09eadf152f0fbbeb9c12b6b3db054cfbf36effc88",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 8,
+          "quote": "c_θ Threshold-update metabolic-cost coefficient, estimated as a single composite",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 8,
+          "quote": "Distinct from λ_E and R_L AU, [0.001, 0.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.001",
+              "registry": "0.001",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 13,
+          "quote": "c_θ Threshold-update metabolic-cost coefficient, in AU",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "v_1": {
+      "status": "verified",
+      "param_hash": "50213ec309a815e0cc647e0d841a9bb663a0e3a4ee415c6c6109b0053035b2ba",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 5,
+          "quote": "v₁, v₂ Value coefficients for extero / intero errors ≥ 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 13,
+          "quote": "V(t) = v₁·|zᵉ| + v₂·|zⁱ_eff|",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "v_2": {
+      "status": "verified",
+      "param_hash": "361b9692fb63c0e97bfc33252c2b8affb281157e5c6f1e3a3ffd2353c6bf8edb",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 5,
+          "quote": "v₁, v₂ Value coefficients for extero / intero errors ≥ 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-NOTATION",
+          "page": 13,
+          "quote": "V(t) = v₁·|zᵉ| + v₂·|zⁱ_eff|",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "M_hat": {
+      "status": "verified",
+      "param_hash": "ab5432cb14fa58bf2cdf4dfac4c5457483789be96ec0b07a279b2e9b15e2be5c",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "Somatic-marker value for context c and action a; its pre-session estimate",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 9,
+          "quote": "Π_i^eff = g_NE·Π_i·exp(β_SM·M̂(c,a)) [−2, 2]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "−2",
+              "registry": "-2",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "2",
+              "registry": "2",
               "match": true
             }
           ]

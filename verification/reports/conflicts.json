@@ -1,12 +1,25 @@
 {
-  "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e",
+  "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053",
   "acknowledged": [
     {
-      "check": "unpinned_source",
-      "params": [],
-      "detail": "no sha256 for SRC-INNOV-GDOC",
+      "check": "precondition_unverifiable",
+      "params": [
+        "dt",
+        "tau_Pi"
+      ],
+      "detail": "EQ-EULER-1: accuracy rule, Notation Appendix p16 (dt ≤ min(τ_S, τ_θ, τ_Π)/10) needs dt ≤ tau_Pi",
       "severity": "P1",
-      "known": "KC-UNPINNED"
+      "known": "KC-PRECOND-TAU-PI"
+    },
+    {
+      "check": "precondition_unverifiable",
+      "params": [
+        "dt_reservoir",
+        "tau_Pi"
+      ],
+      "detail": "EQ-EULER-1: accuracy rule with the reservoir active, Math Spec p26 needs dt_reservoir ≤ tau_Pi",
+      "severity": "P1",
+      "known": "KC-PRECOND-TAU-PI"
     }
   ],
   "unacknowledged": [],

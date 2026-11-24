@@ -106,8 +106,8 @@ def test_cusp_three_equilibria(a, theta):
 
 @given(st.floats(-10, -0.01), st.floats(-10, 10))
 def test_cusp_discriminant(a, theta):
-    """Both directions of the discriminant rule (the converse is classical and
-    not in Lean): with a < 0, three equilibria iff 4a³ + 27θ² < 0."""
+    """Both directions of the discriminant rule (Lean: Apgi.cusp_three_equilibria_iff):
+    with a < 0, three equilibria iff 4a³ + 27θ² < 0."""
     d = R.cusp_discriminant(a, theta)
     assume(abs(d) > 1e-3 * max(1.0, abs(a) ** 3))
     assert len(R.cusp_equilibria(a, theta)) == (3 if d < 0 else 1)
@@ -149,3 +149,168 @@ def test_decay_needs_no_step_bound():
     v = R.decay_step(0.0, 1.0, dt=3.0, tau=1.0)
     assert 0.0 <= v <= 1.0
     assert R.euler_step(0.0, 1.0, dt=3.0, tau=1.0) > 1.0
+
+
+@given(st.floats(-3, 3), st.floats(0.05, 3), st.floats(0.05, 3))
+def test_cusp_three_equilibria_converse(x1, d1, d2):
+    """Lean: Apgi.cusp_three_equilibria_converse. Build x³ + a x + θ from three
+    distinct roots summing to zero; its discriminant must be negative."""
+    x2 = x1 + d1
+    shift = (x1 + x2 + (x2 + d2)) / 3
+    r = [x1 - shift, x2 - shift, x2 + d2 - shift]
+    a = r[0] * r[1] + r[0] * r[2] + r[1] * r[2]
+    theta = -r[0] * r[1] * r[2]
+    gap = min(d1, d2)
+    assert R.cusp_discriminant(a, theta) < 0
+    assert R.cusp_discriminant(a, theta) == pytest.approx(-((r[0] - r[1]) * (r[0] - r[2]) * (r[1] - r[2])) ** 2, rel=1e-9, abs=1e-9 * gap)
+
+
+# ------------------------------------------------- specification 0.3.0 ----
+pos = st.floats(1e-3, 50, allow_nan=False)
+
+
+@given(pos, pos)
+def test_leak_gain_in_open_unit_interval(dt, tau):
+    """Lean: Apgi.leakGain_mem_Ioo (dt > 0, τ_S > 0)."""
+    assume(dt / tau < 30)  # beyond this, 1 − e^{−x} rounds to 1.0 in float64
+    assert 0.0 < R.leak_gain(dt, tau) < 1.0
+
+
+@given(st.floats(-5, 5), st.floats(-5, 5), st.floats(0, 100), pos)
+def test_leak_step_bounded(S, u, dt, tau):
+    """Lean: Apgi.leak_step_mem_Icc (any dt ≥ 0)."""
+    lo, hi = min(S, u), max(S, u)
+    v = R.leak_step(S, u, R.leak_gain(dt, tau))
+    assert lo - 1e-12 <= v <= hi + 1e-12
+
+
+@given(st.floats(-5, 5), st.floats(-5, 5), st.floats(0, 5), pos)
+def test_leak_two_steps(S, u, dt, tau):
+    """Lean: Apgi.leak_two_steps (dt-invariance of the exact integrator)."""
+    g = R.leak_gain(dt, tau)
+    assert R.leak_step(R.leak_step(S, u, g), u, g) == pytest.approx(
+        R.leak_step(S, u, R.leak_gain(2 * dt, tau)), rel=1e-9, abs=1e-12)
+
+
+@given(st.floats(0, 200), unit, st.floats(0, 1))
+def test_hazard_prob_in_unit_interval(r, B, dt):
+    """Lean: Apgi.hazardProb_mem_Icc."""
+    assert 0.0 <= R.hazard_prob(r, B, dt) <= 1.0
+
+
+@given(st.floats(0, 200), unit, st.floats(0, 0.5))
+def test_hazard_two_steps(r, B, dt):
+    """Lean: Apgi.hazard_two_steps, (1 − p_dt)² = 1 − p_2dt (task 26)."""
+    assert (1 - R.hazard_prob(r, B, dt)) ** 2 == pytest.approx(1 - R.hazard_prob(r, B, 2 * dt), rel=1e-9, abs=1e-15)
+
+
+@given(st.floats(0, 200), unit, st.floats(0, 0.05), st.integers(0, 50))
+def test_hazard_n_steps(r, B, dt, n):
+    """Lean: Apgi.hazard_n_steps: n steps of dt equal one step of n·dt."""
+    assert (1 - R.hazard_prob(r, B, dt)) ** n == pytest.approx(1 - R.hazard_prob(r, B, n * dt), rel=1e-9, abs=1e-15)
+
+
+@given(st.floats(0, 200), st.floats(0, 1), unit, unit)
+def test_hazard_monotone_propensity(r, dt, b1, b2):
+    """Lean: Apgi.hazardProb_monotone_propensity."""
+    b1, b2 = min(b1, b2), max(b1, b2)
+    assert R.hazard_prob(r, b1, dt) <= R.hazard_prob(r, b2, dt) + 1e-15
+
+
+@given(st.floats(2, 7.5), st.floats(0, 200), st.floats(0, 1), au, au, au)
+def test_hazard_antitone_threshold(k, r, dt, S, t1, t2):
+    """Lean: Apgi.hazard_antitone_threshold (γ_sig ≥ 0 carries CL-1 through the hazard)."""
+    t1, t2 = min(t1, t2), max(t1, t2)
+    assert R.hazard_prob(r, R.ignition_prob(k, S, t2), dt) <= R.hazard_prob(r, R.ignition_prob(k, S, t1), dt) + 1e-15
+
+
+def test_per_step_bernoulli_is_not_dt_invariant():
+    """Math Spec p22: treating Bₜ as a per-step probability makes window ignition depend on dt
+    (Bₜ = 0.05, 300 ms window: 0.79 at dt = 10 ms, above 0.999 at dt = 1 ms). The hazard does not."""
+    B, window = 0.05, 0.3
+    per_step = {dt: 1 - (1 - B) ** round(window / dt) for dt in (0.01, 0.001)}
+    assert per_step[0.01] == pytest.approx(0.79, abs=0.005) and per_step[0.001] > 0.999
+    r = 10.0
+    hz = {dt: 1 - (1 - R.hazard_prob(r, B, dt)) ** round(window / dt) for dt in (0.01, 0.001)}
+    assert hz[0.01] == pytest.approx(hz[0.001], rel=1e-9)
+
+
+@given(st.floats(-10, 10), st.floats(0, 10))
+def test_ne_clamp_bound(gamma, g):
+    """Lean: Apgi.neClamp_bound, Apgi.neClamp_nonneg."""
+    c = R.ne_clamp(gamma, g)
+    assert c >= 0 and abs(gamma) * c <= R.NE_BOUND * (1 + 1e-12)
+
+
+@given(st.floats(-10, 10), st.floats(0, 10))
+def test_ne_factor_band(gamma, g):
+    """Lean: Apgi.neFactor_band, 1 + γ_NE·g_NE ∈ [0.5, 1.5]."""
+    f = R.ne_factor(gamma, g)
+    assert 0.5 - 1e-12 <= f <= 1.5 + 1e-12
+
+
+@given(st.floats(-10, 10), st.floats(0, 10))
+def test_ne_clamp_identity_within_bound(gamma, g):
+    """Lean: Apgi.neClamp_of_le."""
+    assume(abs(gamma) * g <= R.NE_BOUND)
+    assert R.ne_clamp(gamma, g) == g
+
+
+thr = st.floats(0, 2)
+
+
+@given(thr, st.floats(BAND_LO, BAND_HI), st.floats(0, 1), st.floats(-2, 2), st.floats(-2, 2),
+       st.floats(0, 1), unit, st.floats(0, 1), st.floats(10, 30))
+def test_threshold_step_floor(theta, theta0, eta, C, V, delta, B, dt, tau):
+    """Lean: Apgi.thresholdStep_floor."""
+    assert R.threshold_step(theta, theta0, eta, C, V, delta, B, dt, tau) >= FLOOR
+
+
+@given(thr, st.floats(BAND_LO, BAND_HI), st.floats(0, 1), st.floats(-2, 2), st.floats(-2, 2),
+       st.floats(0, 1), unit, unit, st.floats(0, 1), st.floats(10, 30))
+def test_threshold_step_monotone_ignition(theta, theta0, eta, C, V, delta, b1, b2, dt, tau):
+    """Lean: Apgi.thresholdStep_monotone_ignition (δ_reset ≥ 0)."""
+    b1, b2 = min(b1, b2), max(b1, b2)
+    args = (theta, theta0, eta, C, V, delta)
+    assert R.threshold_step(*args, b1, dt, tau) <= R.threshold_step(*args, b2, dt, tau) + 1e-12
+
+
+@given(thr, st.floats(BAND_LO, BAND_HI), st.floats(0, 1), st.floats(-2, 2), st.floats(-2, 2),
+       st.floats(0, 1), unit, st.floats(0, 1), st.floats(10, 30))
+def test_threshold_step_monotone_drive(theta, theta0, eta, d1, d2, delta, B, dt, tau):
+    """Lean: Apgi.thresholdStep_monotone_drive (η_θ ≥ 0), drive d = C − V."""
+    d1, d2 = min(d1, d2), max(d1, d2)
+    lo = R.threshold_step(theta, theta0, eta, d1, 0.0, delta, B, dt, tau)
+    hi = R.threshold_step(theta, theta0, eta, d2, 0.0, delta, B, dt, tau)
+    assert lo <= hi + 1e-12
+
+
+@given(st.floats(0.5, 2.0), st.floats(0.5, 2.0), st.floats(1.0, 5.0), st.floats(1.0, 5.0), st.floats(-5, 5))
+def test_psi_bounded(ap, am, gp, gm, z):
+    """Lean: Apgi.psi_abs_lt (float tanh may round to ±1, hence ≤)."""
+    assert abs(R.psi(ap, am, gp, gm, z)) <= max(ap, am)
+
+
+@given(st.floats(0.5, 2.0), st.floats(1.0, 5.0), st.floats(-5, 5))
+def test_psi_symmetric_limit(a, g, z):
+    """Lean: Apgi.psi_symmetric."""
+    assert R.psi(a, a, g, g, z) == pytest.approx(a * math.tanh(g * z), rel=1e-15, abs=1e-15)
+
+
+@given(st.floats(0.5, 2.0), st.floats(1.0, 5.0), st.floats(-5, 5))
+def test_psi_odd_when_symmetric(a, g, z):
+    """Lean: Apgi.psi_odd_of_symmetric."""
+    assert R.psi(a, a, g, g, -z) == pytest.approx(-R.psi(a, a, g, g, z), rel=1e-15, abs=1e-15)
+
+
+@given(st.floats(0, 2), st.floats(0.1, 10), st.floats(0.1, 1.2), st.floats(-2, 2), st.floats(-2, 2))
+def test_prec_eff_monotone_marker(g, pb, beta, m1, m2):
+    """Lean: Apgi.precEff_monotone_marker, Apgi.precEff_nonneg (β_SM ≥ 0)."""
+    m1, m2 = min(m1, m2), max(m1, m2)
+    assert 0 <= R.prec_eff(g, pb, beta, m1) <= R.prec_eff(g, pb, beta, m2) * (1 + 1e-15)
+
+
+@given(st.floats(-1e6, 1e6))
+def test_prec_clamp_bounds(x):
+    """Lean: Apgi.precClamp_mem_Icc with the canonical clamp [0.1, 10] AU."""
+    assert 0.1 <= R.prec_clamp(0.1, 10.0, x) <= 10.0

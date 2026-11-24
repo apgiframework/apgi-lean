@@ -2,7 +2,7 @@
   "schema": "apgi-source-manifest/2",
   "note": "Source documents are traced, never overwritten, and never committed: this public repository stores only their sha256 and revision. extract_sources.py --corpus DIR locates each file by sha256, so a changed document is detected as a pin mismatch. A used source with a null sha256 is reported as UNPINNED. Published sources are the Zenodo release cited in 'release'; several PDF file names still say 'Version 1.0' although their content is release v1.1.",
   "release": {"name": "APGI series, Zenodo release v1.1", "date": "2026-10-22", "concept_doi": "10.5281/zenodo.23551315"},
-  "precedence": ["SRC-NOTATION", "SRC-MATHSPEC", "SRC-DYN", "SRC-OSF", "SRC-PRED-REG", "SRC-INNOV-GDOC"],
+  "precedence": ["SRC-NOTATION", "SRC-MATHSPEC", "SRC-DYN", "SRC-OSF", "SRC-PRED-REG", "SRC-MATHSPEC-V12D"],
   "precedence_rule": "On notation, symbols and units the Notation Appendix governs; on equations and numerical worked values the Mathematical Specification governs; pre-registered criteria follow the OSF pre-registration. Unpublished drafts rank last.",
   "sources": [
     {"id": "SRC-NOTATION", "title": "APGI Notation Appendix", "kind": "pdf", "revision": "v1.1 (2026-10-22)",
@@ -28,11 +28,14 @@
     {"id": "SRC-PAPER1", "title": "Thresholds make consciousness selective (Paper 1)", "kind": "pdf", "revision": "v1.1 (2026-10-22)",
      "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf", "pages": 57,
      "sha256": "3c38b1184aa3638e00f528d05a120678346b1fb78d26edd266255f11623a9d08"},
-    {"id": "SRC-INNOV-GDOC", "title": "APGI Innovations (Google Doc, unpublished draft)", "kind": "gdoc", "revision": null, "sha256": null, "file": null,
-     "note": "Unpublished. Only the cusp potential (EQ-CUSP-1) still rests on it: the cusp form does not appear in the published v1.1 corpus."},
+    {"id": "SRC-MATHSPEC-V12D", "title": "APGI Mathematical Specification, v1.2 working draft (unpublished)", "kind": "md", "revision": "v1.2 draft (2026-11-24), §7.7 added",
+     "file": "APGI-Mathematical-Specifications.md", "pages": 1,
+     "sha256": "a151d52d97f78628573aa30539835d92faff94d5f0da6aee3d5d71285544e0ca",
+     "note": "Unpublished working draft for Zenodo release v1.2, kept outside version control (git-ignored apgi-v-1-2/). It carries the cusp normal form (§7.7, EQ-CUSP-1), which the published v1.1 corpus does not contain. Any edit to the draft changes this pin; re-hash with extract_sources.py --hash. After the v1.2 release, re-source EQ-CUSP-1 to the published PDF and retire this entry (task 25)."},
     {"id": "SRC-CODATA", "title": "SI 2019 exact defining constants (BIPM)", "kind": "external", "revision": "SI-2019", "sha256": null, "file": null}
   ],
   "retired_sources": [
+    {"id": "SRC-INNOV-GDOC", "reason": "The 'APGI Innovations' Google Doc could not be located (Drive search, 2026-11-24). Option B (task 7) chosen: the cusp potential moved into the v1.2 Mathematical Specification draft, §7.7 (SRC-MATHSPEC-V12D). Resolves KC-UNPINNED."},
     {"id": "SRC-INNOV-DOCX", "reason": "Superseded by the published v1.1 corpus; no registry entry cites it."},
     {"id": "SRC-THERMO", "reason": "'Thermodynamic Grounding' has no published counterpart; thermodynamic entries now cite Mathematical Specification §11 and Notation Appendix §11."},
     {"id": "SRC-PSYCH-DX", "reason": "No registry entry cites it."}

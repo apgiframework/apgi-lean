@@ -1,158 +1,87 @@
 # APGI verification: remaining tasks
 
-State as of 2026-11-24 08:30 ET.
+State as of 2026-11-24 16:00 ET (spec 0.3.0).
 
 - Repository: https://github.com/apgiframework/apgi-lean. Local checkout: `C:\Claude\Projects\apgi-lake`.
-- GitHub `main` is at 1c5e03d, which contains the merged registry work. Local `main` has one more commit, the one that adds this file, and it is **not yet pushed**.
-- `corpus-v1-registry` was fast-forwarded into `main` and deleted. `main` is the only branch, locally and on GitHub.
-- Local results: `lake build --wfail` passes, 14 of 14 theorems pass the axiom audit, pytest gives 81 passed and 5 xfailed, the consistency check finds 1 open item, and 20 of 20 parameters are verified against the pinned PDFs.
-- CI run #3 on 1c5e03d: Lean, Python and Report jobs all green.
-- Pilot criteria: 6 of 7 expected (confirm in task 4). Criterion 1 is the only one left.
+- GitHub `main` is at 1c5e03d. Local `main` carries two unpushed commits: the one that added this file (15328d4) and the spec 0.3.0 commit described below.
+- Production fixes live on a new local branch, `fix/spec-alignment` in `C:\Claude\Projects\apgi-implementation`, at 7703169 (one commit on top of a106d98). It is **not pushed**. Its worktree is `apgi-lake\Claude outputs\impl-wt`.
+- Local results: `lake build --wfail` passes; 41 of 41 theorems pass the axiom audit (14 pilot, 27 new); pytest gives 112 passed and 1 xfailed (PD-CLIP); the consistency check finds 1 open conflict (KC-PRECOND-TAU-PI); 39 of 39 parameters are verified against their sha256 pins. The production suite gives 2825 passed, 11 skipped, and the same 2 Windows-only failures as a106d98.
+- Pilot criteria: 6 of 7 locally. Criterion 1 is now met. Criterion 6 (report built in GitHub Actions) is met only by a CI run.
 
-Tasks are listed in the order to do them. Later tasks depend on earlier ones where noted.
+## Done in this session
+
+- **Task 7, option B.** You chose B. §7.7 of `apgi-v-1-2\APGI-Mathematical-Specifications.md` now states the cusp normal form V(x) = x⁴/4 + a·x²/2 + θ·x, the iff discriminant rule and the fold points. EQ-CUSP-1 is re-sourced to `SRC-MATHSPEC-V12D` (that draft, pinned by sha256). `SRC-INNOV-GDOC` is retired. Tasks 6 and 9 are therefore closed: KC-UNPINNED is `resolved`.
+- **Task 8.** The defect scan now reads Markdown correctly (it unescapes `\_`, `\[`). It finds 0 defects in the edited v1.2 drafts. Before the edits it found 2: γ_sig "(dimensionless)" and the new KC-CTHETA-UNIT. The published v1.1 PDFs still show 3 hits (E8, E9, KC-CTHETA-UNIT); task 25 removes them.
+- **Task 10.** The pilot is re-rated in `verification-instructions.txt`: design 92/100, implementation 91/100. The last checklist item is ticked.
+- **Task 11.** You chose option (b), targeted theorems. The decision and its reason are recorded in `verification-instructions.txt`.
+- **Task 12.** 19 parameters are registered with page-cited quotes, all verified against the pins: r_max, δ_reset, ρ_retain, the NE bound (0.5, emitted to `Spec.lean` as `ne_bound`), τ_Π, τ_res, Δt_res, α_Π, C_down, C_up, α⁺, α⁻, γ⁺, γ⁻, β_DA, c_θ, v₁, v₂ and M̂(c,a).
+- **Task 13.** These equations are registered: EQ-LEAK-1 (Eq. 23–24), EQ-HAZARD-1 (Eq. 35), EQ-NE-1 (the NE clamp), EQ-ALLO-1 (Eq. 26, then decay, then floor), EQ-PSI-1 (Eq. 21) and EQ-PREC-SM-1 (the Πⁱ_eff form).
+- **Task 14.** EQ-EULER-1 now carries the full rule: dt ≤ τ_θ/10, dt ≤ τ_Π/10, and, with the reservoir active, Δt_res ≤ τ_res/10. Only the τ_Π part cannot be checked; see task 31.
+- **Tasks 15–18.** The production code is fixed on `fix/spec-alignment`. PD-FLOOR, PD-DT, PD-TAU-THETA, PD-KAPPA-SYMBOL and PD-HAZARD are resolved there, and so is PD-TAU-S, a new finding (τ_S was 5 s). The old names stay as aliases for one release and emit `APGIDeprecationWarning`. Golden trajectories are regenerated.
+- **Task 20.** All six PD entries are set to `resolved`. `production.commit` and the CI `ref:` now point at 7703169.
+- **Tasks 21 and 24.** Both are applied to the v1.2 drafts. A backup of the originals sits in `apgi-v-1-2\_backup\`. The Notation Appendix table now gives c_θ as AU.
+- **Tasks 26–28.** These are proved in `Apgi/Dynamics.lean`: `hazard_two_steps`, `hazard_n_steps`, `leakGain_mem_Ioo`, `leak_two_steps`, `cusp_three_equilibria_converse` and `cusp_three_equilibria_iff`, plus the theorems behind EQ-NE-1, EQ-ALLO-1, EQ-PSI-1 and EQ-PREC-SM-1. Each has a float64 twin test. Claims CL-10 to CL-16 are added and CL-5 is now an equivalence.
+- `apgi-v-1-2/` is git-ignored, so the drafts can never be committed to the public repo.
 
 ---
 
-## Phase 1: Today (publish and confirm)
+## Phase 1: Publish (Owner: Uxod, in this order)
 
-**1. Push `main` (the commit that adds this file).** Owner: Uxod.
-HTTPS uses the stored login `lesoto`, which has no write access to `apgiframework/apgi-lean` (403). Use the apgiframework SSH key and enter its passphrase:
+**1. Push the production branch first.** CI checks out `apgi-implementation` at 7703169, and that commit exists only on your machine.
+```powershell
+cd C:\Claude\Projects\apgi-implementation
+git push origin fix/spec-alignment
+```
+Then open a PR into `main` and merge it. Its own CI runs ruff, mypy and pytest, and all three pass locally.
+
+**2. Push `main` of apgi-lean** with the apgiframework SSH key, as before:
 ```powershell
 cd C:\Claude\Projects\apgi-lake
 git push origin main
 ```
-Done when `origin/main` matches local `main`.
+If you push this before task 1, the Python job fails at checkout. That failure is expected; re-run the job after task 1.
 
-**2. Optional: make future pushes work without a manual terminal.** Owner: Uxod. Pick one:
-- Start the agent once from an admin PowerShell: `Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent; ssh-add $HOME\.ssh\id_ed25519_apgi`
-- Or give the `lesoto` account write access to `apgiframework/apgi-lean`.
+**3. Optional: push without a manual terminal.** Either start ssh-agent once from an admin PowerShell (`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent; ssh-add $HOME\.ssh\id_ed25519_apgi`), or give `lesoto` write access to both repos.
 
-**3. Confirm CI.** Owner: either.
-Run #3 (1c5e03d) already passed all three jobs on 2026-11-24, including the first CI run of the production cross-check. Your push in task 1 starts run #4 under Actions → "APGI verification"; all three jobs should be green again.
-- The Python job now also checks out `apgi-implementation` at a106d98. Expect 81 passed and 5 xfailed. The `-rxs` flag lists the five PD divergences.
-- If a job fails, copy its first error line into the next session.
+**4. Confirm CI run #4** under Actions → "APGI verification". Expect all three jobs green, 112 passed and 1 xfailed (PD-CLIP), and a report showing 7 of 7 criteria. If a job fails, copy its first error line into the next session.
 
-**4. Read the report on the run's Summary tab.** Owner: either.
-Expect 6 of 7 criteria. Criterion 1 should fail only on "no sha256 for SRC-INNOV-GDOC".
-
-**5. Local cleanup.** Owner: either. Everything below is git-ignored or temporary, so nothing tracked is affected.
-- In `apgi-lake`, delete `Claude outputs\`, `build.err`, `build.log`, `cache-get.log` and `.lake.mac-backup\`. The last one is a full second copy of Mathlib, several GB.
+**5. Local cleanup.** Everything listed here is git-ignored or temporary.
+- In `apgi-lake`, delete `.lake.mac-backup\` (several GB), `build.err`, `build.log` and `cache-get.log`.
+- Delete `Claude outputs\` once task 1 is merged. It holds the production worktree, so run `git worktree remove "C:\Claude\Projects\apgi-lake\Claude outputs\impl-wt"` from `apgi-implementation` first. It also holds the test venv and text dumps of the pinned PDFs.
+- Delete the duplicate `apgi-lake\REMAINING-TASKS.md` in the repo root. The tracked copy is `docs\REMAINING-TASKS.md`.
 - Delete `%TEMP%\apgi-corpus\` and the `%TEMP%\apgi-*.py` scratch scripts.
-- Keep `C:\Claude\Projects\apgi-implementation` (checked out at a106d98) while you still run `test_production.py` locally.
 
 ---
 
-## Phase 2: This week (close the pilot, criterion 1)
+## Phase 2: Author decisions (Owner: Uxod)
 
-**6. Find the "APGI Innovations" draft.** Owner: Uxod.
-It is the only remaining source for the cusp potential (EQ-CUSP-1). A Drive search for that title on 2026-11-24 found nothing. It may have been renamed or may sit in another account.
+**19. Decide whether `apgi-validation`'s `apgi_core` counts as production code.** That repo is not checked out on this machine, so it has not been looked at. If it counts, add it to `test_production.py` the way `apgi-implementation` was added.
 
-**7. Decide what happens to it (A or B).** Owner: Uxod.
-- **A. Pin it.** Export it to PDF or DOCX and store the file outside the repo. Run `python verification/python/extract_sources.py --hash <file>`. Paste the sha256 and revision into `SRC-INNOV-GDOC` in `specification/source-manifest.json`. Never commit the file, because the repo is public.
-- **B. Publish it.** Move V(x) = x⁴/4 + a·x²/2 + θ·x into the next Zenodo release (Math Spec or Dynamical Formulation). Re-source EQ-CUSP-1 to that document and retire `SRC-INNOV-GDOC`. B is cleaner, because CL-4 and CL-5 would then rest on published text. It waits for the v1.2 release (tasks 21–25).
+**29. PD-CLIP (new, open).** The pipeline clips θ to [0.1, 20] AU (`theta_clip_min`), citing "MathSpec §15". The v1.1 Math Spec states no such clip, and its floor default is θ_floor = 0. Either document 0.1 AU as a study-stated floor or set it to 0. Then set PD-CLIP to `resolved` and bump the commit (task 20 routine).
 
-**8. Scan the draft for the old defects.** Owner: either. Needs task 6.
-Run `python verification/python/extract_sources.py <draft file>`. The published corpus is clean of these, so any remaining copies live in the draft:
-- Landauer 2.87 × 10⁻²¹ J
-- the −θₜ·x cusp sign
-- κ in mol ATP/bit
-- κ as a spectral radius
-- α as an update gain
-- λ_θ
-- Pred 0.B BF₁₀ ≥ 10
+**30. PD-KAPPA-RESIDUAL (new, open).** Bare κ still names other quantities: the learning rate `kappa` in `core/dynamics.py` and `core/preprocessing.py`, the relaxation rate in `engine/somatic.py`, the `KAPPA` decay constant in `engine/latent_state.py` and `estimation/*.py`, `compute_jacobian_discrete(kappa=…)`, and the `*kappa_meta*` names in `energy/bold_calibration.py`. Rename them with the same alias pattern (`core/deprecation.py`). `energy/thermodynamics.py`'s `kappa` is ATP/bit, the correct use, and stays.
 
-Fix each hit in the draft.
+**31. KC-PRECOND-TAU-PI (new, open).** The corpus defines τ_Π but gives it no value or range (Math Spec p6, Notation Appendix p16), so the spec's own rule dt ≤ τ_Π/10 cannot be checked. State a τ_Π range or lower bound in v1.2. Production uses τ_Π = 1000 s. Then register the range with an evidence quote and set the conflict to `resolved`.
 
-**9. Resolve KC-UNPINNED.** Owner: either. Needs task 7.
-Set its status to `resolved` in `specification/known-conflicts.json`, then run the routine at the end of this file. Done when the CI report shows 7 of 7.
+**32. α_Π sign (minor).** Math Spec p6 says α_Π ≥ 0; p16 says α_Π > 0. Pick one in v1.2.
 
-**10. Re-rate the pilot.** Owner: either. Needs task 9.
-Update "Final assessment" in `verification-instructions.txt` and tick the last open checklist item.
+**33. r_max.** Production now uses r_max = 100 s⁻¹ (= 1/dt₀), a placeholder that matches the old per-step behaviour at dt₀. The corpus says r_max is fitted. Replace it once a fit exists.
 
 ---
 
-## Phase 3: Decision
+## Phase 3: Next Zenodo release (v1.2)
 
-**11. Decide the scope of further Lean work.** Owner: Uxod.
-The evidence is in `verification-instructions.txt`, section 9. Lean found 1 defect on its own; extraction and the production check found 14. The options:
-- (a) Stop at the pilot.
-- (b) Add targeted theorems only (tasks 26–28).
-- (c) Full L0–L4. The defect yield does not support this.
+**22. APGI-Advances p13.** Restate "Biological overhead ≈ 1.7 × 10³ (κ = 100 ÷ 0.06)" as R_L, or remove it. No v1.2 draft of APGI-Advances is in `apgi-v-1-2`, so this edit is still open.
 
-Record the decision and the reason in `verification-instructions.txt`.
+**23. File names.** Several v1.1 PDFs are still named "Version 1.0". The "companion documents" PDF is byte-identical to the Mathematical Specification; drop it from the release.
 
----
-
-## Phase 4: Registry completion (C17)
-
-This phase comes before the production fixes, because PD-HAZARD needs r_max registered.
-
-**12. Register the remaining canonical parameters, each with page-cited evidence quotes.** Owner: either.
-r_max, δ_reset, ρ_retain ∈ [0, 1], the NE clamp |γ_NE|·g_NE ≤ 0.5, τ_Π, τ_res, α_Π, C_down and C_up, γ⁺ and γ⁻ ∈ [1, 5], β_DA, c_θ, v₁ and v₂, M̂(c,a), Ψ(z), and the Πⁱ_eff = Πⁱ_baseline·exp(β_SM·M̂) form.
-
-**13. Register the missing equations.** Owner: either.
-- Leaky integrator, λ = 1 − exp(−dt/τ_S) (Math Spec Eq. 23–24)
-- Hazard ignition, 1 − exp(−r_max·Bₜ·dt)
-- NE sub-dominance clamp
-- Allostatic update (Eq. 26)
-
-**14. Extend the dt precondition to τ_Π and τ_res.** Owner: either. Needs task 12.
-The full rule is dt ≤ min(τ)/10. Today it is checked only against τ_S and τ_θ.
-
----
-
-## Phase 5: Production code (`apgiframework/apgi-implementation`)
-
-Make each fix in `apgi-implementation` first, then do task 20 in `apgi-lean`.
-
-**15. PD-FLOOR.** In `core/allostatic.py`, change the `update_threshold_euler` default `theta_min=0.1` to `0.0`. This is the smallest change and a good first PR.
-
-**16. PD-KAPPA-SYMBOL.** Rename config `kappa` (the per-step decay exponent) and the `threshold_decay(kappa=…)` argument, and deprecate `kappa_meta`. Keep the old names as aliases that raise a `DeprecationWarning` for one release.
-
-**17. PD-DT and PD-TAU-THETA, done together because they are coupled.**
-- Set `dt` to 0.01 s (dt₀) and τ_θ to 20 s.
-- Compute the decay exponent as dt/τ_θ instead of storing it as a per-step constant.
-- Rescale every other per-step quantity: λ through `lam_from_tau_s`, and the per-step η_θ as η_θ·dt.
-- Expect behaviour changes. Regenerate any stored reference outputs.
-
-**18. PD-HAZARD.** Needs task 12 (r_max).
-Replace the per-step Bernoulli draw with 1 − exp(−r_max·Bₜ·dt). Change `core/ignition.py` `sample_ignition_state` to take `dt` and `r_max`, and update its callers in `pipeline.py` (lines 1045 and 1205).
-
-**19. Decide whether `apgi-validation`'s `apgi_core` (`engine.py`, `equations.py`, `model.py`) also counts as production code.** Owner: Uxod. It has not been checked yet. If it counts, add it to `test_production.py` the same way.
-
-**20. After each production fix, in `apgi-lean`:**
-- Set that PD entry to `resolved`.
-- Bump the commit in `specification/known-conflicts.json` → `production.commit`.
-- Bump the same commit in `.github/workflows/lean_action_ci.yml` (`ref:`).
-
-Until you do this, the strict xfail becomes a hard failure. That is intended.
-
----
-
-## Phase 6: Next Zenodo release (v1.2), corpus fixes
-
-**21. Math Spec p4.** Change "γ_sig … (dimensionless)" to "1/AU". The reason is on p3: τ_σ carries the units of S, and γ_sig = 1/τ_σ.
-
-**22. APGI-Advances p13.** Restate "Biological overhead ≈ 1.7 × 10³ (κ = 100 ÷ 0.06)" as R_L, or remove it. κ is uncalibrated and measured in ATP/bit.
-
-**23. File names.** Several v1.1 PDFs are still named "Version 1.0". The "companion documents" PDF is byte-identical to the Mathematical Specification; drop the duplicate.
-
-**24. If you chose option B in task 7,** include the cusp potential in this release.
+**34. Review the edits made in the v1.2 drafts** before you publish. They are: the γ_sig unit (Math Spec glossary), c_θ = AU (Notation Appendix Table 20), and the new §7.7. The originals are in `apgi-v-1-2\_backup\`. Any further edit to the Math Spec draft changes its sha256, so re-pin `SRC-MATHSPEC-V12D` with `extract_sources.py --hash` and run the routine.
 
 **25. After publishing:**
 - Re-hash every source and update `revision` and `sha256` in `source-manifest.json`.
-- Run extraction with `--write`. Every evidence page number must still match; fix the ones that moved.
-- Confirm the corpus scan reports 0 defects.
-
----
-
-## Phase 7: Optional Lean (only if task 11 chooses b)
-
-**26. Hazard dt-invariance.** Prove that two steps of dt equal one step of 2·dt: (1 − p_dt)² = 1 − p_2dt. This backs PD-HAZARD directly.
-
-**27. Leaky-integrator gain.** Prove λ = 1 − exp(−dt/τ_S) ∈ (0, 1) for dt > 0. It reuses `decayGain_mem_Icc`.
-
-**28. Cusp converse.** Prove that three distinct equilibria imply 4a³ + 27θ² < 0. That makes the discriminant rule an "if and only if" in Lean, not just the sufficient direction.
+- Re-source EQ-CUSP-1 from `SRC-MATHSPEC-V12D` to the published Math Spec PDF and retire the draft entry.
+- Run extraction with `--write`. Every evidence page number must still match; fix any that moved.
+- Confirm the corpus scan of the published PDFs reports 0 defects. It reports 3 today, all fixed in the drafts or in task 22.
 
 ---
 
@@ -160,17 +89,19 @@ Until you do this, the strict xfail becomes a hard failure. That is intended.
 
 ```powershell
 cd C:\Claude\Projects\apgi-lake
-python verification\python\extract_sources.py --corpus C:\Claude\Projects\Neuro-Brain\Neuro-Input --write
+python verification\python\extract_sources.py --corpus C:\Claude\Projects\Neuro-Brain\Neuro-Input --corpus C:\Claude\Projects\apgi-lake\apgi-v-1-2 --write
 python verification\python\generate_lean.py
 lake build --wfail
 python verification\python\check_consistency.py
 cd verification\python
-$env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-implementation"
+$env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-implementation"   # check out the commit in known-conflicts.json first
 python -m pytest -q -rxs
 cd ..\..
 git add -A
 git commit
 git push origin main
 ```
+
+`--corpus` can now be repeated. The second directory supplies the v1.2 draft that carries the cusp form.
 
 If `check_consistency.py` reports `extraction_unverified`, a registry value changed without re-running extraction. Run the first line again.

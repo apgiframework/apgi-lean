@@ -12,3 +12,5 @@ __pycache__/
 /verification/reports/junit.xml
 # Claude deliverables folder
 /Claude outputs/
+# v1.2 source drafts: never commit (public repo; sources are pinned by sha256 only)
+/apgi-v-1-2/

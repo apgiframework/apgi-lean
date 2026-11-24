@@ -127,11 +127,19 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
             return Fraction(r[side])
         return None
 
+    def support_only(pid: str) -> bool:
+        """A 'support' range (e.g. τ_Π > 0) states only the admissible sign, not a
+        calibrated interval: its lower bound cannot discharge dt ≤ τ/10."""
+        p = pmap.get(pid) or {}
+        return p.get("value") is None and (p.get("range") or {}).get("kind") == "support"
+
     for eq in E:
         for pre in eq.get("preconditions", []):
             lhs_hi, lhs_lo = bound(pre["param"], "hi"), bound(pre["param"], "lo")
             if "param_rhs" in pre:
                 rhs_lo, rhs_hi = bound(pre["param_rhs"], "lo"), bound(pre["param_rhs"], "hi")
+                if support_only(pre["param_rhs"]):
+                    rhs_lo = rhs_hi = None
                 k = Fraction(pre.get("scale", "1"))
                 rhs_lo = rhs_lo * k if rhs_lo is not None else None
                 rhs_hi = rhs_hi * k if rhs_hi is not None else None
@@ -144,6 +152,13 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
                     add("precondition_unverifiable", names, f"{eq['id']}: {pre['theorem']} needs {pre['param']} ≤ {pre.get('param_rhs', pre.get('value'))}")
                 elif not lhs_hi <= rhs_lo:
                     add("precondition_violated", names, f"{eq['id']}: registry allows {pre['param']}={lhs_hi} > {rhs_lo}", "P0")
+            elif pre["op"] == ">":
+                p = pmap.get(pre["param"]) or {}
+                lo_open = p.get("value") is None and not (p.get("range") or {}).get("lo_closed", True)
+                if lhs_lo is None or rhs_hi is None:
+                    add("precondition_unverifiable", names, f"{eq['id']}: {pre['theorem']} needs {pre['param']} > {pre.get('value')}")
+                elif not (lhs_lo > rhs_hi or (lhs_lo == rhs_hi and lo_open)):
+                    add("precondition_violated", names, f"{eq['id']}: registry allows {pre['param']}={lhs_lo} ≤ {rhs_hi}", "P0")
             elif pre["op"] == ">=":
                 if lhs_lo is None or rhs_hi is None:
                     add("precondition_unverifiable", names, f"{eq['id']}: {pre['theorem']} needs {pre['param']} ≥ {pre.get('value')}")

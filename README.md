@@ -19,7 +19,8 @@ apgi/                         Lean project root (lakefile.toml, lean-toolchain)
 │   └── known-conflicts.json  acknowledged open conflicts + corpus defect patterns
 ├── Apgi/
 │   ├── Spec.lean             GENERATED from parameters.json (hash-pinned)
-│   └── Pilot.lean            theorems, unit types, self-enforcing axiom audit
+│   ├── Pilot.lean            pilot theorems, unit types, self-enforcing axiom audit
+│   └── Dynamics.lean         hazard, leaky integrator, NE clamp, allostatic step, Ψ, Πⁱ_eff, cusp iff
 └── verification/
     ├── python/               generator, checker, extractor, tests, report
     └── reports/              conflicts.json, proof-status.json, verification-report.md
@@ -36,6 +37,8 @@ python verification/python/check_consistency.py
 cd verification/python && python -m pytest -q --junitxml=../reports/junit.xml && cd ../..
 python verification/python/make_report.py --junit verification/reports/junit.xml --lean-ok
 python verification/python/extract_sources.py path/to/corpus/   # scan documents
+python verification/python/extract_sources.py --corpus path/to/published-pdfs --corpus path/to/apgi-v-1-2 --write
+                                                                 # verify evidence against sha256 pins
 ```
 
 ## Changing the specification

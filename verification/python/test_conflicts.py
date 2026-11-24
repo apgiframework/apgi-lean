@@ -118,6 +118,8 @@ def test_euler_precondition_satisfied(tmp_path, monkeypatch):
     def ok(P, d):
         P["dt"]["value"] = "0.001"
         P["tau_theta"]["value"] = "0.2"
+        # τ_Π needs a calibrated range for the full rule dt ≤ min(τ_S, τ_θ, τ_Π)/10 (KC-PRECOND-TAU-PI)
+        P["tau_Pi"].update(range={"lo": "0.1", "hi": "1", "lo_closed": True, "hi_closed": True})
     r = run_mutated(tmp_path, monkeypatch, ok)
     assert not any(f["check"].startswith("precondition") and "dt" in f["params"]
                    for f in r["acknowledged"] + r["unacknowledged"])
@@ -166,3 +168,21 @@ def test_spec_lean_in_sync():
 
 def test_python_floor_matches_registry():
     assert R.THETA_FLOOR == float(registry.params()["theta_floor"]["value"])
+
+
+def test_ne_bound_registry_value():
+    """apgi_ref.NE_BOUND mirrors the registry clamp |γ_NE|·g_NE ≤ 0.5 (Math Spec p14)."""
+    assert R.NE_BOUND == float(registry.params()["ne_subdominance_bound"]["value"])
+
+
+def test_dt_rule_needs_tau_pi(tmp_path, monkeypatch):
+    """KC-PRECOND-TAU-PI is load-bearing: give τ_Π a calibrated range and the
+    dt ≤ τ_Π/10 rule becomes checkable; make it too short and it is violated."""
+    def calibrate(lo):
+        return lambda P, d: P["tau_Pi"].update(range={"lo": lo, "hi": "1", "lo_closed": True, "hi_closed": True})
+    ok = run_mutated(tmp_path / "a", monkeypatch, calibrate("0.5"))
+    assert not any(f["check"].startswith("precondition") and "tau_Pi" in f["params"]
+                   for f in ok["acknowledged"] + ok["unacknowledged"])
+    assert "KC-PRECOND-TAU-PI" in ok["stale_known_conflicts"]
+    bad = run_mutated(tmp_path / "b", monkeypatch, calibrate("0.05"))
+    assert any(f["check"] == "precondition_violated" and "tau_Pi" in f["params"] for f in bad["unacknowledged"])

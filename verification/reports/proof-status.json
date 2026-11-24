@@ -1,13 +1,13 @@
 {
-  "generated": "2026-11-24T06:15:57+00:00",
-  "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e",
-  "spec_lean_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e",
-  "spec_version": "0.2.0",
+  "generated": "2026-11-24T20:31:11+00:00",
+  "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053",
+  "spec_lean_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053",
+  "spec_version": "0.3.0",
   "lean_build": "passed",
   "python_tests": {
-    "passed": 56,
+    "passed": 87,
     "failed": 0,
-    "total": 61
+    "total": 88
   },
   "theorems": [
     {
@@ -17,7 +17,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.convex_update_mem_Icc",
@@ -26,7 +26,7 @@
       "equations": [
         "EQ-UPD-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.cuspV_hasDerivAt",
@@ -35,7 +35,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.cusp_three_equilibria",
@@ -44,7 +44,25 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.cusp_three_equilibria_converse",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.cusp_three_equilibria_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.cusp_two_equilibria_witness",
@@ -53,7 +71,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.cusp_unique_equilibrium",
@@ -62,7 +80,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.decayGain_mem_Icc",
@@ -71,7 +89,16 @@
       "equations": [
         "EQ-DECAY-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.decayStep_monotone",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.decay_step_mem_Icc",
@@ -80,7 +107,7 @@
       "equations": [
         "EQ-DECAY-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.euler_step_mem_Icc",
@@ -89,7 +116,61 @@
       "equations": [
         "EQ-EULER-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.hazardProb_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.hazardProb_monotone_propensity",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.hazard_antitone_threshold",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.hazard_n_steps",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.hazard_survival_add",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.hazard_two_steps",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.ignites_antitone_threshold",
@@ -98,7 +179,7 @@
       "equations": [
         "EQ-IGN-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.ignites_monotone_precision",
@@ -107,7 +188,7 @@
       "equations": [
         "EQ-PREC-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.ignitionProb_antitone_threshold",
@@ -116,7 +197,88 @@
       "equations": [
         "EQ-IGN-2"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.leakGain_mem_Ioo",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LEAK-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.leak_step_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LEAK-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.leak_two_steps",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LEAK-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.neClamp_bound",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.neClamp_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.neClamp_of_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.neFactor_band",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.neFactor_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.neThreshold_pos",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.operatingRange_invariant_of_target",
@@ -125,7 +287,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     },
     {
       "name": "Apgi.operatingRange_not_invariant",
@@ -134,7 +296,88 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "e37ebd033e84155e2b4022dad389167dcd6216ddd8e2eb1c998899d6ed08fd7e"
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.precClamp_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.precEff_monotone_marker",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.precEff_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.psi_abs_lt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PSI-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.psi_odd_of_symmetric",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PSI-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.psi_symmetric",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PSI-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.thresholdStep_floor",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.thresholdStep_monotone_drive",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
+    },
+    {
+      "name": "Apgi.thresholdStep_monotone_ignition",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053"
     }
   ],
   "claims": [
@@ -223,18 +466,28 @@
     },
     {
       "id": "CL-5",
-      "text": "a < 0 and 4a³ + 27θ² < 0 together are sufficient for three distinct equilibria.",
+      "text": "Three distinct cusp equilibria exist if and only if 4a³ + 27θ² < 0 (which forces a < 0).",
       "status": "proved",
       "evidence": [
-        "Apgi.cusp_three_equilibria"
+        "Apgi.cusp_three_equilibria",
+        "Apgi.cusp_three_equilibria_converse",
+        "Apgi.cusp_three_equilibria_iff"
       ],
       "equations": [
         "EQ-CUSP-1"
       ],
-      "note": "Moved from tested to proved; the Hypothesis twin test_cusp_three_equilibria checks the float64 realisation.",
+      "note": "Sufficiency proved first (cusp_three_equilibria); the converse (task 28) makes it an equivalence. Twins: test_cusp_three_equilibria, test_cusp_three_equilibria_converse, test_cusp_discriminant.",
       "evidence_state": [
         {
           "ref": "Apgi.cusp_three_equilibria",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.cusp_three_equilibria_converse",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.cusp_three_equilibria_iff",
           "state": "passed"
         }
       ],
@@ -303,28 +556,221 @@
         }
       ],
       "reported_status": "proved"
+    },
+    {
+      "id": "CL-10",
+      "text": "The hazard sampler is dt-invariant: n steps of dt have the same survival probability as one step of n·dt, and the per-step probability lies in [0, 1] and rises with the propensity Bₜ.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.hazardProb_mem_Icc",
+        "Apgi.hazard_two_steps",
+        "Apgi.hazard_n_steps",
+        "Apgi.hazardProb_monotone_propensity"
+      ],
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "note": "Backs PD-HAZARD. Per-step Bernoulli(Bₜ) sampling is not dt-invariant (test_per_step_bernoulli_is_not_dt_invariant).",
+      "evidence_state": [
+        {
+          "ref": "Apgi.hazardProb_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.hazard_two_steps",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.hazard_n_steps",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.hazardProb_monotone_propensity",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-11",
+      "text": "Raising θ cannot raise the per-step ignition probability under the hazard with logistic propensity.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.hazard_antitone_threshold"
+      ],
+      "equations": [
+        "EQ-HAZARD-1",
+        "EQ-IGN-2"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.hazard_antitone_threshold",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-12",
+      "text": "The exact leaky-integrator gain λ = 1 − exp(−dt/τ_S) lies in (0, 1) for dt > 0; the integrator stays inside any interval containing S and S_inst and is dt-invariant under constant input.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.leakGain_mem_Ioo",
+        "Apgi.leak_step_mem_Icc",
+        "Apgi.leak_two_steps"
+      ],
+      "equations": [
+        "EQ-LEAK-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.leakGain_mem_Ioo",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.leak_step_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.leak_two_steps",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-13",
+      "text": "The NE clamp enforces |γ_NE|·g_NE ≤ 0.5 for either sign of γ_NE, keeps 1 + γ_NE·g_NE in [0.5, 1.5], and so never drives a positive threshold to zero.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.neClamp_bound",
+        "Apgi.neFactor_band",
+        "Apgi.neThreshold_pos"
+      ],
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.neClamp_bound",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.neFactor_band",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.neThreshold_pos",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-14",
+      "text": "The canonical threshold step (Eq. 26, exact decay, floor) respects θ_floor; with δ_reset ≥ 0 an ignition never lowers the next threshold, and with η_θ ≥ 0 a larger C − V never lowers it.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.thresholdStep_floor",
+        "Apgi.thresholdStep_monotone_ignition",
+        "Apgi.thresholdStep_monotone_drive"
+      ],
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.thresholdStep_floor",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.thresholdStep_monotone_ignition",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.thresholdStep_monotone_drive",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-15",
+      "text": "Ψ(z) is strictly bounded by max(α⁺, α⁻); with α⁺ = α⁻ and γ⁺ = γ⁻ it reduces to α·tanh(γ·z), which is odd.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.psi_abs_lt",
+        "Apgi.psi_symmetric",
+        "Apgi.psi_odd_of_symmetric"
+      ],
+      "equations": [
+        "EQ-PSI-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.psi_abs_lt",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.psi_symmetric",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.psi_odd_of_symmetric",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-16",
+      "text": "With β_SM ≥ 0, Πⁱ_eff is non-negative and non-decreasing in M̂(c,a); the hard clamp keeps it in [Π_min, Π_max].",
+      "status": "proved",
+      "evidence": [
+        "Apgi.precEff_nonneg",
+        "Apgi.precEff_monotone_marker",
+        "Apgi.precClamp_mem_Icc"
+      ],
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.precEff_nonneg",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.precEff_monotone_marker",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.precClamp_mem_Icc",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
     }
   ],
   "pilot_criteria": [
     {
       "criterion": "Every canonical parameter has a source identifier, unit, version, and documented range",
-      "met": false,
-      "evidence": "all parameters complete; no sha256 for SRC-INNOV-GDOC"
+      "met": true,
+      "evidence": "all parameters complete"
     },
     {
       "criterion": "Known discrepancies produce explicit failures",
       "met": true,
-      "evidence": "1 open conflicts tracked; seeded suite passed"
+      "evidence": "2 open conflicts tracked; seeded suite passed"
     },
     {
       "criterion": "Lean theorems compile without sorry or unapproved axioms",
       "met": true,
-      "evidence": "lake build --wfail: passed; 14/14 theorems axiom-audited via #guard_msgs"
+      "evidence": "lake build --wfail: passed; 41/41 theorems axiom-audited via #guard_msgs"
     },
     {
       "criterion": "Mathematical results are linked to exact specification revisions",
       "met": true,
-      "evidence": "Spec.lean hash matches registry e37ebd033e84"
+      "evidence": "Spec.lean hash matches registry 4ee616035e4a"
     },
     {
       "criterion": "Python tests pass the APGI numerical tolerances (1e-9)",

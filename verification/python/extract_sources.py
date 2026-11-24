@@ -3,7 +3,8 @@
 Usage:
   python extract_sources.py PATH ...                scan .pdf/.docx/.md/.txt for defect patterns
   python extract_sources.py --hash PATH ...         print sha256 pins for source-manifest.json
-  python extract_sources.py --corpus DIR [--write]  verify every parameter's evidence against the
+  python extract_sources.py --corpus DIR [--corpus DIR2 ...] [--write]
+                                                    verify every parameter's evidence against the
                                                     sha256-pinned documents found in DIR; --write
                                                     saves verification/reports/extraction.json
 
@@ -34,6 +35,7 @@ REPORT = ROOT / "verification" / "reports" / "extraction.json"
 PAGE_MARK = re.compile(r"<<PAGE \d+>>")
 # Characters the PDF text layer drops or mangles; ignored when matching quotes.
 SQUASH = re.compile(r"[\s()\[\]{}\-–—−‒-]")
+MD_ESCAPE = re.compile(r"\\([\\`*_{}\[\]()#+\-.!|=<>~^])")
 SUP = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻", "0123456789-")
 
 
@@ -52,6 +54,8 @@ def read_pages(path: Path) -> list[str]:
             xml = z.read("word/document.xml").decode("utf-8")
         return [re.sub(r"<[^>]+>", "", re.sub(r"</w:p>", "\n", xml))]
     text = path.read_text(encoding="utf-8", errors="replace")
+    if suf == ".md":  # Markdown exports escape punctuation (γ\\_sig, \\[2, 7.5\\]); patterns see the plain text
+        text = MD_ESCAPE.sub(r"\1", text)
     if PAGE_MARK.search(text):  # text dumps with <<PAGE n>> markers after each page
         return PAGE_MARK.split(text)[:-1] or [text]
     return [text]
@@ -105,7 +109,7 @@ UNIT_RE = re.compile(r"\s*(ms|s|AU|K|J|ATP/bit|J/bit)\s*$")
 
 
 def parse_quantity(spec, registry_unit: str | None) -> Fraction:
-    """'10 ms' -> 0.01 (in s); '3 × 10³' -> 3000; '2.97 × 10⁻²¹' -> 2.97e-21.
+    """'10 ms' -> 0.01 (in s); '3 × 10³' -> 3000; '2.97 × 10⁻²¹' -> 2.97e-21; '−2' -> -2.
     spec may be {'text': '200', 'unit': 'ms'} when the unit sits elsewhere in the quote."""
     if isinstance(spec, dict):
         text, unit = spec["text"], spec.get("unit")
@@ -113,11 +117,12 @@ def parse_quantity(spec, registry_unit: str | None) -> Fraction:
         m = UNIT_RE.search(spec)
         text, unit = (spec[: m.start()], m.group(1)) if m else (spec, None)
     # The exponent is matched before superscripts are flattened: '10⁹' is 1e9, not 109.
-    m = re.fullmatch(r"\s*([0-9][0-9.,]*)?\s*(?:[×x]\s*)?(?:10\s*([⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+))?\s*", text)
-    if not m or not (m.group(1) or m.group(2)):
+    m = re.fullmatch(r"\s*([−-])?\s*([0-9][0-9.,]*)?\s*(?:[×x]\s*)?(?:10\s*([⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+))?\s*", text)
+    if not m or not (m.group(2) or m.group(3)):
         raise ValueError(f"cannot parse quantity {spec!r}")
-    mant = Fraction(m.group(1).replace(",", "")) if m.group(1) else Fraction(1)
-    val = mant * (Fraction(10) ** int(m.group(2).translate(SUP)) if m.group(2) else 1)
+    sign = -1 if m.group(1) else 1
+    mant = sign * (Fraction(m.group(2).replace(",", "")) if m.group(2) else Fraction(1))
+    val = mant * (Fraction(10) ** int(m.group(3).translate(SUP)) if m.group(3) else 1)
     scale = load("units.json").get("scale_to", {}).get(unit) if unit else None
     if scale and registry_unit == scale[0]:
         val *= Fraction(scale[1])
@@ -137,10 +142,11 @@ def param_hash(p: dict) -> str:
 
 
 # ----------------------------------------------------------- verification --
-def verify(corpus: Path) -> dict:
+def verify(corpus: Path | list[Path]) -> dict:
     sources = {s["id"]: s for s in load("source-manifest.json")["sources"]}
     by_hash = {}
-    for f in iter_files([str(corpus)]):
+    dirs = corpus if isinstance(corpus, list) else [corpus]
+    for f in iter_files([str(d) for d in dirs]):
         by_hash.setdefault(sha256(f), f)
     pins, pages_cache = {}, {}
     for sid, s in sources.items():
@@ -194,7 +200,7 @@ def main() -> int:
     ap.add_argument("targets", nargs="*")
     ap.add_argument("--hash", action="store_true")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--corpus")
+    ap.add_argument("--corpus", action="append", help="directory searched for pinned sources (repeatable)")
     ap.add_argument("--write", action="store_true")
     a = ap.parse_args()
     if a.hash:
@@ -202,7 +208,7 @@ def main() -> int:
             print(f"{sha256(f)}  {f}")
         return 0
     if a.corpus:
-        r = verify(Path(a.corpus))
+        r = verify([Path(c) for c in a.corpus])
         for sid, pin in r["source_pins"].items():
             print(f"{'PIN ' if pin['found'] else 'MISS'} {sid}  {pin['file'] or pin['sha256'][:16]}")
         bad = 0

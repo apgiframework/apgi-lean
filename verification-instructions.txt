@@ -165,7 +165,7 @@ Negative cases are tests, not comments. Each forbidden unit mix must be shown to
 6. Implementation sequence and acceptance criteria
 Implementation checklist
 
-16 of 17 complete, 1 partial, 0 not started. Status as of 2026-11-24 (branch corpus-v1-registry, spec 0.2.0); the generated verification report is authoritative.
+17 of 17 complete. Status as of 2026-11-24 (main, spec 0.3.0); the generated verification report is authoritative.
 
 
 Phase 0 — Environment
@@ -277,8 +277,9 @@ Phase 5 — Decision
 
 P2
 
-[~] Decide whether to extend formalization to L0–L4 components
-    Data recorded below; the decision is the author's.
+[x] Decide whether to extend formalization to L0–L4 components
+    Decided 2026-11-24 (task 11): option (b), targeted theorems only. Every equation registered in spec 0.3.0 gets a Lean-backed statement, plus the cusp converse; no full L0–L4 formalization.
+    Reason: the pre-registered rule (Lean must find at least one defect the Python tests missed) is met, but by one defect (L1); fourteen of fifteen defects came from extraction and the production cross-check. Targeted theorems pin down exactly what the corpus asserts at low cost; open-ended L0–L4 work does not pay at this yield.
     Extend Lean beyond the pilot only if it finds at least one defect that the Python tests missed. This threshold is recorded before the pilot ends.
 
 
@@ -321,7 +322,7 @@ The first milestone should be the automatic detection of the θₜ and notation 
 
 Do not expand to full L0–L4 verification until the pilot demonstrates that formalization catches defects ordinary tests would miss.
 
-Final assessment (2026-11-24): design 88/100; implementation 85/100. All P0 specification conflicts are resolved from the pinned corpus; 6 of 7 pilot criteria are met locally, the seventh (criterion 1) waits only on pinning the unpublished Innovations draft or moving the cusp potential into the published corpus. This is a rating of engineering suitability, not of APGI's scientific validity.
+Final assessment (2026-11-24, re-rated after spec 0.3.0): design 92/100; implementation 91/100. All P0 specification conflicts are resolved from the pinned corpus. Criterion 1 is met: the cusp potential moved into §7.7 of the v1.2 Mathematical Specification draft, pinned by sha256 (SRC-MATHSPEC-V12D), and SRC-INNOV-GDOC is retired. Locally 6 of 7 criteria are met; the seventh (a report generated in GitHub Actions) is met only by a CI run, so expect 7 of 7 there. 39 of 39 parameters are verified against pinned sources; 41 theorems are axiom-audited. One registry conflict stays open on purpose (KC-PRECOND-TAU-PI: the corpus gives τ_Π no value, so dt ≤ τ_Π/10 cannot be checked). Remaining deductions: the cusp source is an unpublished draft until v1.2 is released, τ_Π is uncalibrated, and two production divergences (PD-CLIP, PD-KAPPA-RESIDUAL) remain open. This is a rating of engineering suitability, not of APGI's scientific validity.
 
 The strongest result would be a system in which every major APGI claim can be traced through:
 
@@ -351,3 +352,15 @@ Reading of the evidence
 - The rule's condition is met by one defect (L1), and that defect concerned meaning, not arithmetic.
 - Fourteen of fifteen defects came from comparing the registry with pinned sources and with production code. That is where further effort pays.
 - Lean's continuing value is the theorems that pin down what the corpus asserts: cusp sufficiency (now proved), and exact decay needing no step-size bound (decay_step_mem_Icc). A targeted next candidate would be dt-invariance of the hazard sampler, which bears directly on PD-HAZARD. Full L0–L4 formalization is not supported by this yield.
+
+Spec 0.3.0 additions (2026-11-24)
+Lean (Apgi/Dynamics.lean, 27 new audited theorems): hazard dt-invariance (hazard_two_steps, hazard_n_steps), leaky-integrator gain in (0, 1) and dt-invariance, NE clamp band [0.5, 1.5], monotone allostatic threshold step, Ψ bound and symmetric limit, Πⁱ_eff monotonicity, and the cusp converse, which makes the discriminant rule an equivalence (cusp_three_equilibria_iff). Lean found no new defect; the statements now back CL-10 to CL-16 and the PD-HAZARD fix.
+
+Found by registration and extraction (task 12–14)
+- E10. τ_Π is defined (Math Spec p6, Notation Appendix p16) but has no value or range, so the spec's own rule dt ≤ min(τ_S, τ_θ, τ_Π)/10 cannot be checked. Open as KC-PRECOND-TAU-PI.
+- E11. The registry's dt definition stated dt ≤ min(τ_S, τ_θ, τ_Π, τ_res)/10 unconditionally; with τ_res down to 10 ms that would forbid dt₀ = 10 ms. The corpus makes the τ_res term conditional on an active reservoir (dt ≤ 1 ms, Math Spec p26). Fixed: dt_reservoir registered.
+- E12. Corpus defect: Notation Appendix Table 20 (p37) lists c_θ as n/a; Math Spec p8 and Notation Appendix p13 give AU. Corpus pattern KC-CTHETA-UNIT; fixed in the v1.2 draft.
+- E13. Minor corpus inconsistency: α_Π ≥ 0 (Math Spec p6) vs α_Π > 0 (p16). Not fixed; the author decides.
+
+Found by the production cross-check while fixing PD-DT
+- PD-TAU-S τ_S = 5 s outside 200–500 ms (fixed); PD-CLIP θ clipped to [0.1, 20] AU with no corpus basis (open); the continuous threshold ODE fell back to τ_θ = 1000 s and took the per-step η_θ as a rate (fixed with PD-TAU-THETA); PD-KAPPA-RESIDUAL further bare-κ names (open).

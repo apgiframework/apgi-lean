@@ -96,16 +96,42 @@ def test_default_dt_respects_step_rule():
 
 @divergence("PD-TAU-THETA")
 def test_default_decay_implies_registry_tau_theta():
-    """The per-step decay exponent equals dt/τ_θ, so τ_θ = dt/exponent must lie in [10, 30] s."""
-    tau = CFG["dt"] / CFG["kappa"]
+    """The per-step decay exponent equals dt/τ_θ, so τ_θ = dt/exponent must lie in [10, 30] s.
+    Before the fix the exponent was stored as CONFIG['kappa']; after it, CONFIG holds τ_θ."""
+    tau = CFG["tau_theta"] if "tau_theta" in CFG else CFG["dt"] / CFG["kappa"]
     r = P["tau_theta"]["range"]
     assert float(r["lo"]) <= tau <= float(r["hi"])
+    assert PCFG.decay_exponent(CFG) == pytest.approx(CFG["dt"] / tau, rel=1e-12)
 
 
 @divergence("PD-KAPPA-SYMBOL")
 def test_kappa_name_reserved_for_atp_per_bit():
-    """Notation Appendix §11: bare κ is reserved exclusively for ATP/bit."""
-    assert "kappa" not in CFG
+    """Notation Appendix §11: bare κ is reserved exclusively for ATP/bit, and κ_meta is
+    deprecated (R_L replaces it). Old names may survive one release as warning aliases."""
+    assert "kappa" not in CFG and "kappa_meta" not in CFG
+    params = inspect.signature(PT.threshold_decay).parameters
+    assert "kappa" not in params
+    with pytest.warns(DeprecationWarning):
+        PT.threshold_decay(0.5, 0.35, kappa=0.1)
+
+
+@divergence("PD-TAU-S")
+def test_default_tau_s_in_registry_range():
+    """Notation Appendix p2 / Dynamical Formulation p15: τ_S ∈ [200, 500] ms (worked value 300 ms)."""
+    r = P["tau_S"]["range"]
+    assert float(r["lo"]) <= CFG["tau_s"] <= float(r["hi"])
+
+
+def test_default_lambda_is_exact_gain():
+    """Math Spec Eq. 23–24: λ = 1 − exp(−dt/τ_S) at the configured dt and τ_S."""
+    assert CFG["lam"] == pytest.approx(R.leak_gain(CFG["dt"], CFG["tau_s"]), rel=1e-12)
+
+
+@divergence("PD-CLIP")
+def test_pipeline_theta_clip_matches_floor():
+    """The pipeline clamps θ to [theta_clip_min, theta_clip_max]; Math Spec §4.5 sets the
+    floor θ_floor = 0 unless a study states otherwise, and states no 0.1 AU clip."""
+    assert CFG.get("theta_clip_min", 0.0) == float(P["theta_floor"]["value"])
 
 
 @divergence("PD-FLOOR")
@@ -118,4 +144,15 @@ def test_euler_floor_matches_registry():
 def test_ignition_sampling_is_dt_invariant():
     """Release v1.1: ignition is sampled through 1 − exp(−r_max·Bₜ·dt), superseding per-step
     Bernoulli(Bₜ). A sampler without a dt argument cannot be dt-invariant."""
-    assert "dt" in inspect.signature(PI.sample_ignition_state).parameters
+    sig = inspect.signature(PI.sample_ignition_state).parameters
+    assert "dt" in sig and "r_max" in sig
+    assert "r_max" in CFG and CFG["r_max"] > 0
+
+
+@divergence("PD-HAZARD")
+@given(st.floats(0, 1), st.floats(0, 0.5), st.floats(0, 200))
+def test_production_hazard_matches_reference(B, dt, r_max):
+    """EQ-HAZARD-1. Lean: Apgi.hazard_two_steps, applied to the production hazard."""
+    p = PI.hazard_probability(B, dt, r_max)
+    assert p == pytest.approx(R.hazard_prob(r_max, B, dt), rel=1e-12, abs=1e-15)
+    assert (1 - p) ** 2 == pytest.approx(1 - PI.hazard_probability(B, 2 * dt, r_max), rel=1e-9, abs=1e-15)

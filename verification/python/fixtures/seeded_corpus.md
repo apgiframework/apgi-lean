@@ -10,3 +10,4 @@ KC-BF10-10: Pred 0.B is confirmed when BF₁₀ ≥ 10 in favour of ignition.
 KC-ALPHA-GAIN: The threshold moves toward its target with α as the update gain.
 KC-LAMBDA-THETA: The threshold adapts at rate λ_θ set by noradrenaline.
 KC-GAMMA-SIG-UNIT: γ_sig = 1/τ_σ links steepness to temperature, canonical band [2, 7.5] (dimensionless).
+KC-CTHETA-UNIT: | **c\_θ** | Threshold-update cost coefficient | n/a | \[0.001, 0.5\] |
