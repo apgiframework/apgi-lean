@@ -1,0 +1,294 @@
+{
+  "generated": "2026-11-24T04:39:31+00:00",
+  "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4",
+  "spec_lean_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4",
+  "spec_version": "0.1.0",
+  "lean_build": "passed",
+  "python_tests": {
+    "passed": 38,
+    "failed": 0,
+    "total": 38
+  },
+  "theorems": [
+    {
+      "name": "Apgi.clampedUpdate_floor",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-THR-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.convex_update_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-UPD-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.cuspV_hasDerivAt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.cusp_two_equilibria_witness",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.cusp_unique_equilibrium",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.euler_step_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EULER-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.ignites_antitone_threshold",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.ignites_monotone_precision",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.ignitionProb_antitone_threshold",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.operatingRange_invariant_of_target",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-THR-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    },
+    {
+      "name": "Apgi.operatingRange_not_invariant",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-THR-1"
+      ],
+      "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4"
+    }
+  ],
+  "claims": [
+    {
+      "id": "CL-1",
+      "text": "Raising θ cannot make ignition easier at fixed S.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.ignites_antitone_threshold",
+        "Apgi.ignitionProb_antitone_threshold"
+      ],
+      "equations": [
+        "EQ-IGN-1",
+        "EQ-IGN-2"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.ignites_antitone_threshold",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.ignitionProb_antitone_threshold",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-2",
+      "text": "The clamped update preserves the 0.5 AU floor.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.clampedUpdate_floor"
+      ],
+      "equations": [
+        "EQ-THR-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.clampedUpdate_floor",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-3",
+      "text": "[2, 8] AU is not an invariant of the clamped update for unrestricted targets; it is invariant when targets lie in [2, 8] and 0 ≤ g ≤ 1.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.operatingRange_not_invariant",
+        "Apgi.operatingRange_invariant_of_target"
+      ],
+      "equations": [
+        "EQ-THR-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.operatingRange_not_invariant",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.operatingRange_invariant_of_target",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-4",
+      "text": "a < 0 is necessary for cusp bistability (and hence hysteresis).",
+      "status": "proved",
+      "evidence": [
+        "Apgi.cusp_unique_equilibrium"
+      ],
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.cusp_unique_equilibrium",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-5",
+      "text": "a < 0 and 4a³ + 27θ² < 0 together are sufficient for three equilibria.",
+      "status": "tested",
+      "evidence": [
+        "test_twins.py::test_cusp_discriminant"
+      ],
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "test_twins.py::test_cusp_discriminant",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "tested"
+    },
+    {
+      "id": "CL-6",
+      "text": "Forward-Euler relaxation stays in bounds when Δt ≤ τ.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.euler_step_mem_Icc"
+      ],
+      "equations": [
+        "EQ-EULER-1"
+      ],
+      "evidence_state": [
+        {
+          "ref": "Apgi.euler_step_mem_Icc",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-7",
+      "text": "APGI's hysteresis prediction (Innovation 4) holds in human data.",
+      "status": "unresolved",
+      "evidence": [],
+      "equations": [
+        "EQ-CUSP-1"
+      ],
+      "evidence_state": [],
+      "reported_status": "unresolved"
+    },
+    {
+      "id": "CL-8",
+      "text": "κ ≈ 1,700 (metabolic overhead relative to Landauer).",
+      "status": "assumed",
+      "evidence": [],
+      "equations": [
+        "EQ-LAND-1"
+      ],
+      "note": "No derivation registered; parameters.json kappa.derivation is null.",
+      "evidence_state": [],
+      "reported_status": "assumed"
+    }
+  ],
+  "pilot_criteria": [
+    {
+      "criterion": "Every canonical parameter has a source identifier, unit, version, and documented range",
+      "met": false,
+      "evidence": "5 incomplete parameter(s); sources unpinned"
+    },
+    {
+      "criterion": "Known discrepancies produce explicit failures",
+      "met": true,
+      "evidence": "7 open conflicts tracked; seeded suite passed"
+    },
+    {
+      "criterion": "Lean theorems compile without sorry or unapproved axioms",
+      "met": true,
+      "evidence": "lake build --wfail: passed; 11/11 theorems axiom-audited via #guard_msgs"
+    },
+    {
+      "criterion": "Mathematical results are linked to exact specification revisions",
+      "met": true,
+      "evidence": "Spec.lean hash matches registry 020a8b9b1d3f"
+    },
+    {
+      "criterion": "Python tests pass the APGI numerical tolerances (1e-9)",
+      "met": true,
+      "evidence": "5/5 golden-vector tests passed"
+    },
+    {
+      "criterion": "Continuous integration produces a reproducible verification report",
+      "met": false,
+      "evidence": "generated locally (CI run required)"
+    },
+    {
+      "criterion": "No mathematical proof is described as empirical confirmation of APGI",
+      "met": true,
+      "evidence": "no claim cites a Lean theorem as empirical evidence"
+    }
+  ]
+}

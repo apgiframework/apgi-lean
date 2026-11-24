@@ -1,0 +1,5 @@
+# Pinned for reproducible verification reports (tested on Python 3.10-3.13).
+pytest==9.2.0
+hypothesis==6.168.5
+numpy==2.2.6
+mpmath==1.3.0

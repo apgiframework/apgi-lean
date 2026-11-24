@@ -1,2 +1,14 @@
 /.lake
 /.lake.mac-backup
+# local build logs
+/build.log
+/build.err
+/cache-get.log
+# python
+__pycache__/
+.hypothesis/
+.pytest_cache/
+# CI-only artefact
+/verification/reports/junit.xml
+# Claude deliverables folder
+/Claude outputs/

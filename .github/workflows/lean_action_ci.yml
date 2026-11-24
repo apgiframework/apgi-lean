@@ -1,21 +1,76 @@
-name: Lean Action CI
+name: APGI verification
 
 on:
   push:
   pull_request:
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read # Read access to repository contents
-  pages: write # Write access to GitHub Pages
-  id-token: write # Write access to ID tokens
+  contents: read
 
 jobs:
-  build:
+  lean:
+    name: Lean (lake build --wfail, axiom audit)
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v7
+      # --wfail turns every warning (including `declaration uses sorry`) into a
+      # failure. The #guard_msgs axiom audit in Apgi/Pilot.lean raises a hard
+      # error on any sorryAx, custom axiom, or change in a theorem's axioms.
       - uses: leanprover/lean-action@v1
-      - uses: leanprover-community/docgen-action@v1
+        with:
+          build-args: "--wfail"
+          use-github-cache: true
+      # docgen-action removed until GitHub Pages is configured.
+
+  python:
+    name: Registry, consistency, Python tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r verification/python/requirements.txt
+      - name: Spec.lean is generated from the current registry
+        run: python verification/python/generate_lean.py --check
+      - name: Consistency check (fails on unacknowledged or stale conflicts)
+        run: python verification/python/check_consistency.py
+      - name: Pytest (twins, golden vectors, seeded conflicts)
+        working-directory: verification/python
+        run: python -m pytest -q --junitxml=../reports/junit.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: junit
+          path: verification/reports/junit.xml
+
+  report:
+    name: Verification report
+    needs: [lean, python]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r verification/python/requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: junit
+          path: verification/reports
+        continue-on-error: true
+      - name: Build report
+        run: >
+          python verification/python/make_report.py
+          --junit verification/reports/junit.xml
+          ${{ needs.lean.result == 'success' && '--lean-ok' || '--lean-log failed' }}
+      - run: cat verification/reports/verification-report.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verification-report
+          path: verification/reports/
+      - name: Fail if Lean or Python failed
+        if: needs.lean.result != 'success' || needs.python.result != 'success'
+        run: exit 1

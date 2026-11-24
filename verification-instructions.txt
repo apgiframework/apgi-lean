@@ -33,33 +33,45 @@ Proved · Tested · Assumed · Empirically supported · Unresolved
 
 The central design decision is to separate the canonical specification from the proof library.
 
+`generate_lean.py` generates definitions and constants only from the registry, never proofs. Hand-written proofs import those definitions, so a change to the spec breaks a proof loudly. Each theorem's report entry records the equation ID and the registry hash it was proved against.
+
 The canonical registry defines what APGI claims mathematically. Lean verifies consequences of those definitions. Python tests their numerical realization. Experimental data assesses their scientific relevance.
-4. Recommended repository structure
-apgi-system/
+
+Theorem–test pairing
+Every Lean theorem gets a twin Hypothesis property test that checks the same statement against the Python implementation, with a tolerance for float64. Lean establishes the mathematics; the twin test checks that the code obeys it.
+
+Precondition coverage
+CI checks that every registry range sits inside the hypotheses of the theorem that covers it. For example, a theorem that needs dt ≤ τ is useless if the registry allows dt > τ. A precondition that cannot be checked because a value is missing is reported as an open conflict, not as a pass.
+
+4. Repository structure (as built)
+The Lean project sits at the repository root. The specification and the Python toolchain sit beside it.
+
+apgi/
+├── lakefile.toml, lean-toolchain, lake-manifest.json   (pinned: Lean v4.36.0, Mathlib fc4f59e…)
 ├── specification/
 │   ├── parameters.json
 │   ├── equations.json
 │   ├── units.json
 │   ├── epistemic-claims.json
-│   └── source-manifest.json
+│   ├── source-manifest.json
+│   └── known-conflicts.json
+│
+├── Apgi/
+│   ├── Spec.lean          (generated from parameters.json; do not edit)
+│   └── Pilot.lean         (Proofs 1–5, unit types, axiom audit)
 │
 ├── verification/
-│   ├── lean/
-│   │   ├── Apgi/
-│   │   │   ├── Parameters.lean
-│   │   │   ├── Tiers.lean
-│   │   │   ├── Ignition.lean
-│   │   │   ├── Cusp.lean
-│   │   │   └── DiscreteUpdate.lean
-│   │   ├── lakefile.toml
-│   │   └── lean-toolchain
-│   │
 │   ├── python/
-│   │   ├── extract_sources.py
-│   │   ├── check_consistency.py
+│   │   ├── registry.py
 │   │   ├── generate_lean.py
-│   │   ├── test_equations.py
-│   │   └── test_golden_vectors.py
+│   │   ├── check_consistency.py
+│   │   ├── extract_sources.py
+│   │   ├── apgi_ref.py
+│   │   ├── make_golden.py, golden_vectors.json
+│   │   ├── test_twins.py, test_golden_vectors.py,
+│   │   │   test_conflicts.py, test_equations.py
+│   │   ├── fixtures/ (seeded_corpus.md, clean_corpus.md)
+│   │   └── make_report.py
 │   │
 │   └── reports/
 │       ├── conflicts.json
@@ -68,10 +80,7 @@ apgi-system/
 │
 └── .github/
     └── workflows/
-        └── verify-apgi.yml
-
-
-This structure is a proposal, not a claim about the current repository contents.
+        └── lean_action_ci.yml
 
 Keep the original documents as traceable sources. Do not overwrite them automatically when the registry changes. Changes should create a reviewable difference and require approval before becoming canonical.
 5. What to formalize first
@@ -92,17 +101,12 @@ Prove:
 This establishes that a higher threshold cannot make ignition easier when the signal is held fixed.
 
 The theorem is mathematically straightforward. Its APGI relevance depends on the canonical definition of ignition.
-Proof 2 — Parameter bounds
-Define a bounded threshold as a structure rather than an unrestricted real number.
+Proof 2 — Threshold semantics: floor versus operating range
+Use two types. `ThresholdState` respects the 0.5 AU floor. `OperatingThreshold` lies within [2, 8] AU.
 
-For example, if the canonical operating range is confirmed:
-structure OperatingThreshold where
-  value : ℝ
-  lower : 2 ≤ value
-  upper : value ≤ 8
+Then prove two things. The clamped update preserves the floor. It does not preserve the range for targets below 2 AU, but it does preserve the range when targets are restricted to [2, 8] AU and 0 ≤ gain ≤ 1.
 
-
-Do not put the 0.5 AU floor into the same operating-range structure without first clarifying its relationship to the 2 AU baseline.
+Lean thereby forces the specification to decide whether [2, 8] is a state invariant (and restrict admissible targets) or a regime label. This settles the P0 θₜ conflict formally instead of leaving it as prose.
 Proof 3 — Cusp sign convention
 For a candidate potential:
 \[
@@ -118,22 +122,30 @@ Lean can verify this symbolic relationship.
 
 However, it cannot independently establish that this is the scientifically intended APGI potential.
 
+The candidate potential uses the corrected +θₜ·x sign. A Python check flags any document still showing −θₜ·x.
+
+Add the lemma "a ≥ 0 ⇒ unique equilibrium". It shows that a < 0 is necessary for hysteresis, which links to the Innovation 4 hysteresis prediction. It is not sufficient: three equilibria also need 4a³ + 27θ² < 0. Any paper that cites the Lean result must word it as "necessary".
+
 First verify the canonical equation and sign convention; then prove the derivative and equilibrium identities.
 Proof 4 — Discrete update invariance
 For a simplified allostatic update:
 \[
-x_{t+1}=x_t+\alpha(u_t-x_t)
+x_{t+1}=x_t+g\,(u_t-x_t)
 \]
 
 prove that if
 \[
-0\leq x_t,u_t,\alpha\leq1
+x_t,u_t\in[lo,hi],\quad 0\leq g\leq1
 \]
 
 then
 \[
-0\leq x_{t+1}\leq1
+x_{t+1}\in[lo,hi]
 \]
+
+The gain is written g (`gain`), not α, because α collides with sigmoid steepness.
+
+Add the forward-Euler form with g = dt/τ. It is bounded whenever dt ≤ τ. That is the precondition the integrator actually has to honour.
 
 This is a practical example of a bounded-state invariant.
 
@@ -145,94 +157,114 @@ This may provide more practical value than abstract epistemic tier types.
 
 For example, a dimensionless coefficient cannot be silently treated as a rate with units of inverse seconds.
 
+Make AU its own base dimension, so it cannot mix with any physical unit until a calibration map exists. Add a regression test that rejects κ typed as mol ATP/bit.
+
 Use separate types for physical dimensions and epistemic classifications. They solve different problems.
+
+Negative cases are tests, not comments. Each forbidden unit mix must be shown to fail to elaborate, using `fail_if_success` (or `#guard_msgs`) around the bad expression.
 6. Implementation sequence and acceptance criteria
 Implementation checklist
 
-0 of 17 tasks complete
-
-0%
+10 of 17 complete, 5 partial, 2 not started. Status as of 2026-11-23; the generated verification report is authoritative.
 
 
+Phase 0 — Environment
+[x] At least 15 GB free, or a CI-only Lean build. CI runs `lake build --wfail`, so any `sorry` or warning fails. A `#guard_msgs` axiom audit rejects `sorryAx`, custom axioms, and any change to a theorem's axiom list.
+
+
+P0
 
 Phase 1 — Specification
-[ ] Identify the authoritative parameter registry and source revisions
+[~] Identify the authoritative parameter registry and source revisions
+    Registry built. Source documents still lack sha256 pins (KC-UNPINNED).
 
 
 P0
 
-[ ] Resolve θₜ baseline, operating range, and floor semantics
+[~] Resolve θₜ baseline, operating range, and floor semantics
+    Floor (0.5 AU) and baseline (2.0 AU) registered. Role of [2, 8] awaits the author (KC-THETA-ROLE); Lean has proved both options' consequences.
 
 
 P0
 
-[ ] Resolve κ, λ, λ_θ, β_som, and BF₁₀ discrepancies
+[~] Resolve κ, λ, λ_θ, β_som, and BF₁₀ discrepancies
+    κ unit resolved (dimensionless), derivation missing. β_som registered. λ vs λ_θ and Pred 0.B BF₁₀ (≥100 vs ≥10) await the author.
 
 
 P0
 
-[ ] Define canonical equation IDs and source references
+[x] Define canonical equation IDs and source references
 
 
 P0
 
 
 Phase 2 — Automated checks
-[ ] Implement independent extraction of document values
+[~] Implement independent extraction of document values
+    Defect-pattern extraction works on .md/.txt/.docx. Numeric value extraction per parameter is not yet built.
 
 
 P0
 
-[ ] Build parameter, unit, and equation comparison reports
+[x] Build parameter, unit, and equation comparison reports
 
 
 P0
 
-[ ] Add regression tests for known conflicts
+[x] Add regression tests for known conflicts
+    Seed the known-conflicts suite with:
+    - the θₜ floor vs range
+    - BF₁₀ ≥100 vs ≥10 (Pred 0.B)
+    - the Landauer constant, 2.87 vs 2.97 × 10⁻²¹ J, computed from k_B·T·ln 2 at 310 K
+    - κ's units
+    - the cusp sign
+    - the ρ/κ symbol collision
+    Conflict fixtures with computed truth: Landauer at 310 K = 2.967×10⁻²¹ J (k_B = 1.380649×10⁻²³ J/K, exact SI value). The erroneous 2.871×10⁻²¹ J is the 300 K value.
 
 
 P1
 
 
 Phase 3 — Lean pilot
-[ ] Initialize a pinned Lean 4 and Mathlib project
+[x] Initialize a pinned Lean 4 and Mathlib project
 
 
 P1
 
-[ ] Implement threshold and physical-unit types
+[x] Implement threshold and physical-unit types
 
 
 P1
 
-[ ] Prove ignition threshold monotonicity
+[x] Prove ignition threshold monotonicity
 
 
 P1
 
-[ ] Prove the canonical cusp identity
+[x] Prove the canonical cusp identity
 
 
 P1
 
-[ ] Audit theorem dependencies and prohibit sorryAx
+[x] Audit theorem dependencies and prohibit sorryAx
 
 
 P1
 
 
 Phase 4 — Python integration
-[ ] Compare reference equations against golden vectors
+[x] Compare reference equations against golden vectors
 
 
 P1
 
-[ ] Test discrete updates using Hypothesis
+[x] Test discrete updates using Hypothesis
 
 
 P1
 
-[ ] Add continuous integration and traceable reports
+[~] Add continuous integration and traceable reports
+    Workflow and report generator written; first CI run pending.
 
 
 P1
@@ -245,12 +277,11 @@ Phase 5 — Decision
 P2
 
 [ ] Decide whether to extend formalization to L0–L4 components
+    Extend Lean beyond the pilot only if it finds at least one defect that the Python tests missed. This threshold is recorded before the pilot ends.
 
 
 P2
 
-
- Copy checklistReset
 
 Pilot completion criteria
 The pilot passes only when:
@@ -261,18 +292,20 @@ The pilot passes only when:
 - Python tests pass the existing APGI numerical tolerances, including the specified \(10^{-9}\) checks where applicable.
 - Continuous integration produces a reproducible verification report.
 - No mathematical proof is described as empirical confirmation of APGI.
-The Lean installation workflow using lake new apgi math, Mathlib's precompiled cache, and lake build is supported by the current documentation. Pin the toolchain and dependency versions for reproducibility. 
-GitHub+2
+
+`make_report.py` evaluates each criterion from build artefacts and prints which are met.
+
+The Lean installation workflow using lake new apgi math, Mathlib's precompiled cache, and lake build is supported by the current documentation. Pin the toolchain and dependency versions for reproducibility. `lean-toolchain` (v4.36.0) and `lake-manifest.json` (Mathlib fc4f59e…) are the pins; do not run `lake update` casually.
 
 7. Cost-benefit analysis
 Planning estimates, not measured implementation times.
-Workstream	Estimated effort	Expected benefit
-Canonical registry and validation	1–3 days	Very high
-Source extraction and comparison	2–5 days	Very high
-Lean project and basic proofs	2–4 days	High
-Python integration and CI	2–4 days	High
-Discrete-update invariants	3–7 days	Medium–high
-Full L0–L4 formalization	Unbounded research effort	Uncertain
+
+- Canonical registry and validation: 1–3 days. Expected benefit: very high.
+- Source extraction and comparison: 2–5 days. Expected benefit: very high.
+- Lean project and basic proofs: 2–4 days. Expected benefit: high.
+- Python integration and CI: 2–4 days. Expected benefit: high.
+- Discrete-update invariants: 3–7 days. Expected benefit: medium–high.
+- Full L0–L4 formalization: unbounded research effort. Expected benefit: uncertain.
 
 A small pilot is reasonable. Full-system formalization is not justified at the current stage.
 
@@ -286,7 +319,7 @@ The first milestone should be the automatic detection of the θₜ and notation 
 
 Do not expand to full L0–L4 verification until the pilot demonstrates that formalization catches defects ordinary tests would miss.
 
-Final assessment: 90/100 for the revised design, with 95/100 attainable after a successful pilot. This is a rating of engineering suitability, not of APGI's scientific validity.
+Final assessment: design 85/100; implementation 60/100 (5 of 7 pilot criteria met locally). Re-rate after the first green CI run and resolution of the P0 author decisions. This is a rating of engineering suitability, not of APGI's scientific validity.
 
 The strongest result would be a system in which every major APGI claim can be traced through:
 
