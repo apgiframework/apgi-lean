@@ -1,0 +1,293 @@
+APGI verification architecture
+Canonical APGI Specification
+
+Parameters · Units · Equations · Definitions · Source revisions
+
+
+Independent document extraction and consistency checks
+
+Detect mismatches, missing definitions, and incompatible units
+
+
+Lean 4
+
+Type constraints, mathematical lemmas, assumption dependencies, invariants
+
+
+Python
+
+Reference equations, numerical tests, trajectories, tolerance checks
+
+
+
+
+Continuous Integration Verification
+
+Build · Proof audit · Golden vectors · Regression tests · Traceability
+
+
+APGI Verification Report
+
+Proved · Tested · Assumed · Empirically supported · Unresolved
+
+
+The central design decision is to separate the canonical specification from the proof library.
+
+The canonical registry defines what APGI claims mathematically. Lean verifies consequences of those definitions. Python tests their numerical realization. Experimental data assesses their scientific relevance.
+4. Recommended repository structure
+apgi-system/
+├── specification/
+│   ├── parameters.json
+│   ├── equations.json
+│   ├── units.json
+│   ├── epistemic-claims.json
+│   └── source-manifest.json
+│
+├── verification/
+│   ├── lean/
+│   │   ├── Apgi/
+│   │   │   ├── Parameters.lean
+│   │   │   ├── Tiers.lean
+│   │   │   ├── Ignition.lean
+│   │   │   ├── Cusp.lean
+│   │   │   └── DiscreteUpdate.lean
+│   │   ├── lakefile.toml
+│   │   └── lean-toolchain
+│   │
+│   ├── python/
+│   │   ├── extract_sources.py
+│   │   ├── check_consistency.py
+│   │   ├── generate_lean.py
+│   │   ├── test_equations.py
+│   │   └── test_golden_vectors.py
+│   │
+│   └── reports/
+│       ├── conflicts.json
+│       ├── proof-status.json
+│       └── verification-report.md
+│
+└── .github/
+    └── workflows/
+        └── verify-apgi.yml
+
+
+This structure is a proposal, not a claim about the current repository contents.
+
+Keep the original documents as traceable sources. Do not overwrite them automatically when the registry changes. Changes should create a reviewable difference and require approval before becoming canonical.
+5. What to formalize first
+I recommend five small proofs, in the following order.
+Proof 1 — Ignition threshold monotonicity
+For a simplified criterion:
+\[
+I(S,\theta) \iff S>\theta
+\]
+
+Prove:
+\[
+\theta_1\leq\theta_2
+\land I(S,\theta_2)
+\implies I(S,\theta_1)
+\]
+
+This establishes that a higher threshold cannot make ignition easier when the signal is held fixed.
+
+The theorem is mathematically straightforward. Its APGI relevance depends on the canonical definition of ignition.
+Proof 2 — Parameter bounds
+Define a bounded threshold as a structure rather than an unrestricted real number.
+
+For example, if the canonical operating range is confirmed:
+structure OperatingThreshold where
+  value : ℝ
+  lower : 2 ≤ value
+  upper : value ≤ 8
+
+
+Do not put the 0.5 AU floor into the same operating-range structure without first clarifying its relationship to the 2 AU baseline.
+Proof 3 — Cusp sign convention
+For a candidate potential:
+\[
+V(x)=\frac{x^4}{4}+\frac{a x^2}{2}+\theta x
+\]
+
+the derivative is:
+\[
+\frac{dV}{dx}=x^3+ax+\theta
+\]
+
+Lean can verify this symbolic relationship.
+
+However, it cannot independently establish that this is the scientifically intended APGI potential.
+
+First verify the canonical equation and sign convention; then prove the derivative and equilibrium identities.
+Proof 4 — Discrete update invariance
+For a simplified allostatic update:
+\[
+x_{t+1}=x_t+\alpha(u_t-x_t)
+\]
+
+prove that if
+\[
+0\leq x_t,u_t,\alpha\leq1
+\]
+
+then
+\[
+0\leq x_{t+1}\leq1
+\]
+
+This is a practical example of a bounded-state invariant.
+
+It does not establish stability of the full APGI model, but it provides a foundation for checking individual update components.
+Proof 5 — Dimensional consistency
+Represent physical units explicitly and reject incompatible additions or conversions.
+
+This may provide more practical value than abstract epistemic tier types.
+
+For example, a dimensionless coefficient cannot be silently treated as a rate with units of inverse seconds.
+
+Use separate types for physical dimensions and epistemic classifications. They solve different problems.
+6. Implementation sequence and acceptance criteria
+Implementation checklist
+
+0 of 17 tasks complete
+
+0%
+
+
+
+Phase 1 — Specification
+[ ] Identify the authoritative parameter registry and source revisions
+
+
+P0
+
+[ ] Resolve θₜ baseline, operating range, and floor semantics
+
+
+P0
+
+[ ] Resolve κ, λ, λ_θ, β_som, and BF₁₀ discrepancies
+
+
+P0
+
+[ ] Define canonical equation IDs and source references
+
+
+P0
+
+
+Phase 2 — Automated checks
+[ ] Implement independent extraction of document values
+
+
+P0
+
+[ ] Build parameter, unit, and equation comparison reports
+
+
+P0
+
+[ ] Add regression tests for known conflicts
+
+
+P1
+
+
+Phase 3 — Lean pilot
+[ ] Initialize a pinned Lean 4 and Mathlib project
+
+
+P1
+
+[ ] Implement threshold and physical-unit types
+
+
+P1
+
+[ ] Prove ignition threshold monotonicity
+
+
+P1
+
+[ ] Prove the canonical cusp identity
+
+
+P1
+
+[ ] Audit theorem dependencies and prohibit sorryAx
+
+
+P1
+
+
+Phase 4 — Python integration
+[ ] Compare reference equations against golden vectors
+
+
+P1
+
+[ ] Test discrete updates using Hypothesis
+
+
+P1
+
+[ ] Add continuous integration and traceable reports
+
+
+P1
+
+
+Phase 5 — Decision
+[ ] Measure defects detected and maintenance effort
+
+
+P2
+
+[ ] Decide whether to extend formalization to L0–L4 components
+
+
+P2
+
+
+ Copy checklistReset
+
+Pilot completion criteria
+The pilot passes only when:
+- Every canonical parameter has a source identifier, unit, version, and documented range.
+- Known discrepancies produce explicit failures.
+- The selected Lean theorems compile without sorry or unapproved custom axioms.
+- Mathematical results are linked to exact specification revisions.
+- Python tests pass the existing APGI numerical tolerances, including the specified \(10^{-9}\) checks where applicable.
+- Continuous integration produces a reproducible verification report.
+- No mathematical proof is described as empirical confirmation of APGI.
+The Lean installation workflow using lake new apgi math, Mathlib's precompiled cache, and lake build is supported by the current documentation. Pin the toolchain and dependency versions for reproducibility. 
+GitHub+2
+
+7. Cost-benefit analysis
+Planning estimates, not measured implementation times.
+Workstream	Estimated effort	Expected benefit
+Canonical registry and validation	1–3 days	Very high
+Source extraction and comparison	2–5 days	Very high
+Lean project and basic proofs	2–4 days	High
+Python integration and CI	2–4 days	High
+Discrete-update invariants	3–7 days	Medium–high
+Full L0–L4 formalization	Unbounded research effort	Uncertain
+
+A small pilot is reasonable. Full-system formalization is not justified at the current stage.
+
+The main risk is spending time proving elementary mathematical facts while unresolved specification conflicts and empirical-validation tasks remain open.
+8. Final recommendation
+Adopt the revised approach with a strict scope limit.
+
+I would allocate approximately 80% of the initial effort to canonical specification consistency, source traceability, and Python regression testing, and 20% to Lean.
+
+The first milestone should be the automatic detection of the θₜ and notation conflicts. The second should be a successful Lean proof tied to a canonical APGI equation.
+
+Do not expand to full L0–L4 verification until the pilot demonstrates that formalization catches defects ordinary tests would miss.
+
+Final assessment: 90/100 for the revised design, with 95/100 attainable after a successful pilot. This is a rating of engineering suitability, not of APGI's scientific validity.
+
+The strongest result would be a system in which every major APGI claim can be traced through:
+
+Source → Canonical definition → Mathematical proof or test → Python implementation → Empirical evidence → Verification status.

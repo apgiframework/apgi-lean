@@ -1,0 +1,74 @@
+## A. Diagnostic summary
+
+- **CRITICAL (your setup).** Two separate faults show in your terminal:
+  1. **The disk ran out.** "No space left on device" hit after 327 of 9,117 Mathlib cache files.
+  2. **You ran the follow-up commands in the wrong folder.** You ran `cache get` and `build` in `PRODUCTION/`, but `lake new` created the project in `PRODUCTION/apgi/`. That is why Lake found no lakefile.
+  The "could not canonicalize path" warnings are harmless on a first install.
+- **CRITICAL (plan).** Nothing ties a Lean definition to a specification revision. `generate_lean.py` is listed, but the plan never says what it generates or how changes in the spec are detected. As written, the promise of traceability can't be checked.
+- **HIGH.** Lean proves facts about real numbers, not about your Python code. The plan has no matching test for each theorem and doesn't address float64 rounding. So a proof can pass while the implementation violates it.
+- **HIGH.** Proofs 1 and 4 are true of any threshold model, so they can't catch an APGI-specific defect. Proof 2 sidesteps the one question Lean can actually settle: is the 0.5 AU floor or the [2, 8] AU range the state invariant?
+- **MEDIUM.** Notation collisions and units:
+  - Proof 4 uses α as the update gain, which collides with sigmoid steepness. That is exactly the kind of collision your corpus audit is meant to prevent.
+  - Proof 5 never says what AU is. Arbitrary units are not a physical dimension.
+- **MEDIUM.** The Phase 5 go/no-go decision has no pre-registered threshold. "Measure defects detected" sets no bar for success.
+- **LOW.** Leftover web-page text ("GitHub+2", "Copy checklistReset"). The plan's self-score of 90 is generous given the gaps above.
+
+## B. Unblock the current terminal
+
+```bash
+df -h ~                                   # aim for ~15 GB free
+rm -rf ~/.cache/mathlib                   # partial downloads; safe, they re-download
+# Usual space hogs on a web-dev Mac:
+du -sh ~/Library/Caches ~/Library/Containers/com.docker.docker ~/Library/Developer 2>/dev/null
+find ~/Sites -name node_modules -type d -prune -exec du -sh {} + | sort -h | tail
+
+cd ~/Sites/PRODUCTION/apgi                # the step you missed
+lake exe cache get
+lake build
+```
+
+- **Folder location.** If you want the project at `verification/lean` now, move the `apgi` folder there before building. The package name lives in `lakefile.toml`, not in the folder name.
+- **Version pins.** Commit `lean-toolchain` (v4.36.0) and `lake-manifest.json`, which pins Mathlib to `fc4f59e…`. Those two files are your pins. Don't run `lake update` casually, because it moves Mathlib to a newer version.
+- **Fallback if the MacBook Air stays tight on space:** run Lean only in CI with `leanprover/lean-action`. GitHub's runner downloads the cache, so your disk never holds it.
+
+## C. Edits to the plan
+
+1. **Insert a new "Phase 0 — Environment" before Phase 1:** "At least 15 GB free, or a CI-only Lean build. CI runs `lake build --wfail`, so any `sorry` or warning fails. An axiom audit with `#print axioms` rejects `sorryAx` and custom axioms."
+2. **Insert after "Separate the canonical specification from the proof library":** "`generate_lean.py` generates *definitions and constants only* from the registry, never proofs. Hand-written proofs import those definitions, so a change to the spec breaks a proof loudly. Each theorem's report entry records the equation ID and the registry hash it was proved against."
+3. **Insert a new section, "Theorem–test pairing":** "Every Lean theorem gets a twin Hypothesis property test that checks the same statement against the Python implementation, with a tolerance for float64. Lean establishes the mathematics; the twin test checks that the code obeys it."
+4. **Insert a "precondition coverage" check:** "CI checks that every registry range sits inside the hypotheses of the theorem that covers it." For example, a theorem that needs dt ≤ τ is useless if the registry allows dt > τ.
+5. **Rewrite Proof 2:** use two types, `ThresholdState` (respects the 0.5 floor) and `OperatingThreshold` (within [2, 8]). Then prove that the clamped update preserves the floor but *not* the range. Lean then forces the spec to decide whether [2, 8] is an invariant or a regime label. This settles your P0 θₜ conflict formally instead of leaving it as prose.
+6. **Insert into Proof 3:**
+   - The candidate potential already uses the corrected +θₜ·x sign. A Python check should flag any document still showing −θₜ·x.
+   - Add the lemma "a ≥ 0 ⇒ unique equilibrium." It shows that hysteresis requires a < 0, which links to the Innovation 4 hysteresis prediction.
+7. **Rewrite Proof 4:**
+   - Rename α to `gain`.
+   - Generalise the interval to [lo, hi].
+   - Add the forward-Euler form with gain = dt/τ, which is bounded whenever dt ≤ τ. That precondition is the one your integrator actually has to honour.
+8. **Insert into Proof 5:**
+   - Make AU its own base dimension, so it can't mix with any physical unit until a calibration map exists.
+   - Add a regression test that rejects κ typed as mol ATP/bit.
+9. **Insert into Phase 2:** "Seed the known-conflicts suite with:
+   - the θₜ floor vs range
+   - BF₁₀ ≥100 vs ≥10 (Pred 0.B)
+   - the Landauer constant, 2.87 vs 2.97 × 10⁻²¹ J, computed from k_B·T·ln 2 at 310 K
+   - κ's units
+   - the cusp sign
+   - the ρ/κ symbol collision"
+10. **Rewrite Phase 5:** "Extend Lean beyond the pilot only if it finds at least one defect that the Python tests missed. Record this threshold before the pilot starts."
+11. **Delete** "GitHub+2" and "Copy checklistReset".
+
+## D. The pilot file
+
+`Pilot.lean` implements edits 5–8 and an axiom audit:
+- Ignition monotone in θ, monotone in precision, and sigmoid antitone in θ
+- Floor and range types, with the non-invariance theorem
+- Cusp derivative and uniqueness of the equilibrium
+- Bounded update and Euler step
+- Dimension types
+
+I couldn't compile it here, so expect possibly a lemma rename or a small tactic tweak on the first build. Paste me the errors and I'll fix them.
+
+## E. Next steps, one at a time
+
+**Next:** get `ignites_antitone_threshold` to compile, then stop. **After that:** move to the Python θₜ conflict detector, which is what the plan says the first milestone is. The remaining items can wait until those two work.

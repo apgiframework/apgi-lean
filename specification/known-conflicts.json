@@ -1,0 +1,29 @@
+{
+  "schema": "apgi-known-conflicts/1",
+  "rule": "check_consistency.py fails on any conflict it detects that is NOT listed here with status 'open'. Each entry listed here must still be detected (regression), until its status is set to 'resolved' together with the registry fix.",
+  "conflicts": [
+    {"id": "KC-THETA-ROLE", "check": "unresolved_role", "params": ["theta_operating_lower", "theta_operating_upper"], "status": "open", "severity": "P0",
+     "summary": "[2, 8] AU is not declared a state invariant or a regime label. Lean proves it cannot be an invariant for targets below 2 AU."},
+    {"id": "KC-BF10-0B", "check": "candidate_disagreement", "params": ["bf10_threshold_pred_0B"], "status": "open", "severity": "P0",
+     "summary": "Pred 0.B Bayes-factor threshold: registry ≥100 vs OSF v2 ≥10."},
+    {"id": "KC-LAMBDA", "check": "unresolved_role", "params": ["lambda"], "status": "open", "severity": "P0",
+     "summary": "Bare λ vs λ_θ: distinct parameter or drifted spelling."},
+    {"id": "KC-KAPPA-DERIV", "check": "missing_derivation", "params": ["kappa"], "status": "open", "severity": "P1",
+     "summary": "κ ≈ 1,700 has no registered derivation."},
+    {"id": "KC-INCOMPLETE", "check": "incomplete_parameter", "params": ["lambda_theta", "lambda", "tau_theta", "dt", "k_sigmoid", "bf10_threshold_pred_0B"], "status": "open", "severity": "P1",
+     "summary": "Parameters missing a value/range or unit."},
+    {"id": "KC-PRECOND-EULER", "check": "precondition_unverifiable", "params": ["dt", "tau_theta"], "status": "open", "severity": "P1",
+     "summary": "Δt ≤ τ_θ cannot be checked: neither value is registered."},
+    {"id": "KC-UNPINNED", "check": "unpinned_source", "params": [], "status": "open", "severity": "P1",
+     "summary": "Source documents have no sha256 pin yet."}
+  ],
+  "corpus_patterns": [
+    {"id": "KC-LANDAUER-287", "pattern": "2[.,]87\\s*[×x]\\s*10\\s*(?:⁻²¹|\\^?-21|−21|-21)", "severity": "P0", "summary": "Landauer at 310 K is 2.967×10⁻²¹ J. 2.871×10⁻²¹ J is the 300 K value: the corpus used room temperature, not body temperature."},
+    {"id": "KC-CUSP-SIGN", "pattern": "[−-]\\s*θ[ₜt_]?\\s*[·*⋅]?\\s*x", "severity": "P0", "summary": "Cusp linear term must be +θₜ·x."},
+    {"id": "KC-KAPPA-UNITS", "pattern": "κ[^\\n]{0,40}mol\\s*ATP\\s*/\\s*bit", "severity": "P0", "summary": "κ is dimensionless, not mol ATP/bit."},
+    {"id": "KC-RHO-KAPPA", "pattern": "κ[^\\n]{0,30}spectral\\s+radius|spectral\\s+radius[^\\n]{0,30}κ", "severity": "P1", "summary": "Spectral radius is ρ_crit, not κ."},
+    {"id": "KC-BF10-10", "pattern": "Pred\\s*0\\.B[^\\n]{0,120}BF[₁1][₀0]\\s*[≥>]=?\\s*10(?!\\d)", "severity": "P0", "summary": "Pred 0.B threshold drift (≥10 vs ≥100)."},
+    {"id": "KC-ALPHA-GAIN", "pattern": "α[^\\n]{0,30}(?:update\\s+gain|learning\\s+rate)", "severity": "P1", "summary": "α collides with sigmoid steepness; use `gain`/k."},
+    {"id": "KC-BT-NOTATION", "pattern": "\\bB[ₜt]\\b(?![a-z])", "severity": "P1", "summary": "Bₜ is UI shorthand only; theory uses θₜ."}
+  ]
+}

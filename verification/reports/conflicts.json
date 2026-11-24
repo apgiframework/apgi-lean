@@ -1,0 +1,75 @@
+{
+  "registry_hash": "020a8b9b1d3fca91f946e944d4bf1629fd93dfa1710f5d55c46881339a409ef4",
+  "acknowledged": [
+    {
+      "check": "incomplete_parameter",
+      "params": [
+        "bf10_threshold_pred_0B",
+        "dt",
+        "lambda",
+        "lambda_theta",
+        "tau_theta"
+      ],
+      "detail": "missing value/range, unit, or version",
+      "severity": "P1",
+      "known": "KC-INCOMPLETE"
+    },
+    {
+      "check": "unresolved_role",
+      "params": [
+        "theta_operating_lower",
+        "theta_operating_upper"
+      ],
+      "detail": "role must be 'state_invariant' or 'regime_label'",
+      "severity": "P0",
+      "known": "KC-THETA-ROLE"
+    },
+    {
+      "check": "unresolved_role",
+      "params": [
+        "lambda"
+      ],
+      "detail": "role is UNRESOLVED",
+      "severity": "P0",
+      "known": "KC-LAMBDA"
+    },
+    {
+      "check": "missing_derivation",
+      "params": [
+        "kappa"
+      ],
+      "detail": "approximate value with no registered derivation",
+      "severity": "P1",
+      "known": "KC-KAPPA-DERIV"
+    },
+    {
+      "check": "candidate_disagreement",
+      "params": [
+        "bf10_threshold_pred_0B"
+      ],
+      "detail": "SRC-PRED-REG: 100; SRC-OSF: 10",
+      "severity": "P0",
+      "known": "KC-BF10-0B"
+    },
+    {
+      "check": "precondition_unverifiable",
+      "params": [
+        "dt",
+        "tau_theta"
+      ],
+      "detail": "EQ-EULER-1: Apgi.euler_step_mem_Icc needs dt ≤ tau_theta",
+      "severity": "P1",
+      "known": "KC-PRECOND-EULER"
+    },
+    {
+      "check": "unpinned_source",
+      "params": [],
+      "detail": "no sha256 for SRC-DYN, SRC-INNOV-GDOC, SRC-NOTATION, SRC-OSF, SRC-THERMO",
+      "severity": "P1",
+      "known": "KC-UNPINNED"
+    }
+  ],
+  "unacknowledged": [],
+  "stale_known_conflicts": [],
+  "ok": true
+}

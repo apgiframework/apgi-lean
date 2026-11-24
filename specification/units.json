@@ -1,0 +1,18 @@
+{
+  "schema": "apgi-units/1",
+  "note": "Base dimensions mirror Apgi/Pilot.lean `Dim`. AU is its own base dimension: it never converts to a physical unit until a calibration map is registered here.",
+  "base_dimensions": ["time", "energy", "bit", "au", "temperature", "amount"],
+  "units": {
+    "dimensionless": {},
+    "AU":            {"au": 1},
+    "1/AU":          {"au": -1},
+    "s":             {"time": 1},
+    "1/s":           {"time": -1},
+    "J":             {"energy": 1},
+    "J/K":           {"energy": 1, "temperature": -1},
+    "K":             {"temperature": 1},
+    "J/bit":         {"energy": 1, "bit": -1},
+    "mol_ATP/bit":   {"amount": 1, "bit": -1}
+  },
+  "calibration_maps": []
+}

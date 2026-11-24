@@ -1,0 +1,16 @@
+{
+  "schema": "apgi-source-manifest/1",
+  "note": "Source documents are traced, never overwritten. revision and sha256 stay null until the document is placed in sources/ and hashed by extract_sources.py --hash. A null hash marks the source as UNPINNED in every report.",
+  "precedence": ["SRC-INNOV-GDOC", "SRC-NOTATION", "SRC-THERMO", "SRC-OSF", "SRC-DYN", "SRC-INNOV-DOCX"],
+  "sources": [
+    {"id": "SRC-INNOV-GDOC", "title": "APGI Innovations (Google Doc, lead source)", "kind": "gdoc", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-INNOV-DOCX", "title": "APGI_Innovations.docx", "kind": "docx", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-NOTATION", "title": "Notation Appendix", "kind": "docx", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-THERMO", "title": "Thermodynamic Grounding", "kind": "docx", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-OSF", "title": "OSF Pre-Registration (patched v2)", "kind": "docx", "revision": "v2", "sha256": null, "path": null},
+    {"id": "SRC-DYN", "title": "Dynamical Formulation", "kind": "docx", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-PRED-REG", "title": "Prediction registry (Pred X.Y)", "kind": "docx", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-PSYCH-DX", "title": "Psychiatric Diagnostics (Axis VI, merged)", "kind": "docx", "revision": null, "sha256": null, "path": null},
+    {"id": "SRC-CODATA", "title": "SI 2019 exact defining constants (BIPM)", "kind": "external", "revision": "SI-2019", "sha256": null, "path": null}
+  ]
+}

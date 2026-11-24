@@ -1,0 +1,10 @@
+✔ [239/267] Built Apgi.Basic (2.8s)
+ℹ [18252/18256] Built Apgi.Pilot (249s)
+info: Apgi/Pilot.lean:181:0: 'Apgi.ignites_antitone_threshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Apgi/Pilot.lean:182:0: 'Apgi.ignitionProb_antitone_threshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Apgi/Pilot.lean:183:0: 'Apgi.operatingRange_not_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Apgi/Pilot.lean:184:0: 'Apgi.cuspV_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Apgi/Pilot.lean:185:0: 'Apgi.cusp_unique_equilibrium' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Apgi/Pilot.lean:186:0: 'Apgi.euler_step_mem_Icc' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [18254/18256] Built Apgi (601s)
+Build completed successfully (18256 jobs).
