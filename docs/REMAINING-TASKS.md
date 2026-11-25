@@ -1,13 +1,18 @@
 # APGI verification: remaining tasks
 
-State as of 2026-11-24 19:45 ET (spec 0.3.1).
+State as of 2026-11-24 20:20 ET (spec 0.3.1).
 
-- Repository: https://github.com/apgiframework/apgi-lean. Local checkout: `C:\Claude\Projects\apgi-lake`.
-- GitHub `main` is at 1c5e03d. Local `main` carries three unpushed commits: 15328d4 (this file), c86d4b5 (spec 0.3.0) and the spec 0.3.1 commit described below.
-- Production branch `fix/spec-alignment` in `C:\Claude\Projects\apgi-implementation` is at 7a366db (two commits on a106d98: 7703169, 7a366db). Not pushed. Its worktree is `apgi-lake\Claude outputs\impl-wt`.
-- Local results: `lake build --wfail` passes; 41 of 41 theorems pass the axiom audit; check_consistency finds 0 open, 0 unacknowledged, 0 stale; 39 of 39 parameters are verified against their sha256 pins; pytest gives 115 passed, 1 xfailed (PD-LOOP-GAIN), 1 skipped (test_production_validation.py, no checkout). The production suite gives 2830 passed, 11 skipped, 1 failed (the Windows-only cp1252 baseline failure).
-- Pilot criteria: 6 of 7 locally. Criterion 6 (report built in GitHub Actions) is met only by a CI run.
+- Repository: https://github.com/apgiframework/apgi-lean. Local checkout: `C:\Claude\Projects\apgi-lake`. GitHub `main` and local `main` agree; `main` is the only branch.
+- Production: https://github.com/apgiframework/apgi-implementation. `main` is at 736c296 and contains PR #4 (spec alignment, head 7a366db, which known-conflicts.json and CI pin) and PR #5 (run_k7 chain lengths; the 27 Oct K7 results archived under `gates/archive/2026-10-27/`). Local checkout `C:\Claude\Projects\apgi-implementation` is on `main`, in step with GitHub. Its `origin` now uses the SSH alias `github-apgi`.
+- CI (GitHub Actions, run 45517853733 on 850c627): all three jobs green; report **7 of 7** pilot criteria. Production CI on PR #4 and PR #5: 14 of 14 checks green (Python 3.10–3.13).
+- Local results: `lake build --wfail` passes; 41 of 41 theorems pass the axiom audit; check_consistency finds 0 open, 0 unacknowledged, 0 stale; 39 of 39 parameters are verified against their sha256 pins; pytest gives 115 passed, 1 xfailed (PD-LOOP-GAIN), 1 skipped (test_production_validation.py, no checkout).
 - Rating: design 94/100, implementation 93/100 (verification-instructions.txt).
+
+## Done on 2026-11-24 (late evening)
+
+- **Published.** apgi-lean `main` pushed (850c627). `fix/spec-alignment` pushed, merged as PR #4 with a merge commit (315b7fb) so the pinned 7a366db stays reachable, and deleted. apgi-lean CI re-run: 7 of 7.
+- **Old branch `claude/awesome-hypatia-2q329f`** (4 commits from 27 Oct that never reached main). By your choice: the run_k7 chain-length change and the K7 results went into main as PR #5; the "relax CI" commit and the superseded mypy fixes were dropped. The 27 Oct gate table fails the gate rules PR #3 introduced, so PR #5 keeps it as a dated archive with a README, not as a live gate decision.
+- **Local cleanup.** The production worktree `Claude outputs\impl-wt` is removed; the local `fix/spec-alignment` branch is deleted; stale remote-tracking refs are pruned.
 
 ## Done on 2026-11-24 (evening)
 
@@ -21,26 +26,18 @@ State as of 2026-11-24 19:45 ET (spec 0.3.1).
 
 ---
 
-## Phase 1: Publish (Owner: Uxod, in this order)
+## Phase 1: Finish publishing (Owner: Uxod)
 
-**1. Push the production branch first.** CI checks out `apgi-implementation` at 7a366db, which exists only on your machine.
+**1. Delete the last old branch.** This session may not delete branches on GitHub. From your machine:
 ```powershell
 cd C:\Claude\Projects\apgi-implementation
-git push origin fix/spec-alignment
+git push origin --delete claude/awesome-hypatia-2q329f
 ```
-Then open a PR into `main` and merge it.
+Or delete it on GitHub under Branches. Its two useful commits are in `main` (PR #5).
 
-**2. Push `main` of apgi-lean** with the apgiframework SSH key:
-```powershell
-cd C:\Claude\Projects\apgi-lake
-git push origin main
-```
+**2. Optional.** Start ssh-agent once (`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent; ssh-add $HOME\.ssh\id_ed25519_apgi`), so pushes stop asking for the passphrase.
 
-**3. Optional.** Start ssh-agent once (`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent; ssh-add $HOME\.ssh\id_ed25519_apgi`) or give `lesoto` write access, so pushes no longer need a manual terminal.
-
-**4. Confirm CI** under Actions → "APGI verification": all jobs green, 115 passed, 1 xfailed, report 7 of 7.
-
-**5. Local cleanup.** `.lake.mac-backup\` (several GB), `build.err`, `build.log`, `cache-get.log`, the duplicate root `REMAINING-TASKS.md`; `Claude outputs\` after task 1 is merged (run `git worktree remove "C:\Claude\Projects\apgi-lake\Claude outputs\impl-wt"` from apgi-implementation first); `%TEMP%\apgi-*`.
+**3. Local cleanup (needs your OK to delete).** `.lake.mac-backup\` (several GB), `build.err`, `build.log`, `cache-get.log`, the duplicate root `REMAINING-TASKS.md`, the rest of `Claude outputs\` (test venv, PDF text dumps, logs), `%TEMP%\apgi-*`.
 
 ## Phase 2: Author decisions and follow-ups (Owner: Uxod)
 
@@ -82,7 +79,7 @@ python verification\python\generate_lean.py
 lake build --wfail
 python verification\python\check_consistency.py
 cd verification\python
-$env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-lake\Claude outputs\impl-wt"   # at the commit in known-conflicts.json
+$env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-implementation"   # main contains the pinned commit; check it out exactly if main moves on
 python -m pytest -q -rxs
 cd ..\..
 git add -A
