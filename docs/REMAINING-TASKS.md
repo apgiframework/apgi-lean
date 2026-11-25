@@ -1,54 +1,38 @@
 # APGI verification: remaining tasks
 
-State as of 2026-11-25 05:15 ET (spec 0.3.1, task 36 round).
+State as of 2026-11-25 06:30 ET (spec 0.3.1, tasks 36–39 round).
 
-- Repository: https://github.com/apgiframework/apgi-lean. Local checkout: `C:\Claude\Projects\apgi-lake`. Local `main` is one commit ahead of GitHub (this round, not pushed).
-- Production: https://github.com/apgiframework/apgi-implementation `main` = 736c296 (contains the pinned 7a366db). `main` is the only branch on GitHub; `claude/awesome-hypatia-2q329f` is gone.
-- Second production package: https://github.com/apgiframework/apgi-validation, pinned at de06453. Local clone `Claude outputs\apgi-validation` on branch `fix/spec-alignment-v12` (628f5b1, not pushed); worktree `Claude outputs\apgi-validation-pin` at de06453 for the pinned run.
-- Local results: extraction 39 of 39 verified; `lake build --wfail` passes; 41 of 41 theorems pass the axiom audit; check_consistency 0 open, 0 unacknowledged, 0 stale; pytest 116 passed, 1 xfailed (PD-LOOP-GAIN), 1 skipped (test_production_validation.py, run separately); test_production_validation.py 3 passed, 4 xfailed at de06453; make_report 6 of 7 locally (the seventh needs a CI run).
-- Rating: design 93/100, implementation 95/100, overall readiness 94/100 (verification-instructions.txt).
+- apgi-lean: https://github.com/apgiframework/apgi-lean, local `C:\Claude\Projects\apgi-lake`. `main` is the only branch.
+- apgi-implementation: `main` = a9b2878 (pinned), local `C:\Claude\Projects\apgi-implementation`. `main` is the only branch.
+- apgi-validation: `main` = 811aee2 (pinned), local `C:\Claude\Projects\apgi-validation`. `main` is the only branch.
+- Local results: extraction 39 of 39 verified; `lake build --wfail` passes; 41 of 41 theorems pass the axiom audit; check_consistency 0 open, 0 unacknowledged, 0 stale; pytest 116 passed, 1 xfailed (PD-LOOP-GAIN), 1 skipped; test_production_validation.py 7 passed; apgi-implementation suite at a9b2878 2826 passed, 11 skipped; make_report 6 of 7 locally (the seventh needs a CI run).
+- Rating: design 95/100, implementation 96/100, overall readiness 95/100 (verification-instructions.txt).
+- Pushing: this PC's SSH key needs its passphrase and the HTTPS login (lesoto) has no write access to apgiframework, so this round was pushed through the Claude session's GitHub access. To push locally, see task 2.
 
-## Done on 2026-11-25 (task 36 round)
+## Done on 2026-11-25 (tasks 36–39 round)
 
-- **Task 1.** The old branch `claude/awesome-hypatia-2q329f` is no longer on GitHub (checked with `git ls-remote`).
-- **Task 3, local cleanup.** Deleted `.lake.mac-backup\` (481 MB), `build.err`, `build.log`, `cache-get.log`, the duplicate root `REMAINING-TASKS.md`, `Claude outputs\venv` (432 MB), `Claude outputs\corpus-text` and the old logs and scripts there, and `%TEMP%\apgi-*`. Kept: `Claude outputs\apgi-pending-files.zip`, `parameters.orig.json`, and this round's clones and logs.
-- **Task 36, first half.** test_production_validation.py ran against de06453: 3 passed, 4 xfailed, exactly as the static reading predicted, so no PV entry needed correcting.
-- **Task 36, second half.** All four PV divergences fixed in apgi-validation on `fix/spec-alignment-v12` (628f5b1): PV-THETA-SCALE (θ₀ = 0.35 AU, validated to [0.25, 0.85]; APGISettings.theta0 = 0.35), PV-CLIP (θ floor 0, per task 29), PV-HAZARD (hazard 1 − exp(−r_max·Bₜ·dt), r_max = 100 s⁻¹, in full_model and the equations.py engine), PV-DT (Δt = 10 ms, warning when Δt > τ/10). Against 628f5b1 the four strict xfails XPASS. apgi-validation's affected tests: 420 passed, 21 skipped, 4 failed; the same 4 fail at de06453 on Windows (no `resource` module; CRLF checkout breaks the protocol manifest checksums).
-- **Task 36, CI.** New job `production-validation` runs the module at the pinned commit; the report job now needs it. New test `test_ci_checks_out_the_pinned_production_commits` ties both CI `ref:` values to known-conflicts.json.
-- **Task 34, review of the v1.2 draft edits.** γ_sig in 1/AU, c_θ in AU, α_Π ≥ 0 and the §7.7 cusp mathematics are correct and consistent (unique equilibrium for a ≥ 0; three equilibria iff 4a³ + 27θ² < 0; fold points ±2·(−a/3)^{3/2}; matches the Lean theorems). The corpus scan of the v1.2 drafts finds none of the old defects. Two new cross-document conflicts, registered as corpus patterns (seeded and clean fixtures extended):
-  - **E20, KC-LOOPGAIN-NO-TAU.** Paper 2 (parameter table) and Paper 3 (Appendix B.5) write the loop gain as γ_ψ² < 1/(C_down·C_up); the Notation Appendix and Specifications write (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1. With C in s⁻¹ only the second is dimensionless. Paper 3's γ_ψ ∈ [1, 3] rests on the first.
-  - **E21, KC-TAU-PI-LEVEL.** Paper 3 sets τ_Π = τ_ℓ/10: 5 ms at ℓ = 0, 0.66 s at ℓ = 1. That breaks the v1.2 bound τ_Π ≥ 1 s, and 5 ms breaks dt ≤ τ_Π/10 at dt₀ = 10 ms.
-  - Minor, optional: §7.7 calls θ dimensionless and "the effective threshold on the reduced scale", while θₜ elsewhere is in AU. Consider θ̃ or the phrase "rescaled threshold". Any edit changes the draft's sha256, so re-pin SRC-MATHSPEC-V12D afterwards.
-- **Task 35, analysis.** tau_pi is in seconds in effect: `core/config_schema.py` validate_dt_stability compares it with tau_s in s, and the precision ODE runs with dt in s. Recorded as a note on PD-LOOP-GAIN. Under the τ_Π form the current couplings need τ_Π < 1/(γ_ψ·√(C_down·C_up)) ≈ 7.07 s; under the τ_Π-free form the defaults give 0.02 < 1. The decision waits on task 38.
+- **Task 1.** `claude/awesome-hypatia-2q329f` is gone; every repository has `main` only.
+- **Task 3, cleanup.** Deleted `.lake.mac-backup\` (481 MB), `build.err`, `build.log`, `cache-get.log`, the duplicate root `REMAINING-TASKS.md`, `Claude outputs\venv` (432 MB), the PDF text dumps, old logs and scripts, and `%TEMP%\apgi-*`. Kept `Claude outputs\apgi-pending-files.zip` and `parameters.orig.json`.
+- **Task 36.** test_production_validation.py at de06453: 3 passed, 4 xfailed, as the static reading predicted. All four PV divergences fixed in apgi-validation 628f5b1 and merged to `main` as 811aee2: θ₀ = 0.35 AU (validated to [0.25, 0.85]), θ floor 0, ignition through 1 − exp(−r_max·Bₜ·dt) with r_max = 100 s⁻¹, Δt = 10 ms. Pin moved to 811aee2; PV-* resolved; 7 passed. New CI job `production-validation`; `test_ci_checks_out_the_pinned_production_commits` ties both CI refs to the pins.
+- **Task 34, review of the v1.2 drafts.** γ_sig 1/AU, c_θ AU, α_Π ≥ 0 and the §7.7 cusp mathematics are correct. The review found E20 and E21 (below), registered as corpus patterns KC-LOOPGAIN-NO-TAU and KC-TAU-PI-LEVEL with seeded and clean fixtures.
+- **Task 38 (E20), loop-gain form.** Canonical: (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1, the only dimensionless form. Paper 2 v1.2 draft (γ_ψ row) and Paper 3 v1.2 draft (§2.5 summary, Appendix B.5) rewritten: C_down, C_up in s⁻¹; Paper 3's ranges restated as the dimensionless gains C_down·τ_Π ∈ [0.1, 0.5] and C_up·τ_Π ∈ [0.05, 0.2], which keeps γ_ψ < 3.16, so γ_ψ ∈ [1, 3] stands; Lyapunov rate uses the τ_Π form.
+- **Task 39 (E21), τ_Π per level.** Paper 3 v1.2 draft: τ_Π = max(1 s, τ_ℓ/10) at level ℓ, so the Math Spec bound τ_Π ≥ 1 s holds at every level and dt₀ = 10 ms meets dt ≤ τ_Π/10. The Math Spec draft is unchanged, so SRC-MATHSPEC-V12D keeps its pin. The v1.2 drafts now scan clean (0 hits); both patterns stay active for the published v1.1 PDFs.
+- **Task 37, reduced model.** apgi-implementation a9b2878: constants unchanged (same floats); the docstring states λ = 1 − e^(−0.1) as a per-trial constant and drops the dt = 0.5 s, τ_S = 5 s derivation.
+- **Task 35, first half.** a9b2878 documents tau_pi in s, and validate_dt_stability now uses the configured tau_pi instead of a hard-coded 1000. Production pin moved to a9b2878.
 
 ---
 
-## Phase 1: Publish this round (Owner: Uxod)
+## Phase 1: Owner actions (Uxod)
 
-**40. Push apgi-lean `main`.** One local commit (CI job, corpus patterns, registry notes, reports, this file). From `C:\Claude\Projects\apgi-lake`: `git push origin main`. Expect CI 3 + 1 jobs green and 7 of 7.
+**2. Local pushes.** Start ssh-agent once in an elevated PowerShell (`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent`), then `ssh-add $HOME\.ssh\id_ed25519_apgi` and type the passphrase. Until then, local `git fetch`/`git push` over `github-apgi` fail; read-only fetches over HTTPS still work.
 
-**41. Publish the apgi-validation fixes.**
-```powershell
-cd "C:\Claude\Projects\apgi-lake\Claude outputs\apgi-validation"
-git push -u origin fix/spec-alignment-v12
-```
-Open and merge the PR (merge commit, so 628f5b1 stays reachable). Then in apgi-lean: set `production_secondary.commit` to the merged commit that contains 628f5b1 (or 628f5b1 itself), set PV-THETA-SCALE, PV-CLIP, PV-HAZARD and PV-DT to `resolved` (move each `fix_pending_merge` text into `resolution`), set the CI `ref:` of the production-validation job to the same commit, and run the routine. Expect 7 passed.
-
-**2. Optional.** Start ssh-agent once (`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent; ssh-add $HOME\.ssh\id_ed25519_apgi`), so pushes stop asking for the passphrase.
-
-**42. Optional cleanup.** `Claude outputs\apgi-validation-pin` is a worktree of the clone: remove it with `git -C "Claude outputs\apgi-validation" worktree remove ..\apgi-validation-pin` once the pin moves.
+**43. Check the CI run** on apgi-lean `main` for this round: expect 4 jobs green and 7 of 7.
 
 ## Phase 2: Author decisions (Owner: Uxod)
 
-**38. Canonical loop-gain form (E20).** Choose (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1 (dimensionless; Notation Appendix, Specifications) or γ_ψ² < 1/(C_down·C_up) (Paper 2, Paper 3). Recommendation: the τ_Π form, since it is the only dimensionless one; then rewrite the Paper 2 table row and the Paper 3 Appendix B.5 sentences, including the γ_ψ ∈ [1, 3] justification and the Lyapunov rate.
+**35. PD-LOOP-GAIN, second half.** Production defaults (τ_Π = 1000 s, C_down = 0.1 s⁻¹, C_up = 0.05 s⁻¹, γ_ψ = 2) give 2 × 10⁴ under the canonical form. Either set τ_Π in [1, 7) s at the current couplings (for example 5 s, gain 0.5), or keep τ_Π and scale the couplings to the Paper 3 gains (C_down = 0.1/τ_Π, C_up = 0.05/τ_Π, gain 0.02). Then resolve PD-LOOP-GAIN, move `production.commit` and the CI ref.
 
-**39. τ_Π bound versus Paper 3 (E21).** Either scope τ_Π ≥ 1 s to the single-scale model in Math Spec §2.6 and the Notation Appendix row, or change Paper 3's τ_Π = τ_ℓ/10 (for example τ_Π,ℓ = max(1 s, τ_ℓ/10)). Either choice changes a v1.2 draft: re-pin SRC-MATHSPEC-V12D if the Math Spec changes.
-
-**35. PD-LOOP-GAIN.** After task 38: with the τ_Π form, choose τ_Π ∈ [1, 7) s at the current couplings (for example 5 s, loop gain 0.5), or lower C_down·C_up; state the unit "s" in apgi-implementation's tau_pi description and validator. Then resolve PD-LOOP-GAIN, bump `production.commit` and the CI ref.
-
-**37. models/reduced.py.** Recommendation: keep the constants. The model is per trial, not per integration step, so the dt ≤ τ/10 rule does not apply, and the K7 identifiability results and gate table depend on these values. Drop the derivation "λ = 1 − exp(−dt/τ_S) with dt = 0.5, τ_S = 5" from the docstring (τ_S = 5 s lies outside the registered [0.2, 0.5] s) and state λ ≈ 0.095 as a per-trial retention constant.
-
-**33. r_max** = 100 s⁻¹ is a placeholder until fitted (now in both production packages).
+**33. r_max** = 100 s⁻¹ is a placeholder until fitted (both production packages).
 
 ## Phase 3: Next Zenodo release (v1.2)
 
@@ -56,9 +40,9 @@ Open and merge the PR (merge commit, so 628f5b1 stays reachable). Then in apgi-l
 
 **23.** Several v1.1 PDFs are still named "Version 1.0"; drop the duplicate "companion documents" PDF.
 
-**34. Done (review), see above.** Apply the outcomes of tasks 38 and 39 and the optional §7.7 wording before publishing. Originals are in `apgi-v-1-2\_backup\`.
+**44. Optional wording, Math Spec §7.7.** θ there is dimensionless ("the effective threshold on the reduced scale") while θₜ elsewhere is in AU; consider θ̃ or "rescaled threshold". Any Math Spec draft edit changes its sha256: re-pin SRC-MATHSPEC-V12D (`extract_sources.py --hash`) and run the routine. Originals of all drafts are in `apgi-v-1-2\_backup\`.
 
-**25. After publishing:** re-hash every source; re-source EQ-CUSP-1, tau_Pi and alpha_Pi from SRC-MATHSPEC-V12D to the published Math Spec PDF and retire the draft entry; run extraction with `--write` and fix any moved page numbers; confirm the corpus scan of the published PDFs reports 0 defects (today the v1.2 drafts show 4 hits, all E20 and E21).
+**25. After publishing:** re-hash every source; re-source EQ-CUSP-1, tau_Pi and alpha_Pi from SRC-MATHSPEC-V12D to the published Math Spec PDF and retire the draft entry; run extraction with `--write` and fix any moved page numbers; confirm the corpus scan of the published PDFs reports 0 defects (the v1.2 drafts already scan clean).
 
 ---
 
@@ -74,7 +58,7 @@ cd verification\python
 $env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-implementation"   # main contains the pinned commit; check it out exactly if main moves on
 python -m pytest -q -rxs
 Remove-Item Env:APGI_IMPL_PATH   # the validation module refuses to run with both packages on sys.path
-$env:APGI_VALIDATION_PATH = "C:\Claude\Projects\apgi-lake\Claude outputs\apgi-validation-pin"   # checkout of production_secondary.commit
+$env:APGI_VALIDATION_PATH = "C:\Claude\Projects\apgi-validation"   # main contains the pinned commit; check it out exactly if main moves on
 python -m pytest -q -rxs test_production_validation.py
 Remove-Item Env:APGI_VALIDATION_PATH
 cd ..\..
