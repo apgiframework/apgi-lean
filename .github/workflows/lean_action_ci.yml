@@ -54,9 +54,33 @@ jobs:
           name: junit
           path: verification/reports/junit.xml
 
+  production-validation:
+    # Second production package (task 19/36): apgi_core in apgi-validation, pinned
+    # to known-conflicts.json -> production_secondary.commit. Runs in its own job
+    # because both production repositories ship a top-level 'utils' package.
+    name: apgi-validation cross-check (apgi_core)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: apgiframework/apgi-validation
+          ref: de06453f44703286d9bdb3fbbe79025839ca8ea8
+          path: apgi-validation
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r apgi-validation/requirements.txt
+      - run: pip install -r verification/python/requirements.txt
+      - name: Pytest (strict xfail on every open PV-* divergence)
+        working-directory: verification/python
+        env:
+          APGI_VALIDATION_PATH: ${{ github.workspace }}/apgi-validation
+        run: python -m pytest -q -rxs -p no:cacheprovider test_production_validation.py
+
   report:
     name: Verification report
-    needs: [lean, python]
+    needs: [lean, python, production-validation]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -81,5 +105,5 @@ jobs:
           name: verification-report
           path: verification/reports/
       - name: Fail if Lean or Python failed
-        if: needs.lean.result != 'success' || needs.python.result != 'success'
+        if: needs.lean.result != 'success' || needs.python.result != 'success' || needs.production-validation.result != 'success'
         run: exit 1

@@ -12,3 +12,4 @@ The sigmoid steepness γ_sig = 1/τ_σ carries units of 1/AU.
 When θₜ rises, fewer signals cross into awareness.
 Ignition is sampled from the propensity Bₜ through the hazard r_max·Bₜ.
 c_θ Threshold-update cost coefficient AU [0.001, 0.5]; Ψ(z) = α⁺·tanh(γ⁺·z) for z ≥ 0; |γ_NE|·g_NE ≤ 0.5.
+The proposed subcritical loop gain is (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1; the step rule is dt ≤ τ_Π/10 with τ_Π ≥ 1 s.

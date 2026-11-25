@@ -1,13 +1,13 @@
 {
-  "generated": "2026-11-25T00:02:30+00:00",
-  "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e",
-  "spec_lean_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e",
+  "generated": "2026-11-25T10:09:13+00:00",
+  "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154",
+  "spec_lean_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154",
   "spec_version": "0.3.1",
   "lean_build": "passed",
   "python_tests": {
-    "passed": 90,
+    "passed": 91,
     "failed": 0,
-    "total": 92
+    "total": 93
   },
   "theorems": [
     {
@@ -17,7 +17,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.convex_update_mem_Icc",
@@ -26,7 +26,7 @@
       "equations": [
         "EQ-UPD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.cuspV_hasDerivAt",
@@ -35,7 +35,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.cusp_three_equilibria",
@@ -44,7 +44,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.cusp_three_equilibria_converse",
@@ -53,7 +53,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.cusp_three_equilibria_iff",
@@ -62,7 +62,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.cusp_two_equilibria_witness",
@@ -71,7 +71,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.cusp_unique_equilibrium",
@@ -80,7 +80,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.decayGain_mem_Icc",
@@ -89,7 +89,7 @@
       "equations": [
         "EQ-DECAY-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.decayStep_monotone",
@@ -98,7 +98,7 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.decay_step_mem_Icc",
@@ -107,7 +107,7 @@
       "equations": [
         "EQ-DECAY-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.euler_step_mem_Icc",
@@ -116,7 +116,7 @@
       "equations": [
         "EQ-EULER-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.hazardProb_mem_Icc",
@@ -125,7 +125,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.hazardProb_monotone_propensity",
@@ -134,7 +134,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.hazard_antitone_threshold",
@@ -143,7 +143,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.hazard_n_steps",
@@ -152,7 +152,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.hazard_survival_add",
@@ -161,7 +161,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.hazard_two_steps",
@@ -170,7 +170,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.ignites_antitone_threshold",
@@ -179,7 +179,7 @@
       "equations": [
         "EQ-IGN-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.ignites_monotone_precision",
@@ -188,7 +188,7 @@
       "equations": [
         "EQ-PREC-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.ignitionProb_antitone_threshold",
@@ -197,7 +197,7 @@
       "equations": [
         "EQ-IGN-2"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.leakGain_mem_Ioo",
@@ -206,7 +206,7 @@
       "equations": [
         "EQ-LEAK-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.leak_step_mem_Icc",
@@ -215,7 +215,7 @@
       "equations": [
         "EQ-LEAK-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.leak_two_steps",
@@ -224,7 +224,7 @@
       "equations": [
         "EQ-LEAK-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.neClamp_bound",
@@ -233,7 +233,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.neClamp_nonneg",
@@ -242,7 +242,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.neClamp_of_le",
@@ -251,7 +251,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.neFactor_band",
@@ -260,7 +260,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.neFactor_mem_Icc",
@@ -269,7 +269,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.neThreshold_pos",
@@ -278,7 +278,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.operatingRange_invariant_of_target",
@@ -287,7 +287,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.operatingRange_not_invariant",
@@ -296,7 +296,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.precClamp_mem_Icc",
@@ -305,7 +305,7 @@
       "equations": [
         "EQ-PREC-SM-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.precEff_monotone_marker",
@@ -314,7 +314,7 @@
       "equations": [
         "EQ-PREC-SM-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.precEff_nonneg",
@@ -323,7 +323,7 @@
       "equations": [
         "EQ-PREC-SM-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.psi_abs_lt",
@@ -332,7 +332,7 @@
       "equations": [
         "EQ-PSI-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.psi_odd_of_symmetric",
@@ -341,7 +341,7 @@
       "equations": [
         "EQ-PSI-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.psi_symmetric",
@@ -350,7 +350,7 @@
       "equations": [
         "EQ-PSI-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.thresholdStep_floor",
@@ -359,7 +359,7 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.thresholdStep_monotone_drive",
@@ -368,7 +368,7 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     },
     {
       "name": "Apgi.thresholdStep_monotone_ignition",
@@ -377,7 +377,7 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e"
+      "registry_hash": "27f95b2affcdd7159466e16229399ba9bea4c796e30a59c0de810c63ccb02154"
     }
   ],
   "claims": [
@@ -770,7 +770,7 @@
     {
       "criterion": "Mathematical results are linked to exact specification revisions",
       "met": true,
-      "evidence": "Spec.lean hash matches registry 5330b3bd64ae"
+      "evidence": "Spec.lean hash matches registry 27f95b2affcd"
     },
     {
       "criterion": "Python tests pass the APGI numerical tolerances (1e-9)",

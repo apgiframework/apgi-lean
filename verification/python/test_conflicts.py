@@ -190,3 +190,12 @@ def test_dt_rule_needs_tau_pi(tmp_path, monkeypatch):
         P["tau_Pi"].update(range={"lo": "0.05", "hi": None, "lo_closed": True, "hi_closed": False, "kind": "design_bound"})
     bad = run_mutated(tmp_path / "b", monkeypatch, too_short)
     assert any(f["check"] == "precondition_violated" and "tau_Pi" in f["params"] for f in bad["unacknowledged"])
+
+
+def test_ci_checks_out_the_pinned_production_commits():
+    """The CI 'ref:' of each production checkout must equal the registry pin (tasks 20, 36)."""
+    import re as _re
+    wf = (HERE.parent.parent / ".github" / "workflows" / "lean_action_ci.yml").read_text(encoding="utf-8")
+    refs = dict(_re.findall(r"repository:\s*apgiframework/(\S+)\s+ref:\s*([0-9a-f]{40})", wf))
+    assert refs.get("apgi-implementation") == KNOWN["production"]["commit"]
+    assert refs.get("apgi-validation") == KNOWN["production_secondary"]["commit"]

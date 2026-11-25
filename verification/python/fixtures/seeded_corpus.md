@@ -11,3 +11,5 @@ KC-ALPHA-GAIN: The threshold moves toward its target with α as the update gain.
 KC-LAMBDA-THETA: The threshold adapts at rate λ_θ set by noradrenaline.
 KC-GAMMA-SIG-UNIT: γ_sig = 1/τ_σ links steepness to temperature, canonical band [2, 7.5] (dimensionless).
 KC-CTHETA-UNIT: | **c\_θ** | Threshold-update cost coefficient | n/a | \[0.001, 0.5\] |
+KC-LOOPGAIN-NO-TAU: γ_ψ ∈ [1, 3], motivated by the heuristic loop-gain condition γ_ψ² < 1/(C_down·C_up).
+KC-TAU-PI-LEVEL: Precision decays per level with τ_Π = τ_ℓ/10 and α_Π ∈ [0.01, 0.1].
