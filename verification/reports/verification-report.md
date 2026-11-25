@@ -1,9 +1,9 @@
 # APGI Verification Report
 
-- Generated: 2026-11-24T20:31:11+00:00
-- Spec version: 0.3.0 · registry hash `4ee616035e4aeea9…`
+- Generated: 2026-11-25T00:02:30+00:00
+- Spec version: 0.3.1 · registry hash `5330b3bd64ae87fb…`
 - Lean build (`lake build --wfail`): **passed**
-- Python test functions: **87 passed, 0 failed** of 88 (parametrised cases collapsed)
+- Python test functions: **90 passed, 0 failed** of 92 (parametrised cases collapsed)
 - Pilot criteria met: **6 of 7**
 
 > A Lean proof establishes a consequence of a definition. It is not evidence that APGI describes the brain.
@@ -11,9 +11,9 @@
 ## Pilot criteria
 
 - ✅ **Every canonical parameter has a source identifier, unit, version, and documented range** — all parameters complete
-- ✅ **Known discrepancies produce explicit failures** — 2 open conflicts tracked; seeded suite passed
+- ✅ **Known discrepancies produce explicit failures** — 0 open conflicts tracked; seeded suite passed
 - ✅ **Lean theorems compile without sorry or unapproved axioms** — lake build --wfail: passed; 41/41 theorems axiom-audited via #guard_msgs
-- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry 4ee616035e4a
+- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry 5330b3bd64ae
 - ✅ **Python tests pass the APGI numerical tolerances (1e-9)** — 6/6 golden-vector tests passed
 - ❌ **Continuous integration produces a reproducible verification report** — generated locally (CI run required)
 - ✅ **No mathematical proof is described as empirical confirmation of APGI** — no claim cites a Lean theorem as empirical evidence
@@ -88,8 +88,6 @@
 
 ## Open specification conflicts
 
-- **KC-PRECOND-TAU-PI** (P1) precondition_unverifiable: EQ-EULER-1: accuracy rule, Notation Appendix p16 (dt ≤ min(τ_S, τ_θ, τ_Π)/10) needs dt ≤ tau_Pi
-- **KC-PRECOND-TAU-PI** (P1) precondition_unverifiable: EQ-EULER-1: accuracy rule with the reservoir active, Math Spec p26 needs dt_reservoir ≤ tau_Pi
 
 ## Traceability
 

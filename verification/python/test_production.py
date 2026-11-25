@@ -12,6 +12,7 @@ Known divergences are strict xfails tagged PD-*: CI stays green while the
 divergence is documented, and a fix in production turns the xfail into a
 hard failure until the PD entry is marked resolved.
 """
+import ast
 import inspect
 import os
 import sys
@@ -132,6 +133,59 @@ def test_pipeline_theta_clip_matches_floor():
     """The pipeline clamps θ to [theta_clip_min, theta_clip_max]; Math Spec §4.5 sets the
     floor θ_floor = 0 unless a study states otherwise, and states no 0.1 AU clip."""
     assert CFG.get("theta_clip_min", 0.0) == float(P["theta_floor"]["value"])
+
+
+def test_default_tau_pi_meets_registry_bound():
+    """Task 31 (KC-PRECOND-TAU-PI): v1.2 fixes τ_Π ≥ 1 s; production τ_Π and dt ≤ τ_Π/10 hold."""
+    lo = float(P["tau_Pi"]["range"]["lo"])
+    assert CFG["tau_pi"] >= lo
+    assert CFG["dt"] <= lo / 10
+
+
+def _source_tree(relpath):
+    return ast.parse((Path(IMPL) / relpath).read_text(encoding="utf-8"))
+
+
+def _source_params(relpath, qualname):
+    """Parameter names of a function in a production file, without importing it."""
+    node = _source_tree(relpath)
+    for part in qualname.split("."):
+        node = next(n for n in ast.iter_child_nodes(node)
+                    if isinstance(n, (ast.FunctionDef, ast.ClassDef)) and n.name == part)
+    a = node.args
+    return {x.arg for x in a.posonlyargs + a.args + a.kwonlyargs}
+
+
+def _source_all(relpath):
+    for n in _source_tree(relpath).body:
+        if isinstance(n, (ast.Assign, ast.AnnAssign)):
+            targets = n.targets if isinstance(n, ast.Assign) else [n.target]
+            if any(isinstance(t, ast.Name) and t.id == "__all__" for t in targets):
+                return set(ast.literal_eval(n.value))
+    return set()
+
+
+@divergence("PD-KAPPA-RESIDUAL")
+def test_no_bare_kappa_for_rates_or_ratios():
+    """Notation Appendix: bare κ is ATP/bit only; κ_e, κ_i are withdrawn (η_pred,e, η_pred,i)."""
+    import analysis.stability as PS
+    import core.dynamics as PD
+    import energy.bold_calibration as PB
+
+    assert "kappa_e" not in CFG and "kappa_i" not in CFG
+    assert "kappa" not in inspect.signature(PD.update_prediction).parameters
+    assert "kappa" not in inspect.signature(PS.compute_jacobian_discrete).parameters
+    assert "kappa_meta" not in inspect.signature(PB.estimate_bits_from_bold_energy).parameters
+    # engine and models import the full pipeline (structlog etc.), so read their source
+    assert "kappa" not in _source_params("engine/somatic.py", "SomaticThresholdAdapter.__init__")
+    assert "KAPPA" not in _source_all("models/reduced.py")
+
+
+@divergence("PD-LOOP-GAIN")
+def test_default_cross_level_loop_gain_subcritical():
+    """Notation Appendix p19, p34 (proposed): (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1."""
+    g = (CFG["C_down"] * CFG["tau_pi"]) * (CFG["C_up"] * CFG["tau_pi"]) * CFG["gamma_psi"] ** 2
+    assert g < 1
 
 
 @divergence("PD-FLOOR")

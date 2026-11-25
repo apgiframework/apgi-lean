@@ -28,9 +28,9 @@
     {"id": "SRC-PAPER1", "title": "Thresholds make consciousness selective (Paper 1)", "kind": "pdf", "revision": "v1.1 (2026-10-22)",
      "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf", "pages": 57,
      "sha256": "3c38b1184aa3638e00f528d05a120678346b1fb78d26edd266255f11623a9d08"},
-    {"id": "SRC-MATHSPEC-V12D", "title": "APGI Mathematical Specification, v1.2 working draft (unpublished)", "kind": "md", "revision": "v1.2 draft (2026-11-24), §7.7 added",
+    {"id": "SRC-MATHSPEC-V12D", "title": "APGI Mathematical Specification, v1.2 working draft (unpublished)", "kind": "md", "revision": "v1.2 draft (2026-11-24), §7.7 added; §2.6 τ_Π ≥ 1 s and α_Π ≥ 0",
      "file": "APGI-Mathematical-Specifications.md", "pages": 1,
-     "sha256": "a151d52d97f78628573aa30539835d92faff94d5f0da6aee3d5d71285544e0ca",
+     "sha256": "8f2fe523fa34ad16f65c859435d8213f069cca996c678807f0a7806ae5b24bd1",
      "note": "Unpublished working draft for Zenodo release v1.2, kept outside version control (git-ignored apgi-v-1-2/). It carries the cusp normal form (§7.7, EQ-CUSP-1), which the published v1.1 corpus does not contain. Any edit to the draft changes this pin; re-hash with extract_sources.py --hash. After the v1.2 release, re-source EQ-CUSP-1 to the published PDF and retire this entry (task 25)."},
     {"id": "SRC-CODATA", "title": "SI 2019 exact defining constants (BIPM)", "kind": "external", "revision": "SI-2019", "sha256": null, "file": null}
   ],

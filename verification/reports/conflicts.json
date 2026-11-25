@@ -1,27 +1,6 @@
 {
-  "registry_hash": "4ee616035e4aeea9eb0253c4471b2f5b5d38d15366e37a0f76ed1edf247eb053",
-  "acknowledged": [
-    {
-      "check": "precondition_unverifiable",
-      "params": [
-        "dt",
-        "tau_Pi"
-      ],
-      "detail": "EQ-EULER-1: accuracy rule, Notation Appendix p16 (dt ≤ min(τ_S, τ_θ, τ_Π)/10) needs dt ≤ tau_Pi",
-      "severity": "P1",
-      "known": "KC-PRECOND-TAU-PI"
-    },
-    {
-      "check": "precondition_unverifiable",
-      "params": [
-        "dt_reservoir",
-        "tau_Pi"
-      ],
-      "detail": "EQ-EULER-1: accuracy rule with the reservoir active, Math Spec p26 needs dt_reservoir ≤ tau_Pi",
-      "severity": "P1",
-      "known": "KC-PRECOND-TAU-PI"
-    }
-  ],
+  "registry_hash": "5330b3bd64ae87fb9f91cdd8e93c927be135bbb47f1a76b66e9ead2fdff0f89e",
+  "acknowledged": [],
   "unacknowledged": [],
   "stale_known_conflicts": [],
   "ok": true

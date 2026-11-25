@@ -165,7 +165,7 @@ Negative cases are tests, not comments. Each forbidden unit mix must be shown to
 6. Implementation sequence and acceptance criteria
 Implementation checklist
 
-17 of 17 complete. Status as of 2026-11-24 (main, spec 0.3.0); the generated verification report is authoritative.
+17 of 17 complete. Status as of 2026-11-24 (main, spec 0.3.1); the generated verification report is authoritative.
 
 
 Phase 0 — Environment
@@ -322,7 +322,7 @@ The first milestone should be the automatic detection of the θₜ and notation 
 
 Do not expand to full L0–L4 verification until the pilot demonstrates that formalization catches defects ordinary tests would miss.
 
-Final assessment (2026-11-24, re-rated after spec 0.3.0): design 92/100; implementation 91/100. All P0 specification conflicts are resolved from the pinned corpus. Criterion 1 is met: the cusp potential moved into §7.7 of the v1.2 Mathematical Specification draft, pinned by sha256 (SRC-MATHSPEC-V12D), and SRC-INNOV-GDOC is retired. Locally 6 of 7 criteria are met; the seventh (a report generated in GitHub Actions) is met only by a CI run, so expect 7 of 7 there. 39 of 39 parameters are verified against pinned sources; 41 theorems are axiom-audited. One registry conflict stays open on purpose (KC-PRECOND-TAU-PI: the corpus gives τ_Π no value, so dt ≤ τ_Π/10 cannot be checked). Remaining deductions: the cusp source is an unpublished draft until v1.2 is released, τ_Π is uncalibrated, and two production divergences (PD-CLIP, PD-KAPPA-RESIDUAL) remain open. This is a rating of engineering suitability, not of APGI's scientific validity.
+Final assessment (2026-11-24, re-rated after spec 0.3.1): design 94/100; implementation 93/100. All P0 specification conflicts are resolved from the pinned corpus, and no registry conflict is open: KC-PRECOND-TAU-PI is resolved by the v1.2 draft's design bound τ_Π ≥ 1 s. Locally 6 of 7 criteria are met; the seventh (a report generated in GitHub Actions) is met only by a CI run. 39 of 39 parameters are verified against pinned sources; 41 theorems are axiom-audited. Eight of nine apgi-implementation divergences are resolved. Remaining deductions: the cusp, τ_Π and α_Π sources are an unpublished draft until v1.2 is released; τ_Π and r_max are uncalibrated; PD-LOOP-GAIN is open; apgi-validation's apgi_core carries four open divergences (PV-*) found by reading its source, and its cross-check has not run yet. This is a rating of engineering suitability, not of APGI's scientific validity.
 
 The strongest result would be a system in which every major APGI claim can be traced through:
 
@@ -364,3 +364,12 @@ Found by registration and extraction (task 12–14)
 
 Found by the production cross-check while fixing PD-DT
 - PD-TAU-S τ_S = 5 s outside 200–500 ms (fixed); PD-CLIP θ clipped to [0.1, 20] AU with no corpus basis (open); the continuous threshold ODE fell back to τ_θ = 1000 s and took the per-step η_θ as a rate (fixed with PD-TAU-THETA); PD-KAPPA-RESIDUAL further bare-κ names (open).
+
+Spec 0.3.1 additions (2026-11-24, evening)
+Author decisions: task 29 θ floor to 0; task 31 τ_Π ≥ 1 s (design lower bound); task 32 α_Π ≥ 0; task 19 apgi_core counts as production code.
+- KC-PRECOND-TAU-PI resolved: §2.6 of the v1.2 Math Spec draft states τ_Π ≥ 1 s and α_Π ≥ 0 (E13 fixed in the draft); SRC-MATHSPEC-V12D re-pinned (8f2fe523…). dt = 10 ms and Δt_res = 1 ms both satisfy dt ≤ τ_Π/10.
+- PD-CLIP and PD-KAPPA-RESIDUAL resolved in apgi-implementation 7a366db (fix/spec-alignment). The κ_e/κ_i config keys (withdrawn in the Notation Appendix) were renamed too.
+- E14. Production defect found while renaming: the BOLD calibrator's E/(N·E_min) is the dimensionless R_L but was documented as J/bit, and example 05 passed it to the pipeline as joules_per_bit. Fixed in 7a366db.
+- E15. PD-LOOP-GAIN (open): the proposed subcritical loop gain (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1 is 2 × 10⁴ at production defaults if tau_pi is in seconds; production states no unit for tau_pi.
+- E16–E19. apgi-validation de06453 apgi_core, by reading the source: PV-THETA-SCALE (θ₀ = 0.03 and 3.0 AU vs [0.25, 0.85]), PV-CLIP (θ ∈ [0.1, 5]), PV-HAZARD (per-step Bernoulli), PV-DT (Δt = 50 ms with τ = 0.2 s). test_production_validation.py encodes them; it has not been run.
+- Lean found no new defect in this round; every new finding came from the production cross-checks.

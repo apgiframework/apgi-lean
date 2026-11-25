@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T19:52:36+00:00",
+  "generated": "2026-11-24T23:37:18+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -38,7 +38,7 @@
       "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf"
     },
     "SRC-MATHSPEC-V12D": {
-      "sha256": "a151d52d97f78628573aa30539835d92faff94d5f0da6aee3d5d71285544e0ca",
+      "sha256": "8f2fe523fa34ad16f65c859435d8213f069cca996c678807f0a7806ae5b24bd1",
       "found": true,
       "file": "APGI-Mathematical-Specifications.md"
     }
@@ -711,21 +711,28 @@
     },
     "tau_Pi": {
       "status": "verified",
-      "param_hash": "09ac9cec999c12812e2a4ae7487e941dfe4687e7d8fba77609d4f5bb050d75fe",
+      "param_hash": "2d8b316b65d3a5d3c78e5c9d3e69efe4af21328b6f835d9b7d77681b33842cdd",
       "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "v1.2 fixes the design lower bound τ_Π ≥ 1 s",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        },
         {
           "source": "SRC-MATHSPEC",
           "page": 6,
           "quote": "τ_Π Precision decay timescale > 0 (s)",
           "status": "found",
-          "values": [
-            {
-              "field": "range.lo",
-              "document": "0",
-              "registry": "0",
-              "match": true
-            }
-          ]
+          "values": []
         },
         {
           "source": "SRC-NOTATION",
@@ -805,12 +812,26 @@
     },
     "alpha_Pi": {
       "status": "verified",
-      "param_hash": "7494c2e24c4989a41010642834f47d9342b197d094d1b03f3e9eea3ac9f5f7a0",
+      "param_hash": "981d2e4293951292f6da61a2a0aad04f9ceb2911afa33cdddbed4711bc504911",
       "evidence": [
         {
           "source": "SRC-MATHSPEC",
           "page": 6,
           "quote": "α_Π Precision drive coefficient from |ε| ≥ 0 (s⁻¹)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "where α_Π ≥ 0 [s⁻¹] is the precision error-sensitivity gain",
           "status": "found",
           "values": [
             {

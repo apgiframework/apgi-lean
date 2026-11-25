@@ -37,10 +37,12 @@ def test_registry_state_is_fully_acknowledged():
     assert r["stale_known_conflicts"] == []
 
 
-@pytest.mark.parametrize("k", [k["id"] for k in KNOWN["conflicts"] if k["status"] == "open"])
-def test_known_conflict_still_detected(k):
+def test_known_conflicts_still_detected():
+    """Every open known conflict is still detected (vacuous once all are resolved;
+    a parametrised form would turn the empty set into a skip)."""
     hits = {f["known"] for f in CC.run(write=False)["acknowledged"]}
-    assert k in hits
+    open_ids = {k["id"] for k in KNOWN["conflicts"] if k["status"] == "open"}
+    assert open_ids <= hits
 
 
 def test_landauer_registry_value():
@@ -118,8 +120,6 @@ def test_euler_precondition_satisfied(tmp_path, monkeypatch):
     def ok(P, d):
         P["dt"]["value"] = "0.001"
         P["tau_theta"]["value"] = "0.2"
-        # τ_Π needs a calibrated range for the full rule dt ≤ min(τ_S, τ_θ, τ_Π)/10 (KC-PRECOND-TAU-PI)
-        P["tau_Pi"].update(range={"lo": "0.1", "hi": "1", "lo_closed": True, "hi_closed": True})
     r = run_mutated(tmp_path, monkeypatch, ok)
     assert not any(f["check"].startswith("precondition") and "dt" in f["params"]
                    for f in r["acknowledged"] + r["unacknowledged"])
@@ -176,13 +176,17 @@ def test_ne_bound_registry_value():
 
 
 def test_dt_rule_needs_tau_pi(tmp_path, monkeypatch):
-    """KC-PRECOND-TAU-PI is load-bearing: give τ_Π a calibrated range and the
-    dt ≤ τ_Π/10 rule becomes checkable; make it too short and it is violated."""
-    def calibrate(lo):
-        return lambda P, d: P["tau_Pi"].update(range={"lo": lo, "hi": "1", "lo_closed": True, "hi_closed": True})
-    ok = run_mutated(tmp_path / "a", monkeypatch, calibrate("0.5"))
+    """KC-PRECOND-TAU-PI (resolved by τ_Π ≥ 1 s, task 31) is load-bearing: the registered
+    bound discharges dt ≤ τ_Π/10; a support-only range makes the rule unverifiable again,
+    and a bound that is too short makes it violated."""
+    r = CC.run(write=False)
     assert not any(f["check"].startswith("precondition") and "tau_Pi" in f["params"]
-                   for f in ok["acknowledged"] + ok["unacknowledged"])
-    assert "KC-PRECOND-TAU-PI" in ok["stale_known_conflicts"]
-    bad = run_mutated(tmp_path / "b", monkeypatch, calibrate("0.05"))
+                   for f in r["acknowledged"] + r["unacknowledged"])
+    def support_only(P, d):
+        P["tau_Pi"].update(range={"lo": "0", "hi": None, "lo_closed": False, "hi_closed": False, "kind": "support"})
+    unv = run_mutated(tmp_path / "a", monkeypatch, support_only)
+    assert any(f["check"] == "precondition_unverifiable" and "tau_Pi" in f["params"] for f in unv["unacknowledged"])
+    def too_short(P, d):
+        P["tau_Pi"].update(range={"lo": "0.05", "hi": None, "lo_closed": True, "hi_closed": False, "kind": "design_bound"})
+    bad = run_mutated(tmp_path / "b", monkeypatch, too_short)
     assert any(f["check"] == "precondition_violated" and "tau_Pi" in f["params"] for f in bad["unacknowledged"])
