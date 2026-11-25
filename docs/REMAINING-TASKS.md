@@ -4,7 +4,7 @@ State as of 2026-11-25 06:30 ET (spec 0.3.1, tasks 36–39 round).
 
 - apgi-lean: https://github.com/apgiframework/apgi-lean, local `C:\Claude\Projects\apgi-lake`. `main` is the only branch.
 - apgi-implementation: `main` = a9b2878 (pinned), local `C:\Claude\Projects\apgi-implementation`. `main` is the only branch.
-- apgi-validation: `main` = 811aee2 (pinned), local `C:\Claude\Projects\apgi-validation`. `main` is the only branch.
+- apgi-validation: `main` = 07ca731, local `C:\Claude\Projects\apgi-validation`. `main` is the only branch. Pinned at 811aee2; 07ca731 only rebuilds the `release/` manifest (its own gate XC-CI-05.3 hashes apgi_core), so apgi_core is identical.
 - Local results: extraction 39 of 39 verified; `lake build --wfail` passes; 41 of 41 theorems pass the axiom audit; check_consistency 0 open, 0 unacknowledged, 0 stale; pytest 116 passed, 1 xfailed (PD-LOOP-GAIN), 1 skipped; test_production_validation.py 7 passed; apgi-implementation suite at a9b2878 2826 passed, 11 skipped; make_report 6 of 7 locally (the seventh needs a CI run).
 - Rating: design 95/100, implementation 96/100, overall readiness 95/100 (verification-instructions.txt).
 - Pushing: this PC's SSH key needs its passphrase and the HTTPS login (lesoto) has no write access to apgiframework, so this round was pushed through the Claude session's GitHub access. To push locally, see task 2.
@@ -26,7 +26,7 @@ State as of 2026-11-25 06:30 ET (spec 0.3.1, tasks 36–39 round).
 
 **2. Local pushes.** Start ssh-agent once in an elevated PowerShell (`Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent`), then `ssh-add $HOME\.ssh\id_ed25519_apgi` and type the passphrase. Until then, local `git fetch`/`git push` over `github-apgi` fail; read-only fetches over HTTPS still work.
 
-**43. Check the CI run** on apgi-lean `main` for this round: expect 4 jobs green and 7 of 7.
+**43. CI.** The production-validation job now installs apgi-validation with Python 3.11 and its `requirements.lock`, as apgi-validation's own CI does. Confirm the run on apgi-lean `main` shows 4 jobs green and 7 of 7.
 
 ## Phase 2: Author decisions (Owner: Uxod)
 

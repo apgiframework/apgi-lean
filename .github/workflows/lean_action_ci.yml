@@ -67,11 +67,13 @@ jobs:
           repository: apgiframework/apgi-validation
           ref: 811aee236ef251ad7a39dbca977fa91968fd5050
           path: apgi-validation
+      # Same interpreter and lock file as apgi-validation's own CI: unpinned on
+      # 3.12 its requirements pull a pytensor that does not build.
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
-      - run: pip install -r apgi-validation/requirements.txt
-      - run: pip install -r verification/python/requirements.txt
+          python-version: "3.11"
+      - run: pip install -r apgi-validation/requirements.txt -c apgi-validation/requirements.lock
+      - run: pip install pytest hypothesis mpmath -c apgi-validation/requirements.lock
       - name: Pytest (strict xfail on every open PV-* divergence)
         working-directory: verification/python
         env:
