@@ -1,6 +1,6 @@
 {
   "schema": "apgi-parameters/2",
-  "spec_version": "0.3.1",
+  "spec_version": "0.4.0",
   "note": "verification: 'project-notes' = recorded from the author's notes, not yet matched to a pinned source; 'extracted' = every evidence quote was found on the stated page of the sha256-pinned source and states the registry value (verification/reports/extraction.json); 'computed' = exact constant. Evidence pages are 1-based PDF page indices, not printed page labels. Quotes are short and matched after removing whitespace, brackets and dashes, which the PDF text layer drops. A range with kind 'support' states only the admissible sign or support (e.g. τ_Π > 0), not a calibrated interval; precondition checks treat its bounds as unknown.",
   "parameters": [
     {"id": "theta_floor", "symbol": "θ_floor", "lean_name": "θ_floor", "lean_type": "Apgi.Threshold", "value": "0", "unit": "AU",
@@ -272,7 +272,52 @@
      "source": "SRC-MATHSPEC", "version": "0.3.0", "verification": "extracted", "epistemic": "definition",
      "evidence": [
        {"source": "SRC-MATHSPEC", "page": 9, "quote": "Somatic-marker value for context c and action a; its pre-session estimate", "states": {}},
-       {"source": "SRC-MATHSPEC", "page": 9, "quote": "Π_i^eff = g_NE·Π_i·exp(β_SM·M̂(c,a)) [−2, 2]", "states": {"range.lo": "−2", "range.hi": "2"}}]}
+       {"source": "SRC-MATHSPEC", "page": 9, "quote": "Π_i^eff = g_NE·Π_i·exp(β_SM·M̂(c,a)) [−2, 2]", "states": {"range.lo": "−2", "range.hi": "2"}}]},
+    {"id": "m0", "symbol": "m₀", "lean_name": null, "value": "0.79788456080286535588", "unit": "dimensionless", "range": null, "role": "constant",
+     "definition": "Stimulus-free mean of |z| for standard-normal z, m₀ = √(2/π), stored to 20 significant digits. Subtracted in the excess magnitude |z|_ex = |z| − m₀ (EQ-EXCESS-1), which gives S_inst and S a stimulus-free mean of zero.",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "computed", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "m₀ = √(2/π) ≈ 0.80, the stimulus-free mean of |z|", "states": {}}]},
+    {"id": "pi_min", "symbol": "Π_min", "lean_name": null, "value": "0.1", "unit": "AU", "range": null, "role": "constraint",
+     "definition": "Lower precision clamp, applied after every precision computation and modulation step (EQ-PREC-2, EQ-PREC-ACH-1, EQ-PREC-SM-1).",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "Bounds: Π_min = 0.1, Π_max = 10", "states": {"value": "0.1"}}]},
+    {"id": "pi_max", "symbol": "Π_max", "lean_name": null, "value": "10", "unit": "AU", "range": null, "role": "constraint",
+     "definition": "Upper precision clamp, a numerical bound on AU-scaled precision, not a measured biological ceiling.",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "Π_max = 10, matching the canonical precision range", "states": {"value": "10"}}]},
+    {"id": "eps_stab", "symbol": "ε_stab", "lean_name": null, "value": "1e-8", "unit": "dimensionless", "range": null, "role": "constant",
+     "definition": "Numerical stabilizer in denominators (EQ-STD-1, EQ-PREC-2). Never a prediction error.",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "Canonical ε_stab = 10⁻⁸", "states": {"value": "10⁻⁸"}}]},
+    {"id": "T_window_e", "symbol": "T_window,e", "lean_name": null, "value": "5", "unit": "s", "range": null, "role": "time_constant",
+     "definition": "Exteroceptive reference window for the standardization statistics μ_ref, σ_ref (EQ-STD-1), and the EMA horizon α_EMA = 1 − exp(−dt/T_window) (EQ-EMA-2). The reference statistics exclude the current sample and do not share an estimator with the precision variance.",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "running reference windows (5 s exteroceptive, 10 s interoceptive) that exclude the current sample", "states": {"value": {"text": "5", "unit": "s"}}}]},
+    {"id": "T_window_i", "symbol": "T_window,i", "lean_name": null, "value": "10", "unit": "s", "range": null, "role": "time_constant",
+     "definition": "Interoceptive reference window (see T_window_e).",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "running reference windows (5 s exteroceptive, 10 s interoceptive) that exclude the current sample", "states": {"value": {"text": "10", "unit": "s"}}}]},
+    {"id": "g_NE", "symbol": "g_NE", "lean_name": null, "value": "1", "unit": "dimensionless", "range": {"lo": "0", "hi": null, "lo_closed": true, "hi_closed": false, "kind": "support"}, "role": "gain",
+     "definition": "Noradrenergic gain (tonic level), shared by Πⁱ_eff and θ_eff after the clamp EQ-NE-1. Default 1 (neutral).",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "With g_NE = 1 (neutral precision gain), γ_NE = 0 (no NE threshold route), β_5HT = 0", "states": {"value": "1"}}]},
+    {"id": "gamma_NE", "symbol": "γ_NE", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": null, "hi": null, "lo_closed": false, "hi_closed": false, "kind": "support"}, "role": "coupling",
+     "definition": "Signed NE coupling on the effective threshold, θ_eff = θ·(1 + γ_NE·g_NE)…. No default sign (SSOT R6): the sign is estimated with a prior symmetric about zero. γ_NE = 0 removes the NE threshold route. KC-GAMMA-NE-SIGN tracks the v1.2 draft's 'default > 0'.",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "so the sign of γ_NE is estimated, not fixed", "states": {}}]},
+    {"id": "beta_5HT", "symbol": "β_5HT", "lean_name": null, "value": "0", "unit": "AU", "range": null, "role": "offset",
+     "definition": "Serotonergic additive offset in θ_eff, read-out only (EQ-THEFF-1); never written back to θ. Default 0. Sign hypothesis β_5HT > 0 (R17, proposed).",
+     "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "The default value is β_5HT = 0 (no serotonergic modulation)", "states": {"value": "0"}}]}
   ],
   "retired_parameters": [
     {"id": "lambda_theta", "reason": "λ_θ does not occur in the published v1.1 corpus. The threshold mean-reversion rate is γ_θ = 1/τ_θ (gamma_theta); the allostatic learning rate is η_θ (eta_theta). Resolves KC-LAMBDA."},

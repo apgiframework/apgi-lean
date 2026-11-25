@@ -99,3 +99,50 @@ def test_full_model_ignition_is_dt_invariant():
 def test_full_model_step_rule():
     p = F.APGIParameters()
     assert p.delta_t <= p.tau / 10
+
+
+# ------------------------------------- SSOT v1.2 minimal core (task 53) ----
+@divergence("SSOT-V1")
+def test_model_accumulates_signal():
+    """EQ-LEAK-1: S(t+1) depends on S(t). model.py recomputes S from the current z alone."""
+    m1, m2 = M.APGIModel(), M.APGIModel()
+    m1.step(1.0)
+    m2.step(1.0)
+    m2.S += 5.0
+    m1.step(0.5)
+    m2.step(0.5)
+    assert m1.S != pytest.approx(m2.S)
+
+
+@divergence("SSOT-V1")
+def test_model_z_excludes_current_sample():
+    """EQ-STD-1: ε(t) is standardized before it enters the running statistics."""
+    import inspect
+
+    src = inspect.getsource(M.APGIModel.step)
+    assert src.index("self.stats_e.z(eps)") < src.index("self.stats_e.update(eps)")
+
+
+@divergence("SSOT-V2")
+def test_full_model_drive_is_excess_centered():
+    """EQ-DRIVE-1 / EQ-EXCESS-1: |ε| = m₀ in both channels gives zero drive, so from S = 0 the
+    next S is 0."""
+    f = F.APGIFullDynamicModel(seed=10101)
+    f.state.S = 0.0
+    assert f.signal_accumulation(1.0, 1.0, R.M0, R.M0, beta=1.0) == pytest.approx(0.0, abs=1e-12)
+
+
+@divergence("SSOT-V2")
+def test_full_model_uses_exact_leak_weight():
+    """EQ-LEAK-1: S(t+1) = (1 − λ)·S(t) + λ·S_inst, λ = 1 − e^(−Δt/τ); the fixed point is S_inst.
+    Checked on the increment from S = 0, which is λ·S_inst whatever the drive's centring."""
+    f = F.APGIFullDynamicModel(seed=10101)
+    p = f.params
+    lam = R.leak_gain(p.delta_t, p.tau)
+    f.state.S = 0.0
+    a = f.signal_accumulation(1.0, 1.0, 3.0, 3.0, beta=1.0)
+    f.state.S = 1.0
+    b = f.signal_accumulation(1.0, 1.0, 3.0, 3.0, beta=1.0)
+    assert b - a == pytest.approx(1.0 - lam, rel=1e-12)  # retention e^(−Δt/τ) = 1 − λ (holds today)
+    s_inst = {(p.we + p.wi) * 3.0, (p.we + p.wi) * (3.0 - R.M0)}  # uncentered or centered drive
+    assert any(a == pytest.approx(lam * s, rel=1e-9) for s in s_inst)

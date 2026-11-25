@@ -39,6 +39,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r verification/python/requirements.txt
+      # The SSOT-P* behavioural tests (task 53) construct pipeline.APGIPipeline, which imports
+      # structlog and pydantic. numpy stays at the verification pin; scipy for optional modules.
+      - run: pip install "structlog>=24.1.0,<26.0" "pydantic>=2.0.0,<3.0" "scipy>=1.10.0,<2.0"
       - name: Spec.lean is generated from the current registry
         run: python verification/python/generate_lean.py --check
       - name: Consistency check (fails on unacknowledged or stale conflicts)

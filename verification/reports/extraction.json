@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-25T11:01:33+00:00",
+  "generated": "2026-11-25T22:29:38+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -1183,6 +1183,172 @@
               "field": "range.hi",
               "document": "2",
               "registry": "2",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "m0": {
+      "status": "verified",
+      "param_hash": "96b86322b9fa46a8a001538b3b3139d70dcf7f24606ab497856facaceea954b7",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "m₀ = √(2/π) ≈ 0.80, the stimulus-free mean of |z|",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "pi_min": {
+      "status": "verified",
+      "param_hash": "7179b940ef77945f5f8ec3a5b818137cf0f62b4fc563d6ef663fa60a45867a6d",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "Bounds: Π_min = 0.1, Π_max = 10",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.1",
+              "registry": "0.1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "pi_max": {
+      "status": "verified",
+      "param_hash": "9b52719d6a46e018537a4b3132e5947929c87b257df8dffcdd3b709fd2844f19",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "Π_max = 10, matching the canonical precision range",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "10",
+              "registry": "10",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "eps_stab": {
+      "status": "verified",
+      "param_hash": "4543bd8ebd32ec46718c2c5f81836febc3e16f6c3c357641270833c253982023",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "Canonical ε_stab = 10⁻⁸",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "10⁻⁸",
+              "registry": "1e-8",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "T_window_e": {
+      "status": "verified",
+      "param_hash": "800f1ac93a22693a38f755551c1e64056670c59a78f1bea68d1ed604d9bc4e38",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "running reference windows (5 s exteroceptive, 10 s interoceptive) that exclude the current sample",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "5",
+              "registry": "5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "T_window_i": {
+      "status": "verified",
+      "param_hash": "2231c4de9ed8c961765c19cc02fd621bc3871f9071122b8ce69a305b2dd034d7",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "running reference windows (5 s exteroceptive, 10 s interoceptive) that exclude the current sample",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "10",
+              "registry": "10",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "g_NE": {
+      "status": "verified",
+      "param_hash": "494adc0e1f4e2408dc796156c28384b331446b7f7a8322f7e2bfcae3ce9d8afc",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "With g_NE = 1 (neutral precision gain), γ_NE = 0 (no NE threshold route), β_5HT = 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "gamma_NE": {
+      "status": "verified",
+      "param_hash": "3661beb779a83913bf18a4ba562840cbbf991145a233d8f9088e6826189120f4",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "so the sign of γ_NE is estimated, not fixed",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "beta_5HT": {
+      "status": "verified",
+      "param_hash": "9a13f80f7847df74d27f516546c7877221f7ddb0fa05a9ee2887c9746b1e4fd3",
+      "evidence": [
+        {
+          "source": "SRC-MATHSPEC-V12D",
+          "page": 1,
+          "quote": "The default value is β_5HT = 0 (no serotonergic modulation)",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
               "match": true
             }
           ]

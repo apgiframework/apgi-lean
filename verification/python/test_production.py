@@ -210,3 +210,183 @@ def test_production_hazard_matches_reference(B, dt, r_max):
     p = PI.hazard_probability(B, dt, r_max)
     assert p == pytest.approx(R.hazard_prob(r_max, B, dt), rel=1e-12, abs=1e-15)
     assert (1 - p) ** 2 == pytest.approx(1 - PI.hazard_probability(B, 2 * dt, r_max), rel=1e-9, abs=1e-15)
+
+
+# ------------------------------------- SSOT v1.2 minimal core (task 53) ----
+# Behavioural tests on the full pipeline (pipeline.APGIPipeline), one strict
+# xfail per SSOT-P* divergence. Each test is written against the SSOT
+# statement, so a production fix turns it into a hard failure (XPASS) until the
+# divergence is marked resolved. Inputs are chosen so a test isolates its own
+# divergence: fixing SSOT-Pn alone flips the SSOT-Pn tests and no others.
+import copy  # noqa: E402
+import warnings  # noqa: E402
+
+
+def _pipe(**over):
+    """A fresh production pipeline at the default CONFIG with `over` applied."""
+    import pipeline as PP
+
+    cfg = copy.deepcopy(CFG)
+    cfg.update(over)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return PP.APGIPipeline(cfg)
+
+
+def _step(p, x_e, x_i):
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return p.step(x_e, x_i)
+
+
+TINY_ETA = 1e-12  # production validates η_θ ∈ (0, 1]; this keeps θ fixed to ~1e-12 AU
+
+
+def test_pipeline_importable():
+    """Guard for the SSOT-P* xfails: an import error inside them would count as an expected
+    failure. CI installs structlog and pydantic for this (apgi-implementation requirements)."""
+    p = _pipe()
+    r = _step(p, 0.1, -0.1)
+    assert {"S", "S_inst", "theta", "B", "pi_e", "z_e_norm"} <= set(r)
+
+
+@divergence("SSOT-P1")
+def test_drive_is_sign_symmetric():
+    """TC-09 / EQ-DRIVE-1: errors of equal magnitude and opposite sign contribute equally."""
+    a = _step(_pipe(beta=0.0), 1.5, 0.0)["S_inst"]
+    b = _step(_pipe(beta=0.0), -1.5, 0.0)["S_inst"]
+    assert a == pytest.approx(b, rel=1e-9)
+
+
+@divergence("SSOT-P1")
+def test_drive_is_excess_centered():
+    """TC-07 / EQ-EXCESS-1: zero error gives S_inst = −m₀·(Πᵉ_rel + Πⁱ_rel) < 0, so the
+    stimulus-free mean of S_inst is zero and θ₀ sits on the excess-surprise scale."""
+    assert _step(_pipe(beta=0.0), 0.0, 0.0)["S_inst"] < -0.5
+
+
+@divergence("SSOT-P2")
+def test_standardization_does_not_share_the_precision_estimator():
+    """EQ-STD-1 / TC-17: z uses separate reference statistics, so changing the precision
+    variance estimate must not change z."""
+    p, q = _pipe(beta=0.0), _pipe(beta=0.0)
+    p.state.sigma2_e = 4.0
+    assert _step(p, 1.0, 0.0)["z_e_norm"] == pytest.approx(_step(q, 1.0, 0.0)["z_e_norm"], rel=1e-12)
+
+
+@divergence("SSOT-P2")
+def test_precision_uses_variance_before_current_sample():
+    """SSOT §8 step 4: Π(t) = clip(1/(Σ(t) + ε_stab)); ε(t) enters Σ only at step 14."""
+    p = _pipe()
+    s2 = p.state.sigma2_e
+    r = _step(p, 3.0, 0.0)
+    assert r["pi_e"] == pytest.approx(R.prec_clamp(CFG["pi_min"], CFG["pi_max"], 1 / (s2 + CFG["eps"])), rel=1e-9)
+
+
+@divergence("SSOT-P3")
+def test_default_accumulator_is_exact_leak():
+    """EQ-LEAK-1: without an ignition, S(t+1) = (1 − λ)·S(t) + λ·S_inst(t), deterministic."""
+    p = _pipe(beta=0.0)
+    p.S = 0.2
+    r = _step(p, 1.0, 0.0)
+    assert r["B"] == 0
+    assert r["S"] == pytest.approx(R.leak_step(0.2, r["S_inst"], CFG["lam"]), rel=1e-9)
+
+
+@divergence("SSOT-P3")
+def test_signal_state_is_signed():
+    """S is signed and never overwritten by a compression (log1p is a read-out only, SSOT §5.5/§6.4):
+    from S = −0.3 with zero error the state stays negative."""
+    p = _pipe(beta=0.0)
+    p.S = -0.3
+    assert _step(p, 0.0, 0.0)["S"] < 0
+
+
+@divergence("SSOT-P4")
+def test_ignition_is_decided_from_existing_S():
+    """EQ-PIPE-1 (§8 steps 8-13): the decision compares the existing S(t) with θ_eff(t), before
+    reset and accumulation. Hard-threshold limit (EQ-IGN-1) so the test is deterministic."""
+    p = _pipe(beta=0.0, stochastic_ignition=False, eta=TINY_ETA)
+    p.S = p.theta + 0.01
+    assert _step(p, 0.0, 0.0)["B"] == 1
+
+
+@divergence("SSOT-P4")
+def test_reset_increment_inside_allostatic_step():
+    """EQ-ALLO-1: δ_reset·B(t) is added inside the allostatic step, before the exact decay,
+    and applied exactly once (TC-12): θ(t+1) = θ₀ + (θ + δ − θ₀)·e^(−dt/τ_θ)."""
+    p = _pipe(beta=0.0, stochastic_ignition=False, eta=TINY_ETA, delta=0.5)
+    th0 = p.theta
+    p.S = 5.0
+    r = _step(p, 0.0, 0.0)
+    assert r["B"] == 1
+    expected = R.threshold_step(th0, CFG["theta_base"], 0.0, 0.0, 0.0, 0.5, 1, CFG["dt"], CFG["tau_theta"])
+    assert p.theta == pytest.approx(expected, rel=1e-9)
+
+
+@divergence("SSOT-P5")
+def test_ne_factor_is_read_out_only():
+    """TC-11 / EQ-THEFF-1: the NE factor scales θ_eff, never θ. With no ignition θ stays at θ₀."""
+    p = _pipe(ne_on_threshold=True, gamma_ne=0.2, g_ne=1.0, eta=TINY_ETA, beta=0.0, stochastic_ignition=False)
+    for _ in range(100):
+        _step(p, 0.0, 0.0)
+    assert p.theta == pytest.approx(CFG["theta_base"], abs=1e-6)
+
+
+@divergence("SSOT-P5")
+def test_serotonin_offset_is_read_out_only():
+    """TC-11 / EQ-THEFF-1: β_5HT shifts θ_eff, never θ (written back it accumulates ≈ 2000·β_5HT)."""
+    p = _pipe(beta_5ht=0.1, eta=TINY_ETA, beta=0.0, stochastic_ignition=False)
+    for _ in range(100):
+        _step(p, 0.0, 0.0)
+    assert p.theta == pytest.approx(CFG["theta_base"], abs=1e-6)
+
+
+@divergence("SSOT-P6")
+def test_ne_clamp_binds_for_negative_coupling():
+    """EQ-NE-1, Lean CL-13 (neClamp_bound): |γ_NE|·g_NE ≤ 0.5 for either sign of γ_NE."""
+    p = _pipe(ne_on_threshold=True, gamma_ne=-2.0, g_ne=1.0)
+    assert abs(p.config["gamma_ne"]) * p.config["g_ne"] <= 0.5 + 1e-12
+    assert p.config["g_ne"] == pytest.approx(R.ne_clamp(-2.0, 1.0))
+
+
+@divergence("SSOT-P6")
+def test_gamma_ne_has_no_default_sign():
+    """R6: γ_NE has no default sign; the neutral default is 0 (no NE threshold route) or unset."""
+    assert CFG.get("gamma_ne") in (None, 0.0)
+
+
+@divergence("SSOT-P7")
+def test_default_theta0_is_canonical():
+    """SSOT §4.1: θ₀ = 0.35 AU (registry theta_baseline)."""
+    th0 = float(P["theta_baseline"]["value"])
+    assert CFG["theta_base"] == th0 and CFG.get("theta_0", th0) == th0
+
+
+@divergence("SSOT-P7")
+def test_default_sampling_is_hazard():
+    """EQ-HAZARD-1 is the canonical sampler; the hard threshold is a limit, not the default."""
+    assert CFG["stochastic_ignition"] is True
+
+
+@divergence("SSOT-P7")
+def test_manifest_reports_operating_point():
+    """R1 / TC-14: every run reports γ_sig·θ₀, σ(−γ_sig·θ₀) and the stimulus-free event rate."""
+    m = _pipe().manifest()
+    op = R.operating_point(1.0 / CFG["ignite_tau"], CFG["theta_base"], CFG["r_max"])
+    flat = {**m, **(m.get("operating_point") or {})}
+    for k, v in op.items():
+        assert flat.get(k) == pytest.approx(v, rel=1e-9), k
+
+
+@divergence("SSOT-P8")
+def test_ema_weights_follow_reference_windows():
+    """EQ-EMA-2: α_EMA = 1 − exp(−dt/T_window), T_window = 5 s (extero), 10 s (intero)."""
+    assert CFG["alpha_e"] == pytest.approx(R.ema_alpha(CFG["dt"], float(P["T_window_e"]["value"])), rel=1e-9)
+    assert CFG["alpha_i"] == pytest.approx(R.ema_alpha(CFG["dt"], float(P["T_window_i"]["value"])), rel=1e-9)
+
+
+@divergence("SSOT-P9")
+def test_default_dopamine_bias_is_zero():
+    """SSOT §4.2: β_DA = 0 by default (registry beta_DA)."""
+    assert CFG["beta"] == 0.0
