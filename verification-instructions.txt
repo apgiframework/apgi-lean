@@ -322,7 +322,7 @@ The first milestone should be the automatic detection of the θₜ and notation 
 
 Do not expand to full L0–L4 verification until the pilot demonstrates that formalization catches defects ordinary tests would miss.
 
-Final assessment (2026-11-25, re-rated after tasks 36–39): design 95/100; implementation 96/100; overall readiness 95/100. No registry conflict is open; 39 of 39 parameters are verified against pinned sources; 41 theorems are axiom-audited; locally 6 of 7 criteria are met, the seventh only by a CI run. Both production packages are pinned to main and cross-checked: apgi-implementation a9b2878 (2826 of its own tests pass) and apgi-validation 811aee2 (all four PV divergences resolved; 7 of 7 pass), each with a CI job and a test that ties the CI ref to the pin. The v1.2 drafts now agree on the loop-gain form ((C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² < 1) and on τ_Π ≥ 1 s at every level, and scan clean. Remaining deductions: the cusp, τ_Π and α_Π sources are an unpublished draft until v1.2 is released; τ_Π and r_max are uncalibrated; PD-LOOP-GAIN stays open because the production defaults give 2 × 10⁴ under the canonical form; the published v1.1 PDFs still carry E20, E21 and the earlier corpus defects. This is a rating of engineering suitability, not of APGI's scientific validity.
+Final assessment (2026-11-25, re-rated against the APGI Single Source of Truth, v1.2, registry 0.3.1, hash 3fc0faa0…): design 91/100; implementation 60/100; overall release readiness 58/100. The earlier 95/96 measured the registry's own scope; the SSOT widens the yardstick to the full v1.2 model. Strong: the verification layer. 41 of 41 theorems match the SSOT register with pinned axioms; 16 of 16 claim statuses match; 25 golden vectors in 6 families; CI 7 of 7; all 31 SSOT worked numbers recompute correctly. Weak: the production layer. apgi-implementation drives S with the signed Ψ transform and no excess correction or relative precision; it shares one estimator between z-scoring and precision; it accumulates by Euler–Maruyama and overwrites S with log1p; it follows a different step order; and it writes θ_eff terms back into θ when they are enabled. apgi_core uses an energy-form S with no accumulation. The registry holds 10 of 53 SSOT equations and 35 of 73 parameter rows, so none of this is detected yet. Release blockers closed: 7 of 18. Conformance tests: 7 of 26 pass, 5 partial. This is a rating of engineering suitability, not of APGI's scientific validity.
 
 The strongest result would be a system in which every major APGI claim can be traced through:
 
@@ -387,3 +387,8 @@ Tasks 37–39 round (2026-11-25)
 - Task 39: Paper 3 v1.2 draft sets τ_Π = max(1 s, τ_ℓ/10). E20 and E21 no longer occur in the v1.2 drafts.
 - apgi-validation main 811aee2 merges the PV fixes; pin moved, PV-* resolved, 7 passed.
 - apgi-implementation a9b2878 (task 35 first half, task 37): tau_pi documented in s and used by the step-rule validator; reduced-model docstring corrected, constants unchanged. Pin moved; 116 passed, 1 xfailed (PD-LOOP-GAIN).
+
+SSOT audit (2026-11-25)
+- Findings SSOT-P1…P7 (apgi-implementation), SSOT-V1, V2 (apgi_core), SSOT-R1…R3 (registry and Lean), SSOT-D1…D8 (the SSOT document); details and tasks 45–58 in docs/REMAINING-TASKS.md.
+- Lean finding: ignites_monotone_precision holds for the uncentered Π·|ε| (registry EQ-PREC-1) but not for the SSOT drive Π_rel·(|z| − m₀), which is antitone in Π_rel when |z| < m₀.
+- As in every earlier round, the defects came from comparing artefacts against an authority (here the SSOT), not from Lean.
