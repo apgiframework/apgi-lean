@@ -121,11 +121,11 @@
   },
   "production_secondary": {
     "repository": "apgiframework/apgi-validation",
-    "commit": "f6fec658727f105c4735717ae30c9132f02d8988",
+    "commit": "604a3d9ef846aee53696ea0ed35457e129f5b31e",
     "package": "apgi_core",
     "decision": "Task 19: apgi_core counts as production code. It implements the spec's ignition, threshold, precision and reset equations independently of apgi-implementation and backs the Validation/Falsification protocols, so its defaults feed empirical claims.",
     "tests": "verification/python/test_production_validation.py (strict xfail while a divergence is open; skipped unless APGI_VALIDATION_PATH is set). CI job production-validation runs it at the pinned commit.",
-    "evidence": "Divergences found by reading the source at de06453 (2026-11-24) and confirmed by running the module there (3 passed, 4 xfailed). Fixed in 628f5b1, merged to apgi-validation main as 811aee2 (2026-11-25), the pinned commit: 7 passed.",
+    "evidence": "Divergences found by reading the source at de06453 (2026-11-24) and confirmed by running the module there (3 passed, 4 xfailed). Fixed in 628f5b1, merged to apgi-validation main as 811aee2 (2026-11-25), the pinned commit: 7 passed. Round 75: SSOT-V3 resolved in 604a3d9 (task 62c), 15 passed, 2 skipped (SSOT-V1 declared variant).",
     "divergences": [
       {"id": "PV-THETA-SCALE", "status": "resolved", "severity": "P1", "where": "utils/apgi_settings.py APGISettings.theta0 = 0.03; apgi_core/full_model.py APGIParameters.theta_t0 = 3.0 (validated to [1, 10])",
        "summary": "Baseline thresholds outside the published θ₀ ∈ [0.25, 0.85] AU (Notation Appendix). apgi_core/model.py APGIConfig.theta0 = 0.5 is inside. The same E1 θ-scale defect the registry had before spec 0.2.", "resolution": "628f5b1 (merged as 811aee2): APGIParameters.theta_t0 = 0.35 AU, validated to [0.25, 0.85]; APGISettings.theta0 = 0.35."},
@@ -141,9 +141,9 @@
       {"id": "SSOT-V2", "status": "resolved", "resolution": "Task 52: APGIFullDynamicModel.signal_accumulation uses the excess drive |ε| − m₀ and the exact leak weight λ = 1 − e^(−Δt/τ); fixed point S_inst.", "severity": "P0", "where": "apgi_core/full_model.py APGIFullDynamicModel.signal_accumulation: S ← e^(−Δt/τ)·S + we·Πe·|εe| + wi·β·Πi·|εi|",
        "summary": "The full model uses the uncentered drive Π·|ε| (no excess m₀, EQ-DRIVE-1) and adds the drive per step without the λ weight, so its fixed point is S_inst/(1 − e^(−Δt/τ)) (≈ 20.5·S_inst at Δt = 10 ms, τ = 0.2 s) instead of S_inst (EQ-LEAK-1).",
        "tests": ["test_production_validation.py::test_full_model_drive_is_excess_centered", "test_production_validation.py::test_full_model_uses_exact_leak_weight"], "task": 52},
-      {"id": "SSOT-V3", "status": "open", "severity": "P1", "task": "62b", "where": "apgi_core/full_model.py APGIFullDynamicModel.step and threshold_dynamics (f6fec65)",
+      {"id": "SSOT-V3", "status": "resolved", "resolution": "Task 62c (author decision 2026-11-27: align): apgi-validation 604a3d9. APGIFullDynamicModel.step follows SSOT §8: the propensity from the existing S(t), θ(t); C = c₁S(t) + c₂B(t−1), V = v₁|zᵉ| + v₂|zⁱ_eff|; EQ-ALLO-1 with δ_reset·B(t), the exact decay and the θ_floor clamp (η_θ ≥ 0, so η_θ = 0 is expressible); the retention reset before the exact leak. φ·I(t−1) removed. Trajectory-equal to apgi_ref.core_step with CORE_DEFAULTS and with every allostatic term on; eight planted faults caught (round 75).", "severity": "P1", "task": "62b", "where": "apgi_core/full_model.py APGIFullDynamicModel.step and threshold_dynamics (f6fec65)",
        "summary": "TC-04: full_model does not compute the same S, θ, Bₜ as the SSOT core, although it shares the drive and exact leak (SSOT-V2, resolved; test_full_model_signal_matches_reference_until_first_event passes). (a) The propensity is computed from the newly accumulated S(t+1) and θ(t+1), not the existing S(t) and θ_eff(t) (SSOT §8 step 8). (b) No post-ignition retention S ← ρ_retain·S (EQ-RESET-1); S diverges at the first event. (c) The threshold step is forward-Euler mean reversion with C = γ_c·(S − θ)₊·(1 + η_m/η_m,max), V = Πᵉ|εᵉ| + β·Πⁱ|εⁱ| and a facilitation φ·I(t−1), not EQ-ALLO-1 with EQ-COST-1, EQ-VAL-1 and δ_reset·B(t); η_θ ≥ 0.01 is enforced, so η_θ = 0 cannot be expressed. Found in the task-62b TC-04 trajectory test (2026-11-27). Either align it (as SSOT-V2 did for the drive) or label it a declared variant with MODEL_FORM (as SSOT-V1): an author decision (task 62c).",
-       "tests": ["test_production_validation.py::test_full_model_matches_reference_trajectory", "test_production_validation.py::test_full_model_decides_from_existing_signal", "test_production_validation.py::test_full_model_applies_retention_on_ignition"]}
+       "tests": ["test_production_validation.py::test_full_model_matches_reference_trajectory", "test_production_validation.py::test_full_model_matches_reference_trajectory_allostatic", "test_production_validation.py::test_full_model_decides_from_existing_signal", "test_production_validation.py::test_full_model_applies_retention_on_ignition"]}
     ]
   },
   "retired_patterns": [

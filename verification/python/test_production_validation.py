@@ -162,7 +162,7 @@ def test_full_model_uses_exact_leak_weight():
 
 
 # ------------------------------- TC-04: apgi_core.full_model trajectory (task 62b) ----
-def _full_model_pair(n=600, seed=404):
+def _full_model_pair(n=600, seed=404, extra=None):
     """Reference run (CORE_DEFAULTS) and the full model driven by the reference's own Π and z.
 
     full_model takes Π and ε as inputs, so the reference supplies them: we = wi = 0.5 and
@@ -173,9 +173,12 @@ def _full_model_pair(n=600, seed=404):
     g = np.random.default_rng(seed)
     xe = g.standard_normal(n) + np.where((np.arange(n) % 200) >= 120, 2.0, 0.0)
     xi, us = g.standard_normal(n), g.random(n)
-    rp = dict(R.CORE_DEFAULTS)
+    rp = {**R.CORE_DEFAULTS, **(extra or {})}
     par = F.APGIParameters(delta_t=rp["dt"], tau=rp["tau_S"], we=0.5, wi=0.5, theta_t0=rp["theta0"],
-                           k=rp["gamma_sig"], beta=1.0, r_max=rp["r_max"], tau_theta=rp["tau_theta"])
+                           k=rp["gamma_sig"], beta=1.0, r_max=rp["r_max"], tau_theta=rp["tau_theta"],
+                           eta_theta=rp["eta_theta"], c1=rp["c1"], c2=rp["c2"], v1=rp["v1"], v2=rp["v2"],
+                           delta_reset=rp["delta_reset"], rho_retain=rp["rho_retain"],
+                           theta_floor=rp["theta_floor"])
 
     class Draws:
         def __init__(self, u):
@@ -213,6 +216,27 @@ def test_full_model_matches_reference_trajectory():
     """TC-04 for apgi_core.full_model: S, θ, Bₜ and B(t) equal apgi_ref.core_step within
     tolerance on 600 seeded steps (the SSOT §8 order, EQ-RESET-1, EQ-ALLO-1)."""
     for k, r in enumerate(_full_model_pair()):
+        assert r["fm_Bt"] == pytest.approx(r["ref_Bt"], rel=1e-9, abs=1e-12), (k, "B_t")
+        assert r["fm_B"] == r["ref_B"], (k, "B")
+        assert r["fm_S"] == pytest.approx(r["ref_S"], rel=1e-9, abs=1e-12), (k, "S")
+        assert r["fm_theta"] == pytest.approx(r["ref_theta"], rel=1e-9, abs=1e-12), (k, "theta")
+
+
+# Every allostatic term on (task 62c): cost and value weights, η_θ ≠ 0, δ_reset, a retention other
+# than the default, and a cost large enough that the θ_floor = 0 clamp binds on some steps.
+ALLO_ON = dict(eta_theta=0.05, c1=0.4, c2=0.3, v1=0.6, v2=0.4, delta_reset=0.05, rho_retain=0.2, r_max=20.0)
+
+
+@divergence("SSOT-V3")
+def test_full_model_matches_reference_trajectory_allostatic():
+    """TC-04 with EQ-COST-1, EQ-VAL-1, EQ-ALLO-1 (η_θ, δ_reset, floor) and EQ-RESET-1 all active:
+    the same 600-step comparison, plus a check that the run exercises events and the floor."""
+    rows = _full_model_pair(extra=ALLO_ON)
+    assert sum(r["ref_B"] for r in rows) >= 5
+    assert any(r["ref_theta"] == 0.0 for r in rows)              # θ_floor binds
+    assert sum(r["ref_theta"] > 0.0 for r in rows) > 50            # ... and θ leaves it
+    assert len({round(r["ref_theta"], 9) for r in rows}) > 50      # θ moves
+    for k, r in enumerate(rows):
         assert r["fm_Bt"] == pytest.approx(r["ref_Bt"], rel=1e-9, abs=1e-12), (k, "B_t")
         assert r["fm_B"] == r["ref_B"], (k, "B")
         assert r["fm_S"] == pytest.approx(r["ref_S"], rel=1e-9, abs=1e-12), (k, "S")
