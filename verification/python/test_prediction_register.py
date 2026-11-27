@@ -105,3 +105,37 @@ def test_v12_draft_table_equals_the_locked_record():
     assert [r[0] for r in rows] == [p["pred_id"] for p in PREDS]
     for r, p in zip(rows, PREDS):
         assert r == [p[c] for c in HYP_COLUMNS], p["id"]
+
+
+# A number in the SSOT's condensed Table 15 that the locked Table 15 cell does not state, but another
+# extraction-verified part of the same locked record does: (row, number) -> registry parameter.
+SUPPORTED_ELSEWHERE = {("0.A–0.C", "100"): "bf10_threshold_pred_0B"}  # SRC-OSF p. 69, Pred 0.B criterion
+
+
+def test_ssot_condensed_table_agrees_with_the_locked_record():
+    """B-07 (machine half, Table 15): the SSOT's condensed copy of the register names the same codes,
+    with the same severity tier and label, and states no number that the locked row (or a named,
+    extraction-verified parameter of the same record) does not. Row order is not checked."""
+    ssot = registry.ROOT / "docs" / "apgi-v-1-2" / "APGI-Single-Source-of-Truth.md"
+    if not ssot.exists():
+        pytest.skip("SSOT draft not present (untracked; local check)")
+    rows = draft_table_rows(ssot, "## **Master prediction register (OSF Table 15")
+    rows = [r for r in rows if r[0] != "Pred"]
+    locked = {p["pred_id"]: p for p in PREDS}
+    assert sorted(r[0] for r in rows) == sorted(locked)
+    params = registry.params()
+    num = re.compile(r"\d+(?:\.\d+)?")
+    for pid, _prot, _construct, standard, severity, _hep in rows:
+        p = locked[pid]
+        m = re.match(r"([AB])\b", severity)
+        assert (m[1] if m else None) == p["severity_tier"], pid
+        label = ("Exploratory" if severity.startswith("Exploratory") else "CE" if "CE" in severity
+                 else "Speculative" if "speculative" in severity.lower() else None)
+        assert label == p["label"], pid
+        stated = set(num.findall(p["classification_standard"] + p["construct"] + p["pred_id"]))
+        for n in set(num.findall(standard)) - stated:
+            pid_param = SUPPORTED_ELSEWHERE.get((pid, n))
+            assert pid_param, f"{pid}: SSOT states {n}, which the locked row does not"
+            q = params[pid_param]
+            assert q["value"] == n and q["verification"] == "extracted"
+            assert all(e["source"] == TABLE["source"] for e in q["evidence"])

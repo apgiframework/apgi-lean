@@ -18,7 +18,7 @@ namespace Apgi
 def specVersion : String := "0.6.0"
 
 /-- SHA-256 of the specification files this file was generated from. -/
-def specHash : String := "ed7ae2ca38a6a614ab7d388218b504caab5d54edbbcfd31a13db81870440d33a"
+def specHash : String := "e4b80c7bfd610dadcc762047efd0ef9c2202e0b906b5d035542ba44d83617171"
 
 /-- `theta_floor` (AU) — SRC-MATHSPEC, role: state_invariant. -/
 noncomputable def θ_floor : ℝ := 0

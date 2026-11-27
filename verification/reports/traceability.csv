@@ -259,3 +259,4 @@ REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test
 REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_every_cited_prediction_code_is_registered
 REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_alpha_psy_is_the_pred_1e_threshold
 REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_v12_draft_table_equals_the_locked_record
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_ssot_condensed_table_agrees_with_the_locked_record

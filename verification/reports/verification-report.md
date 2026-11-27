@@ -1,9 +1,9 @@
 # APGI Verification Report
 
-- Generated: 2026-11-27T22:18:39+00:00
-- Spec version: 0.6.0 · registry hash `ed7ae2ca38a6a614…`
+- Generated: 2026-11-27T22:53:42+00:00
+- Spec version: 0.6.0 · registry hash `e4b80c7bfd610dad…`
 - Lean build (`lake build --wfail`): **passed**
-- Python test functions: **272 passed, 0 failed** of 273 (parametrised cases collapsed)
+- Python test functions: **273 passed, 0 failed** of 274 (parametrised cases collapsed)
 - Pilot criteria met: **6 of 7**
 
 > A Lean proof establishes a consequence of a definition. It is not evidence that APGI describes the brain.
@@ -13,7 +13,7 @@
 - ✅ **Every canonical parameter has a source identifier, unit, version, and documented range** — all parameters complete
 - ✅ **Known discrepancies produce explicit failures** — 0 open conflicts tracked; seeded suite passed
 - ✅ **Lean theorems compile without sorry or unapproved axioms** — lake build --wfail: passed; 196/196 theorems axiom-audited via #guard_msgs
-- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry ed7ae2ca38a6
+- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry e4b80c7bfd61
 - ✅ **Python tests pass the APGI numerical tolerances (1e-9)** — 15/15 golden-vector tests passed
 - ❌ **Continuous integration produces a reproducible verification report** — generated locally (CI run required)
 - ✅ **No mathematical proof is described as empirical confirmation of APGI** — no claim cites a Lean theorem as empirical evidence
