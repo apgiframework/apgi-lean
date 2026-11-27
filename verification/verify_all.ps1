@@ -12,6 +12,7 @@ Run "lake" { lake build --wfail }
 Run "consistency" { python verification\python\check_consistency.py }
 Run "manifest" { python verification\python\make_release_manifest.py }
 Run "traceability" { python verification\python\make_traceability.py }
+Run "recovery" { python verification\python\make_recovery_report.py }   # TC-08d-g study, about 3 min (task 62b)
 Set-Location verification\python
 $env:APGI_IMPL_PATH = $Impl
 Run "pytest" { python -m pytest -q -rxs -p no:cacheprovider }

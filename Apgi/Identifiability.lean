@@ -25,8 +25,17 @@ The likelihood is the Bernoulli likelihood of the event sequence B(t) under the 
 sampler (EQ-HAZARD-1). The observation model EQ-OBS-1/2 depends on the data only through the
 propensity path, so `propensity_path_rescale` carries over to it.
 
-TC-08d–g are declared *posterior trade-offs* (near-degeneracies), not exact invariances; they
-are statistical properties of a fit and are not theorems here. The recovery gate itself
+* **TC-08g (c₁, v₁, v₂, η_θ).** EQ-ALLO-1 sees the cost and value weights only through
+  η_θ·c₁, η_θ·c₂, η_θ·v₁, η_θ·v₂: scaling η_θ by a ≠ 0 and the four weights by 1/a leaves
+  every trajectory unchanged (`traj_scaleAllo`, `scaleAllo_not_injective`), and with η_θ = 0
+  the weights do not enter at all (`traj_weights_eta_zero`). This is an exact degeneracy
+  inside the declared TC-08g trade-off; what remains (how well the products are recovered)
+  is statistical.
+
+TC-08d–f, and the recovery of the TC-08g products and of τ_θ, are *posterior trade-offs*
+(near-degeneracies), not exact invariances; they are statistical properties of a fit, measured
+by verification/python/recovery_pipeline.py and reported in
+verification/reports/recovery-pipeline.json. The recovery gate itself
 (Pearson r > 0.85, median range-scaled error < 20%) is a computational test:
 verification/python/test_recovery.py.
 -/
@@ -156,6 +165,87 @@ theorem gain_product_not_injective {W : Type*} (R : RefEstimator W) (p : PipePar
   rw [hx, Real.exp_sub, Real.exp_log (by norm_num : (0 : ℝ) < 2)]
   field_simp
 
+/-! ## TC-08g: the allostatic gain and the cost and value weights -/
+
+/-- p with η_θ multiplied by a and the cost and value weights c₁, c₂, v₁, v₂ divided by a. -/
+noncomputable def PipeParams.scaleAllo (p : PipeParams) (a : ℝ) : PipeParams :=
+  { p with core := { p.core with η := a * p.core.η },
+           c1 := p.c1 / a, c2 := p.c2 / a, v1 := p.v1 / a, v2 := p.v2 / a }
+
+/-- p with the cost and value weights replaced. -/
+def PipeParams.withWeights (p : PipeParams) (c1 c2 v1 v2 : ℝ) : PipeParams :=
+  { p with c1 := c1, c2 := c2, v1 := v1, v2 := v2 }
+
+theorem costC_div (a c1 c2 S Bp : ℝ) :
+    costC (c1 / a) (c2 / a) 0 S Bp 0 = costC c1 c2 0 S Bp 0 / a := by
+  simp only [costC, mul_zero, add_zero, div_mul_eq_mul_div, ← add_div]
+
+theorem valueV_div (a v1 v2 ze zi : ℝ) :
+    valueV (v1 / a) (v2 / a) ze zi = valueV v1 v2 ze zi / a := by
+  simp only [valueV, div_mul_eq_mul_div, ← add_div]
+
+/-- EQ-ALLO-1 depends on (η_θ, C, V) only through η_θ·(C − V). -/
+theorem thresholdStep_scale {a : ℝ} (ha : a ≠ 0) (θ θ₀ η C V δ B dt τ : ℝ) :
+    thresholdStep θ θ₀ (a * η) (C / a) (V / a) δ B dt τ = thresholdStep θ θ₀ η C V δ B dt τ := by
+  have h : a * η * (C / a - V / a) = η * (C - V) := by
+    field_simp
+  unfold thresholdStep allostaticStep
+  rw [h]
+
+/-- With η_θ = 0 the cost and value drive does not enter EQ-ALLO-1. -/
+theorem thresholdStep_eta_zero (θ θ₀ C V δ B dt τ : ℝ) :
+    thresholdStep θ θ₀ 0 C V δ B dt τ = max θ_floor (decayStep (θ + δ * B) θ₀ dt τ) := by
+  unfold thresholdStep allostaticStep
+  simp
+
+/-- TC-08g: one step depends on (η_θ, c₁, c₂, v₁, v₂) only through the products
+    η_θ·c₁, η_θ·c₂, η_θ·v₁, η_θ·v₂. -/
+theorem pipeStep_scaleAllo {W : Type*} (R : RefEstimator W) (p : PipeParams) {a : ℝ}
+    (ha : a ≠ 0) (s : PipeState W) (xe xi u : ℝ) :
+    pipeStep R (p.scaleAllo a) s xe xi u = pipeStep R p s xe xi u := by
+  simp only [pipeStep, pipeLog, coreStep, PipeParams.scaleAllo, costC_div, valueV_div,
+    thresholdStep_scale ha]
+  rfl
+
+/-- TC-08g along every trajectory, for every input and draw sequence. -/
+theorem traj_scaleAllo {W : Type*} (R : RefEstimator W) (p : PipeParams) {a : ℝ}
+    (ha : a ≠ 0) (s₀ : PipeState W) (xe xi u : ℕ → ℝ) :
+    ∀ n, traj R (p.scaleAllo a) s₀ xe xi u n = traj R p s₀ xe xi u n
+  | 0 => rfl
+  | n + 1 => by
+    change pipeStep R (p.scaleAllo a) (traj R (p.scaleAllo a) s₀ xe xi u n) (xe n) (xi n) (u n) =
+      pipeStep R p (traj R p s₀ xe xi u n) (xe n) (xi n) (u n)
+    rw [traj_scaleAllo R p ha s₀ xe xi u n]
+    exact pipeStep_scaleAllo R p ha _ _ _ _
+
+/-- TC-08g: η_θ is not identifiable apart from the weights. For η_θ ≠ 0, doubling η_θ and
+    halving c₁, c₂, v₁, v₂ is a different setting with the same trajectory. -/
+theorem scaleAllo_not_injective {W : Type*} (R : RefEstimator W) (p : PipeParams)
+    (hη : p.core.η ≠ 0) (s₀ : PipeState W) (xe xi u : ℕ → ℝ) :
+    (p.scaleAllo 2).core.η ≠ p.core.η ∧
+      ∀ n, traj R (p.scaleAllo 2) s₀ xe xi u n = traj R p s₀ xe xi u n := by
+  refine ⟨fun h => hη ?_, traj_scaleAllo R p two_ne_zero s₀ xe xi u⟩
+  change 2 * p.core.η = p.core.η at h
+  linarith
+
+/-- TC-08g with η_θ = 0 (the CFG-CORE placeholder): the weights c₁, c₂, v₁, v₂ do not enter
+    the trajectory at all, so they are unidentified from any data. -/
+theorem pipeStep_weights_eta_zero {W : Type*} (R : RefEstimator W) (p : PipeParams)
+    (hη : p.core.η = 0) (c1 c2 v1 v2 : ℝ) (s : PipeState W) (xe xi u : ℝ) :
+    pipeStep R (p.withWeights c1 c2 v1 v2) s xe xi u = pipeStep R p s xe xi u := by
+  simp only [pipeStep, pipeLog, coreStep, PipeParams.withWeights, hη, thresholdStep_eta_zero]
+  rfl
+
+theorem traj_weights_eta_zero {W : Type*} (R : RefEstimator W) (p : PipeParams)
+    (hη : p.core.η = 0) (c1 c2 v1 v2 : ℝ) (s₀ : PipeState W) (xe xi u : ℕ → ℝ) :
+    ∀ n, traj R (p.withWeights c1 c2 v1 v2) s₀ xe xi u n = traj R p s₀ xe xi u n
+  | 0 => rfl
+  | n + 1 => by
+    change pipeStep R (p.withWeights c1 c2 v1 v2) (traj R (p.withWeights c1 c2 v1 v2) s₀ xe xi u n)
+        (xe n) (xi n) (u n) = pipeStep R p (traj R p s₀ xe xi u n) (xe n) (xi n) (u n)
+    rw [traj_weights_eta_zero R p hη c1 c2 v1 v2 s₀ xe xi u n]
+    exact pipeStep_weights_eta_zero R p hη c1 c2 v1 v2 _ _ _ _
+
 /-! ## Axiom audit -/
 
 /-- info: 'Apgi.ignitionProb_shift' depends on axioms: [propext, Classical.choice, Quot.sound] -/
@@ -197,5 +287,41 @@ theorem gain_product_not_injective {W : Type*} (R : RefEstimator W) (p : PipePar
 /-- info: 'Apgi.gain_product_not_injective' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
 #print axioms Apgi.gain_product_not_injective
+
+/-- info: 'Apgi.costC_div' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.costC_div
+
+/-- info: 'Apgi.valueV_div' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.valueV_div
+
+/-- info: 'Apgi.thresholdStep_scale' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.thresholdStep_scale
+
+/-- info: 'Apgi.thresholdStep_eta_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.thresholdStep_eta_zero
+
+/-- info: 'Apgi.pipeStep_scaleAllo' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.pipeStep_scaleAllo
+
+/-- info: 'Apgi.traj_scaleAllo' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.traj_scaleAllo
+
+/-- info: 'Apgi.scaleAllo_not_injective' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.scaleAllo_not_injective
+
+/-- info: 'Apgi.pipeStep_weights_eta_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.pipeStep_weights_eta_zero
+
+/-- info: 'Apgi.traj_weights_eta_zero' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms Apgi.traj_weights_eta_zero
 
 end Apgi

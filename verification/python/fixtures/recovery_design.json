@@ -1,0 +1,167 @@
+{
+  "status": "Synthetic recovery-study design for SSOT §17 and TC-08d–g (task 62b). Every value in this file is a study-design choice and NOT a registered APGI value, except the entries listed under 'registered_values_used', which are copied from specification/parameters.json and checked against it by test_recovery_pipeline.py. The generating ranges of the composite gains k_C = η_θ·c₁ and k_V = η_θ·v₁ (per step at this dt) were chosen so that θ moves by O(0.1 AU); they are not estimates of anything. r_max is unregistered (B-13) and fixed here at 5/s.",
+  "observation": "Every-step ignition events B(t) with known inputs (oracle observation). A behavioral report is a parameter-free garbling of B, so this bounds what behavior can identify from above.",
+  "registered_values_used": {
+    "theta_baseline": 0.35,
+    "tau_S": 0.3,
+    "tau_theta_range": [
+      10,
+      30
+    ],
+    "gamma_sig_range": [
+      2,
+      7.5
+    ],
+    "T_window_e": 5,
+    "T_window_i": 10,
+    "pi_min": 0.1,
+    "pi_max": 10,
+    "theta_floor": 0
+  },
+  "dt": 0.025,
+  "duration_s": 300,
+  "inputs": {
+    "fast": {
+      "noise_sd": 1.0,
+      "pulse_amplitude": 2.5,
+      "pulse_s": 0.5,
+      "pulse_period_s": 3.0
+    },
+    "blocks": {
+      "noise_sd": 1.0,
+      "pulse_amplitude": 2.5,
+      "pulse_s": 0.5,
+      "pulse_period_s": 3.0,
+      "block_s": 40.0
+    }
+  },
+  "fixed": {
+    "dt": 0.025,
+    "theta0": 0.35,
+    "gamma_sig": 5.0,
+    "r_max": 5.0,
+    "rho_retain": 0.3,
+    "tau_S": 0.3,
+    "tau_theta": 20.0,
+    "delta_reset": 0.0,
+    "eta_theta": 0.0,
+    "c1": 0.0,
+    "c2": 0.0,
+    "v1": 0.0,
+    "v2": 0.0,
+    "gamma_ne": 0.0,
+    "g_ne": 1.0,
+    "T_e": 5.0,
+    "T_i": 10.0
+  },
+  "sbc": {
+    "draws": 99,
+    "bins": 10
+  },
+  "blocks": {
+    "allo_fast": {
+      "tc": "TC-08e, TC-08g",
+      "question": "Are τ_θ, k_C = η_θ·c₁ and k_V = η_θ·v₁ recovered from events when the stimulus changes fast relative to τ_θ?",
+      "input": "fast",
+      "grid": {
+        "tau_theta": [
+          10,
+          30,
+          9
+        ],
+        "k_C": [
+          -0.0004,
+          0.0004,
+          9
+        ],
+        "k_V": [
+          0.0,
+          0.0004,
+          9
+        ]
+      },
+      "subjects": 30,
+      "seed": 2026112801,
+      "oos_subjects": 8,
+      "null": {
+        "k_C": 0.0,
+        "k_V": 0.0
+      }
+    },
+    "allo_blocks": {
+      "tc": "TC-08e, TC-08g",
+      "question": "Does a slow block design (40 s on, 40 s off) separate adaptation (k) from recovery (τ_θ)?",
+      "input": "blocks",
+      "grid": {
+        "tau_theta": [
+          10,
+          30,
+          9
+        ],
+        "k_C": [
+          -0.0004,
+          0.0004,
+          9
+        ],
+        "k_V": [
+          0.0,
+          0.0004,
+          9
+        ]
+      },
+      "subjects": 30,
+      "seed": 2026112802,
+      "oos_subjects": 8,
+      "null": {
+        "k_C": 0.0,
+        "k_V": 0.0
+      }
+    },
+    "ne": {
+      "tc": "TC-08d",
+      "question": "Are g_NE and γ_NE separately recovered when both NE pathways are active (EQ-NE-1 clamp included)?",
+      "input": "fast",
+      "grid": {
+        "gamma_ne": [
+          -0.4,
+          0.4,
+          9
+        ],
+        "g_ne": [
+          0.5,
+          1.5,
+          9
+        ]
+      },
+      "subjects": 30,
+      "seed": 2026112803,
+      "oos_subjects": 8,
+      "null": {
+        "gamma_ne": 0.0,
+        "g_ne": 1.0
+      }
+    },
+    "sig": {
+      "tc": "TC-08f",
+      "question": "How much does a free precision scale Π̄ (both channels) cost the recovery of γ_sig, against Π̄ fixed numerically as §17 requires?",
+      "input": "fast",
+      "grid": {
+        "gamma_sig": [
+          2.0,
+          7.5,
+          12
+        ],
+        "log_pi_scale": [
+          -0.6931471805599453,
+          0.6931471805599453,
+          9
+        ]
+      },
+      "subjects": 30,
+      "seed": 2026112804,
+      "known": [
+        "log_pi_scale"
+      ]
+    }
+  }
+}

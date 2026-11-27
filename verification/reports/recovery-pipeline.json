@@ -1,0 +1,397 @@
+{
+  "design_status": "Synthetic recovery-study design for SSOT §17 and TC-08d–g (task 62b). Every value in this file is a study-design choice and NOT a registered APGI value, except the entries listed under 'registered_values_used', which are copied from specification/parameters.json and checked against it by test_recovery_pipeline.py. The generating ranges of the composite gains k_C = η_θ·c₁ and k_V = η_θ·v₁ (per step at this dt) were chosen so that θ moves by O(0.1 AU); they are not estimates of anything. r_max is unregistered (B-13) and fixed here at 5/s.",
+  "observation": "Every-step ignition events B(t) with known inputs (oracle observation). A behavioral report is a parameter-free garbling of B, so this bounds what behavior can identify from above.",
+  "design_sha256": "9b169a04d5be051ce0a531e9c6798bfa4c814535726ee7f3c80eb0a78fa32335",
+  "source_sha256": "78d1f5971936405ff5428c8a5dcf111e2d54ff1b0b3392964dc1ff8dee64b30d",
+  "gate": {
+    "r_HIGH": 0.85,
+    "err_gate": 0.2
+  },
+  "blocks": {
+    "allo_fast": {
+      "block": "allo_fast",
+      "tc": "TC-08e, TC-08g",
+      "question": "Are τ_θ, k_C = η_θ·c₁ and k_V = η_θ·v₁ recovered from events when the stimulus changes fast relative to τ_θ?",
+      "input": "fast",
+      "subjects": 30,
+      "mean_events": 453.5,
+      "grid": {
+        "tau_theta": [
+          10.0,
+          30.0,
+          9
+        ],
+        "k_C": [
+          -0.0004,
+          0.0004,
+          9
+        ],
+        "k_V": [
+          0.0,
+          0.0004,
+          9
+        ]
+      },
+      "parameters": {
+        "tau_theta": {
+          "pearson_r": 0.753095488327,
+          "median_range_scaled_error": 0.138591802352,
+          "posterior_sd_over_prior_sd": 0.708194055995,
+          "sbc": {
+            "chi2": 8.0,
+            "df": 9,
+            "p": 0.535013767932,
+            "counts": [
+              1,
+              3,
+              6,
+              3,
+              4,
+              3,
+              3,
+              3,
+              0,
+              4
+            ]
+          }
+        },
+        "k_C": {
+          "pearson_r": 0.302829768513,
+          "median_range_scaled_error": 0.226149369925,
+          "posterior_sd_over_prior_sd": 0.990448647593,
+          "sbc": {
+            "chi2": 10.666666666667,
+            "df": 9,
+            "p": 0.298768373603,
+            "counts": [
+              3,
+              2,
+              2,
+              5,
+              0,
+              7,
+              3,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "k_V": {
+          "pearson_r": 0.904097755803,
+          "median_range_scaled_error": 0.088518186208,
+          "posterior_sd_over_prior_sd": 0.368809997566,
+          "sbc": {
+            "chi2": 4.0,
+            "df": 9,
+            "p": 0.911526481137,
+            "counts": [
+              3,
+              5,
+              2,
+              4,
+              2,
+              4,
+              2,
+              2,
+              2,
+              4
+            ]
+          }
+        }
+      },
+      "posterior_correlation_median": {
+        "tau_theta~k_C": -0.018190238499,
+        "tau_theta~k_V": -0.789280989132,
+        "k_C~k_V": -0.036757547099
+      },
+      "profile_flat_fraction": {
+        "tau_theta": 0.748148148148,
+        "k_C": 1.0,
+        "k_V": 0.462962962963
+      },
+      "out_of_sample": {
+        "sessions": 8,
+        "null": {
+          "k_C": 0.0,
+          "k_V": 0.0
+        },
+        "mean_pred_minus_null_nats": 69.505003584073,
+        "mean_truth_minus_pred_nats": 0.219177211802
+      }
+    },
+    "allo_blocks": {
+      "block": "allo_blocks",
+      "tc": "TC-08e, TC-08g",
+      "question": "Does a slow block design (40 s on, 40 s off) separate adaptation (k) from recovery (τ_θ)?",
+      "input": "blocks",
+      "subjects": 30,
+      "mean_events": 368.266666666667,
+      "grid": {
+        "tau_theta": [
+          10.0,
+          30.0,
+          9
+        ],
+        "k_C": [
+          -0.0004,
+          0.0004,
+          9
+        ],
+        "k_V": [
+          0.0,
+          0.0004,
+          9
+        ]
+      },
+      "parameters": {
+        "tau_theta": {
+          "pearson_r": 0.480254836032,
+          "median_range_scaled_error": 0.200110205189,
+          "posterior_sd_over_prior_sd": 0.864233971213,
+          "sbc": {
+            "chi2": 8.0,
+            "df": 9,
+            "p": 0.535013767932,
+            "counts": [
+              4,
+              2,
+              2,
+              3,
+              5,
+              1,
+              6,
+              3,
+              1,
+              3
+            ]
+          }
+        },
+        "k_C": {
+          "pearson_r": 0.360529877594,
+          "median_range_scaled_error": 0.196204670125,
+          "posterior_sd_over_prior_sd": 0.990638568048,
+          "sbc": {
+            "chi2": 7.333333333333,
+            "df": 9,
+            "p": 0.603648848111,
+            "counts": [
+              1,
+              1,
+              2,
+              4,
+              5,
+              5,
+              2,
+              4,
+              4,
+              2
+            ]
+          }
+        },
+        "k_V": {
+          "pearson_r": 0.916707248345,
+          "median_range_scaled_error": 0.083879918653,
+          "posterior_sd_over_prior_sd": 0.391571581192,
+          "sbc": {
+            "chi2": 6.666666666667,
+            "df": 9,
+            "p": 0.673167617168,
+            "counts": [
+              0,
+              5,
+              3,
+              5,
+              3,
+              2,
+              3,
+              2,
+              4,
+              3
+            ]
+          }
+        }
+      },
+      "posterior_correlation_median": {
+        "tau_theta~k_C": -0.013953186844,
+        "tau_theta~k_V": -0.786174106945,
+        "k_C~k_V": -0.030372668799
+      },
+      "profile_flat_fraction": {
+        "tau_theta": 0.911111111111,
+        "k_C": 1.0,
+        "k_V": 0.525925925926
+      },
+      "out_of_sample": {
+        "sessions": 8,
+        "null": {
+          "k_C": 0.0,
+          "k_V": 0.0
+        },
+        "mean_pred_minus_null_nats": 34.63229043796,
+        "mean_truth_minus_pred_nats": 0.016527784464
+      }
+    },
+    "ne": {
+      "block": "ne",
+      "tc": "TC-08d",
+      "question": "Are g_NE and γ_NE separately recovered when both NE pathways are active (EQ-NE-1 clamp included)?",
+      "input": "fast",
+      "subjects": 30,
+      "mean_events": 266.633333333333,
+      "grid": {
+        "gamma_ne": [
+          -0.4,
+          0.4,
+          9
+        ],
+        "g_ne": [
+          0.5,
+          1.5,
+          9
+        ]
+      },
+      "parameters": {
+        "gamma_ne": {
+          "pearson_r": 0.976406150541,
+          "median_range_scaled_error": 0.047742355544,
+          "posterior_sd_over_prior_sd": 0.212213886747,
+          "sbc": {
+            "chi2": 4.0,
+            "df": 9,
+            "p": 0.911526481137,
+            "counts": [
+              3,
+              3,
+              3,
+              1,
+              3,
+              1,
+              4,
+              4,
+              4,
+              4
+            ]
+          }
+        },
+        "g_ne": {
+          "pearson_r": 0.907142589066,
+          "median_range_scaled_error": 0.105088064442,
+          "posterior_sd_over_prior_sd": 0.380514250008,
+          "sbc": {
+            "chi2": 8.0,
+            "df": 9,
+            "p": 0.535013767932,
+            "counts": [
+              6,
+              4,
+              3,
+              1,
+              3,
+              1,
+              4,
+              1,
+              3,
+              4
+            ]
+          }
+        }
+      },
+      "posterior_correlation_median": {
+        "gamma_ne~g_ne": 0.202148293878
+      },
+      "profile_flat_fraction": {
+        "gamma_ne": 0.251851851852,
+        "g_ne": 0.422222222222
+      },
+      "out_of_sample": {
+        "sessions": 8,
+        "null": {
+          "gamma_ne": 0.0,
+          "g_ne": 1.0
+        },
+        "mean_pred_minus_null_nats": 29.58080870226,
+        "mean_truth_minus_pred_nats": 0.582989210973
+      }
+    },
+    "sig": {
+      "block": "sig",
+      "tc": "TC-08f",
+      "question": "How much does a free precision scale Π̄ (both channels) cost the recovery of γ_sig, against Π̄ fixed numerically as §17 requires?",
+      "input": "fast",
+      "subjects": 30,
+      "mean_events": 295.7,
+      "grid": {
+        "gamma_sig": [
+          2.0,
+          7.5,
+          12
+        ],
+        "log_pi_scale": [
+          -0.69314718056,
+          0.69314718056,
+          9
+        ]
+      },
+      "parameters": {
+        "gamma_sig": {
+          "pearson_r": 0.985443858924,
+          "median_range_scaled_error": 0.020524550545,
+          "posterior_sd_over_prior_sd": 0.12263787201,
+          "sbc": {
+            "chi2": 10.0,
+            "df": 9,
+            "p": 0.350263437829,
+            "counts": [
+              6,
+              4,
+              2,
+              1,
+              2,
+              2,
+              1,
+              6,
+              3,
+              3
+            ]
+          },
+          "with_log_pi_scale_known": {
+            "pearson_r": 0.987843795197,
+            "median_range_scaled_error": 0.018504882475,
+            "posterior_sd_over_prior_sd": 0.113812055121
+          }
+        },
+        "log_pi_scale": {
+          "pearson_r": 0.932375716604,
+          "median_range_scaled_error": 0.062355515982,
+          "posterior_sd_over_prior_sd": 0.263277703269,
+          "sbc": {
+            "chi2": 6.0,
+            "df": 9,
+            "p": 0.74131156129,
+            "counts": [
+              5,
+              5,
+              4,
+              2,
+              4,
+              3,
+              2,
+              2,
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "posterior_correlation_median": {
+        "gamma_sig~log_pi_scale": 0.184714977549
+      },
+      "profile_flat_fraction": {
+        "gamma_sig": 0.152777777778,
+        "log_pi_scale": 0.314814814815
+      }
+    }
+  },
+  "numpy": "2.1.3"
+}
