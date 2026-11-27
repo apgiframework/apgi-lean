@@ -38,7 +38,7 @@ def main() -> int:
         done = dict(ex.map(_block, list(design["blocks"])))
     report = _clean(RP.run_study(design, done))
     report["numpy"] = np.__version__
-    RP.REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    RP.REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {RP.REPORT_PATH} in {time.time() - t0:.0f}s")
     for b, r in report["blocks"].items():
         for k, v in r["parameters"].items():
