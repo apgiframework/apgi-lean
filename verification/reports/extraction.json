@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T13:45:41+00:00",
+  "generated": "2026-11-27T20:16:27+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -43,7 +43,7 @@
       "file": "APGI-Mathematical-Specifications.md"
     },
     "SRC-SSOT-V12D": {
-      "sha256": "18951b656834a752e5dc99ce8765e1a3244095f3020d740ddaf0f394756e20be",
+      "sha256": "582a09b9bf78fe7979fbf2b1af75539a5bc84995e139833de2215f322229f324",
       "found": true,
       "file": "APGI-Single-Source-of-Truth.md"
     }
@@ -2141,6 +2141,222 @@
           "source": "SRC-SSOT-V12D",
           "page": 1,
           "quote": "Decisive-comparison gate | median range-scaled error < 20%",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "alpha_EMA": {
+      "status": "verified",
+      "param_hash": "0da867971f58d8907f3c8455d6dfc5bda60c0bb3db841e8f7606b15e3223d42e",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 7,
+          "quote": "with α_ EMA = 1 − exp(−dt/T_window) 0, 1",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 2,
+          "quote": "α_ EMA EMA smoothing rate; modality-specific variants α_ EMA_e, α_ EMA_i 0, 1",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "beta_Sigma": {
+      "status": "verified",
+      "param_hash": "729102b65ba4424e0823cc797a0d623b6878707fc44dcfd36460c3455e93cf80",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 7,
+          "quote": "β_Σ EMA retention weight, β_Σ = 1 − α_ EMA",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 2,
+          "quote": "β_Σ EMA retention weight for running variance, 1 − α_ EMA",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "tau_min": {
+      "status": "verified",
+      "param_hash": "df19420e45fd1a516d1f4ad8f514fce1f6813e5e3f8aa969a967560a0745c481",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Continuous-gradient endpoints and hierarchy coordinate | s, s, — | participant-estimated",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "tau_max": {
+      "status": "verified",
+      "param_hash": "76abb9d36617f5d36f02cd9b938f0862ddad8ad373a232648ade19e2a4c6012b",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Continuous-gradient endpoints and hierarchy coordinate | s, s, — | participant-estimated",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "m_Psi": {
+      "status": "verified",
+      "param_hash": "e1a408f26a51950ac1b8b2662cc230d50a08f38d5e139eb442d1bb5daae9d9dd",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Stimulus-free mean of |Ψ(z)| | — | computed",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "K_ell": {
+      "status": "verified",
+      "param_hash": "be45e2fa80f530c5b22ea846c3ea59bb8e0a36c3f6c095e43f4ce1c3b190646e",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 19,
+          "quote": "K_ℓ Within-level Kuramoto coupling strength n/a",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "K_ell_m": {
+      "status": "verified",
+      "param_hash": "7221bc945ca73649ae52f4fe98bb7f318bf82099c989584d2964faaafc2f9d2f",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 19,
+          "quote": "K_ℓm Inter-level Kuramoto coupling",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "R_L": {
+      "status": "verified",
+      "param_hash": "b02b7ee7e03f6b82fd16db6ec1b9212e4ce3897e4a7aa7e44d503b601454c532",
+      "evidence": [
+        {
+          "source": "SRC-NOTATION",
+          "page": 22,
+          "quote": "R_L Landauer erasure-consistency ratio: R_L = E_event / N_erase · k_B · T_env · ln 2. Not a function of κ.",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "kappa_pop": {
+      "status": "verified",
+      "param_hash": "52d9f83ca745766e739fe7937127c416cb6312fcdd2efacf1ab3fcd07499cd64",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "A separate band for κ_pop or κ_beh needs a prospective amendment",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "kappa_beh": {
+      "status": "verified",
+      "param_hash": "87891d5444a485a3e3d9b148070a269a36f3ac65c0c62d3e4bcc99225296e8dd",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "A separate band for κ_pop or κ_beh needs a prospective amendment",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "alpha_psy_log": {
+      "status": "verified",
+      "param_hash": "74ca87dcf620326582b14685cad3a9adf8b50ab48bfb690fd2261c976f88f549",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Logistic descriptive slope (≈ 3.19·k at threshold, log₁₀ axis) | no decision weight",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "g_guess": {
+      "status": "verified",
+      "param_hash": "0e1c6d47d528a7daccccbf832e3865391c2dcfb2393e496704483fd5d7de3b68",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "g = catch-trial false-alarm rate",
+          "status": "found",
+          "values": []
+        },
+        {
+          "source": "SRC-MATHSPEC",
+          "page": 41,
+          "quote": "guesses and lapses enter through a stated observation model, e.g., P(report) = g + 1 − g − λ_ lapse)·P(hit)",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "protocol_seeds": {
+      "status": "verified",
+      "param_hash": "76e1ee4e12852eee28ea6d2bd4fb4d3f929acb65e570b9c0abb7d4d386e767e0",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "1 = 10101 … 7 = 70707; Protocol 0 registered separately",
           "status": "found",
           "values": []
         }
