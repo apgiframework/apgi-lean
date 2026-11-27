@@ -24,8 +24,13 @@ jobs:
       # docgen-action removed until GitHub Pages is configured.
 
   python:
-    name: Registry, consistency, Python tests
+    name: Registry, consistency, Python tests (${{ matrix.python }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # SSOT §28.3: Python 3.11 is the reference environment and 3.12 MUST also be tested.
+        python: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v7
       # Production code under test (E21), pinned to the commit recorded in
@@ -37,7 +42,7 @@ jobs:
           path: apgi-implementation
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
       - run: pip install -r verification/python/requirements.txt
       # The SSOT-P* behavioural tests (task 53) construct pipeline.APGIPipeline, which imports
       # structlog and pydantic. numpy stays at the verification pin; scipy for optional modules.
@@ -46,6 +51,8 @@ jobs:
         run: python verification/python/generate_lean.py --check
       - name: Consistency check (fails on unacknowledged or stale conflicts)
         run: python verification/python/check_consistency.py
+      - name: Traceability matrix and assumption inventory are generated from the current registry
+        run: python verification/python/make_traceability.py --check
       - name: Pytest (twins, golden vectors, seeded conflicts, production cross-check)
         working-directory: verification/python
         env:
@@ -54,7 +61,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: junit
+          name: junit-${{ matrix.python }}
           path: verification/reports/junit.xml
 
   production-validation:
@@ -96,7 +103,7 @@ jobs:
       - run: pip install -r verification/python/requirements.txt
       - uses: actions/download-artifact@v4
         with:
-          name: junit
+          name: junit-3.12
           path: verification/reports
         continue-on-error: true
       - name: Build report
