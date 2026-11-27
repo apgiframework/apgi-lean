@@ -1,9 +1,11 @@
 # Full local verification routine (docs/REMAINING-TASKS.md "Routine after any registry edit"). Writes .verify.log.
+# -Impl: an apgi-implementation checkout at the pinned commit (a worktree when local main is ahead of the pin).
+param([string]$Impl = "C:\Claude\Projects\apgi-implementation")
 $ErrorActionPreference = "Continue"
 Set-Location C:\Claude\Projects\apgi-lake
 $log = "C:\Claude\Projects\apgi-lake\.verify.log"
 function Run($name, $block) { "=== $name ===" | Out-File -Encoding utf8 -Append $log; (& $block 2>&1 | Out-String -Width 300) | Out-File -Encoding utf8 -Append $log; "--- exit $LASTEXITCODE" | Out-File -Encoding utf8 -Append $log }
-"START $(Get-Date -Format o)" | Out-File -Encoding utf8 $log
+"START $(Get-Date -Format o) impl=$Impl ($(git -C $Impl rev-parse --short HEAD))" | Out-File -Encoding utf8 $log
 Run "extract" { python verification\python\extract_sources.py --corpus C:\Claude\Projects\Neuro-Brain\Neuro-Input --corpus C:\Claude\Projects\apgi-lake\docs\apgi-v-1-2 --write }
 Run "generate_lean" { python verification\python\generate_lean.py }
 Run "lake" { lake build --wfail }
@@ -11,7 +13,7 @@ Run "consistency" { python verification\python\check_consistency.py }
 Run "manifest" { python verification\python\make_release_manifest.py }
 Run "traceability" { python verification\python\make_traceability.py }
 Set-Location verification\python
-$env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-implementation"
+$env:APGI_IMPL_PATH = $Impl
 Run "pytest" { python -m pytest -q -rxs -p no:cacheprovider }
 Remove-Item Env:APGI_IMPL_PATH
 $env:APGI_VALIDATION_PATH = "C:\Claude\Projects\apgi-validation"
