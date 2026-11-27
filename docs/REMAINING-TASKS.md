@@ -3,7 +3,7 @@
 State as of 2026-11-27 12:00 ET (round 73). Measured against **APGI Single Source of Truth (SSOT), framework v1.2** (docs/apgi-v-1-2/APGI-Single-Source-of-Truth.md, sha256 18951b65…, pinned as SRC-SSOT-V12D). Registry **spec 0.6.0**; the registry hash is written by `generate_lean.py` into Apgi/Spec.lean.
 
 - Repositories, all `main` only:
-  - apgi-lean: round 72 (cfa5b48) is on origin/main; GitHub Actions "APGI verification" **green on cfa5b48** (run 46029638355, read from the public API). This round (73) is local commits on top, not pushed.
+  - apgi-lean: round 73 (3dd4d68) is on origin/main (pushed by the author 2026-11-27 13:00 ET); GitHub Actions "APGI verification" **green on 3dd4d68** (run 46045899533, read from the public API), which runs the production tests at pin 8d8e5bd, the report checks and `lake build --wfail`. Round 72 (cfa5b48) was green on run 46029638355.
   - apgi-implementation: main at **8d8e5bd** (the F13 patch, applied and pushed by the author); CI **green on every job, including "lint & types"**. **New pin 8d8e5bd** (formatting and type annotations over d153f6a; no behaviour change, confirmed by the full apgi-lean suite).
   - apgi-validation: f6fec65 (unchanged).
 - Round 73 checks. Python (cloud workspace, Python 3.13, fresh public clones of the three repositories at the pins, the same commands as CI): consistency 0 open, 0 unacknowledged, 0 stale; `generate_lean.py --check`, `make_traceability.py --check`, `production_report.py --check` current; apgi-lean pytest with production **343 passed, 1 skipped, 6 xfailed** (all six strict, SSOT-P10/P12/P13); without production 276 passed, 2 skipped; test_production_validation.py **11 passed, 2 skipped, 3 xfailed** (strict, SSOT-V3). Lean (this PC, `lake build --wfail` on the round-73 Spec.lean, 11:39–11:46 ET): **Build completed successfully (7248 jobs)**.
@@ -64,13 +64,9 @@ Each strict xfail was also run with `--runxfail` to confirm it fails on its stat
 
 ### Next step (one at a time)
 
-**Push apgi-lean** (github-apgi key loaded), then confirm CI "APGI verification" is green with the pin 8d8e5bd (it runs the new production tests, the report check and `lake build --wfail`):
+**Done 2026-11-27 13:00 ET:** apgi-lean 3dd4d68 pushed; CI "APGI verification" green (run 46045899533); apgi-implementation CI green on the pin 8d8e5bd (run 46029607584).
 
-```powershell
-git -C C:\Claude\Projects\apgi-lake push origin main
-```
-
-After that: **task 71a** (author decision): the §17 disposition for τ_θ and η_θ·c₁; then **59b** below.
+**Task 71a** (author decision): the §17 disposition for τ_θ and η_θ·c₁ (F12), and the CL-45 reporting statement. Then **59b** below, which needs apgi-implementation (C:\Claude\Projects\apgi-implementation) connected to the session.
 
 ### Phase A remainder
 **59b.** Fix in apgi-implementation, legacy extension path: SSOT-P10 (one precision definition when the precision ODE is on; resonance-level reset uses the configured δ_reset), SSOT-P12 (EQ-MS-4 factor with /Π_max and the [0.5, 1.5] bound; modulation as a read-out, never written back into θ), SSOT-P13 (γ_NE ≠ 0 runs both NE pathways, or the flag is removed). Then mark each resolved and move the pin; the strict xfails will fail until then.
@@ -108,7 +104,7 @@ Initial (start of round 73, after observing cfa5b48 and 8d8e5bd green) → final
 - Implementation 88 → 86: three new production divergences were found (SSOT-P12, SSOT-P13, SSOT-V3), one of them (P13) on any run with γ_NE ≠ 0; the default core still matches the reference step for step. This is a lower score for better knowledge, not for a regression.
 - Proof completeness 89 → 89.
 - Testing 94 → 95: 18 new test cases, 9 of them strict xfails each pinned to its stated assertion; six planted faults caught, one only after the test was strengthened.
-- Reproducibility 90 → 91: CI observed green on apgi-lean cfa5b48 and on every apgi-implementation job at the new pin; the production run report is regenerated and checked in CI; all checks reproduced from fresh public clones. Deduction: round 73 not yet pushed, so its CI run is not observed.
+- Reproducibility 90 → 91: CI observed green on apgi-lean cfa5b48 and on every apgi-implementation job at the new pin; the production run report is regenerated and checked in CI; all checks reproduced from fresh public clones. Round 73 since pushed and observed green (run 46045899533).
 - Documentation 89 → 90: the report, inventory and traceability carry the new divergences with evidence.
 - Publication readiness 69 → 69: blockers B-07, B-13, B-14, B-16, B-17, B-18, tag and DOI, decisions 71a and 62c, and three open production divergences.
 - **Overall 89 → 89.** A perfect specification score would still not be a claim of scientific truth (SSOT §32).
