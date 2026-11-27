@@ -23,6 +23,10 @@ that APGI describes the brain. See `specification/epistemic-claims.json` and
   reference step for step (TC-04), and its clamped-step fraction, operating point and
   stimulus-free event rate are reported (TC-10, TC-14; `verification/reports/production-run-report.json`).
   Known production divergences are strict xfails, so a fix fails CI until it is recorded.
+- **Registered (OSF):** the Master Prediction Register (OSF Table 15) of the locked
+  pre-registration is in `specification/hypotheses.json`, cell for cell; source extraction
+  checks every row against the sha256-pinned PDF and that the rows reproduce the table with
+  nothing dropped or added (TC-26, first slice; the other OSF tables are not yet registered).
 - **Assumed / empirical:** bridges and registered hypotheses (`specification/bridges.json`,
   CL-* claims). They are stated as hypotheses and never proved.
 
@@ -39,6 +43,7 @@ apgi-lean/
 │   ├── equations.json        equation IDs → Lean theorems → Python → tests
 │   ├── requirements.json     SSOT requirement → proof/test traceability (REQ-*)
 │   ├── bridges.json          bridge and measurement assumptions with falsifiers
+│   ├── hypotheses.json       OSF Table 15 (Master Prediction Register), verbatim, PDF-verified
 │   ├── units.json            base dimensions (AU is its own dimension)
 │   ├── epistemic-claims.json proved / tested / assumed / empirical / unresolved
 │   ├── symbols.json, configurations.json, revisions.json
