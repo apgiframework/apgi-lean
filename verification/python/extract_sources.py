@@ -136,6 +136,20 @@ def registry_field(p: dict, field: str):
     return (p.get("range") or {}).get(side)
 
 
+def record_hash(r: dict) -> str:
+    """Hash of a bridges.json record's evidence-bearing fields (statement, status, falsifier, quotes)."""
+    keep = {k: r.get(k) for k in ("id", "statement", "status", "falsifier", "construct", "candidate", "limitation", "evidence")}
+    return hashlib.sha256(json.dumps(keep, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def bridge_records() -> list[dict]:
+    import registry
+    if not (registry.SPEC / "bridges.json").exists():
+        return []
+    b = load("bridges.json")
+    return b.get("bridges", []) + b.get("observables", [])
+
+
 def param_hash(p: dict) -> str:
     keep = {k: p.get(k) for k in ("id", "value", "range", "unit", "evidence")}
     return hashlib.sha256(json.dumps(keep, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
@@ -190,8 +204,19 @@ def verify(corpus: Path | list[Path]) -> dict:
             d["values"] = checks
             details.append(d)
         out[p["id"]] = {"status": "verified" if ok else "failed", "param_hash": param_hash(p), "evidence": details}
+    records = {}
+    for r in bridge_records():
+        details, ok = [], True
+        for e in r.get("evidence") or []:
+            pages = pages_cache.get(e["source"])
+            q = squash(e["quote"])
+            found = pages is not None and 1 <= e["page"] <= len(pages) and q in pages[e["page"] - 1]
+            details.append({"source": e["source"], "page": e["page"], "quote": e["quote"],
+                            "status": "found" if found else ("source not pinned or not found in corpus" if pages is None else "NOT FOUND")})
+            ok &= found
+        records[r["id"]] = {"status": "verified" if ok and details else "failed", "record_hash": record_hash(r), "evidence": details}
     return {"generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "tool": "extract_sources.py --corpus", "source_pins": pins, "parameters": out}
+            "tool": "extract_sources.py --corpus", "source_pins": pins, "parameters": out, "records": records}
 
 
 # --------------------------------------------------------------------- CLI --
@@ -218,11 +243,18 @@ def main() -> int:
                 bad += 1
                 for d in v["evidence"]:
                     print(f"       p{d['page']} {d['status']}; values {[(c['field'], c['document'], c['registry'], c['match']) for c in d['values']]}")
+        for rid, v in r["records"].items():
+            print(f"{'OK  ' if v['status'] == 'verified' else 'FAIL'} {rid}")
+            if v["status"] != "verified":
+                bad += 1
+                for d in v["evidence"]:
+                    print(f"       p{d['page']} {d['status']}: {d['quote'][:80]}")
         if a.write:
             REPORT.parent.mkdir(parents=True, exist_ok=True)
             REPORT.write_text(json.dumps(r, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
             print(f"wrote {REPORT.relative_to(ROOT)}")
-        print(f"{len(r['parameters']) - bad} verified, {bad} failed")
+        print(f"{len(r['parameters']) + len(r['records']) - bad} verified, {bad} failed "
+              f"({len(r['parameters'])} parameters, {len(r['records'])} bridge/observable records)")
         return 1 if bad or not all(p["found"] for p in r["source_pins"].values()) else 0
     hits = scan(a.targets)
     if a.json:

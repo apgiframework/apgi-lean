@@ -1,0 +1,183 @@
+requirement,ssot,kind,status,conformance_test,evidence_type,evidence
+REQ-PIPE-ORDER,§8,proved,pass,,lean,Apgi.pipeStep
+REQ-PIPE-ORDER,§8,proved,pass,,lean,Apgi.pipeLog
+REQ-PIPE-ORDER,§8,proved,pass,,lean,Apgi.pipeStep_core
+REQ-PIPE-ORDER,§8,proved,pass,,lean,Apgi.pipeStep_decision_input_independent
+REQ-PIPE-ORDER,§8,proved,pass,,test,test_core.py::test_pipeline_decides_from_existing_S
+REQ-PIPE-ORDER,§8,proved,pass,,test,test_pipeline_lean.py::test_decision_input_independent
+REQ-PIPE-ORDER,§8,proved,pass,,test,test_production.py::test_production_core_matches_reference_trajectory
+REQ-PIPE-ORDER,§8,proved,pass,,equation,EQ-PIPE-1
+REQ-PIPE-ORDER,§8,proved,pass,,claim,CL-33
+REQ-PIPE-17-REJECTED,§8,proved,pass,,lean,Apgi.orders_differ
+REQ-PIPE-17-REJECTED,§8,proved,pass,,lean,Apgi.decideAfterAccumulation_strictMono_drive
+REQ-PIPE-17-REJECTED,§8,proved,pass,,lean,Apgi.standardize_after_update_shrinks
+REQ-PIPE-17-REJECTED,§8,proved,pass,,test,test_pipeline_lean.py::test_orders_differ
+REQ-PIPE-17-REJECTED,§8,proved,pass,,test,test_pipeline_lean.py::test_standardize_after_update_shrinks
+REQ-PIPE-17-REJECTED,§8,proved,pass,,equation,EQ-PIPE-1
+REQ-PIPE-17-REJECTED,§8,proved,pass,,equation,EQ-STD-1
+REQ-PIPE-17-REJECTED,§8,proved,pass,,claim,CL-33
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.PipeAdmissible
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.PipeInv
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.pipeInv_step
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.traj_inv
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.traj_prec_mem_Icc
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.traj_ne_bound
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.pipeLog_Sinst_ge
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.driveLower_nonpos
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,lean,Apgi.retain_leak_ge
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,test,test_pipeline_lean.py::test_traj_inv
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,test,test_pipeline_lean.py::test_cfg_core_is_admissible
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,equation,EQ-PIPE-1
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,equation,EQ-PREC-2
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,equation,EQ-NE-1
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,equation,EQ-DRIVE-1
+REQ-INV-BOUNDED,"§8, §23 TC-10, TC-13",proved,pass,,claim,CL-32
+REQ-INV-S-UPPER,§8,conditional,pass,,lean,Apgi.traj_S_le
+REQ-INV-S-UPPER,§8,conditional,pass,,test,test_pipeline_lean.py::test_traj_S_le
+REQ-INV-S-UPPER,§8,conditional,pass,,equation,EQ-LEAK-1
+REQ-INV-S-UPPER,§8,conditional,pass,,claim,CL-32
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,lean,Apgi.sampler_volume
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,lean,Apgi.pipeLog_ignition_measure
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,lean,Apgi.pipeLog_B_eq_one_iff
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,lean,Apgi.hazard_survival_add
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,lean,Apgi.hazard_n_steps
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,test,test_pipeline_lean.py::test_sampler_frequency_matches_hazard
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,test,test_twins.py::test_per_step_bernoulli_is_not_dt_invariant
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,equation,EQ-HAZARD-1
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,claim,CL-10
+REQ-HAZARD-SAMPLER,"§8 step 9, EQ-HAZARD-1",proved,pass,,claim,CL-34
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,lean,Apgi.clampedUpdate_floor
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,lean,Apgi.thresholdStep_floor
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,lean,Apgi.operatingRange_not_invariant
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,lean,Apgi.operatingRange_invariant_of_target
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,test,test_production.py::test_default_theta0_is_canonical
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,test,test_conflicts.py::test_unresolving_theta_role_is_rejected
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,equation,EQ-THR-1
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,equation,EQ-ALLO-1
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,claim,CL-2
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,claim,CL-3
+REQ-THETA-RANGE,§30.1 B-01,proved,pass,,claim,CL-14
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,lean,Apgi.ignites_antitone_threshold
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,lean,Apgi.ignitionProb_antitone_threshold
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,lean,Apgi.ignitionProb_at_threshold
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,lean,Apgi.ignitionProb_tendsto_one
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,lean,Apgi.ignitionProb_tendsto_zero
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,test,test_twins.py::test_ignites_antitone_threshold
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,equation,EQ-IGN-1
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,equation,EQ-IGN-2
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,claim,CL-1
+REQ-IGNITION,§8 EQ-IGN-1/2,proved,pass,TC-05,claim,CL-19
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,lean,Apgi.cusp_three_equilibria_iff
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,lean,Apgi.cusp_discriminant_iff_fold
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,lean,Apgi.cusp_monostable_of_ignition
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,lean,Apgi.cusp_monostable_of_extinction
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,test,test_golden_vectors.py::test_cusp_equilibria
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,equation,EQ-CUSP-1
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,equation,EQ-CUSP-2
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,claim,CL-4
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,claim,CL-5
+REQ-CUSP,§8 EQ-CUSP-1/2,proved,pass,,claim,CL-21
+REQ-STRATA-L0-L4,§12.1,proved,pass,,lean,Apgi.Level
+REQ-STRATA-L0-L4,§12.1,proved,pass,,lean,Apgi.ignition_levels
+REQ-STRATA-L0-L4,§12.1,proved,pass,,lean,Apgi.L0_outside_ignition_model
+REQ-STRATA-L0-L4,§12.1,proved,pass,,lean,Apgi.idx_injective
+REQ-STRATA-L0-L4,§12.1,proved,pass,,test,test_pipeline_lean.py::test_level_tau_values_and_limitations
+REQ-STRATA-L0-L4,§12.1,proved,pass,,equation,EQ-GEO-1
+REQ-STRATA-L0-L4,§12.1,proved,pass,,claim,CL-35
+REQ-STRATA-GEO,§12.2,proved,pass,,lean,Apgi.levelTau_values
+REQ-STRATA-GEO,§12.2,proved,pass,,lean,Apgi.levelTau_strictMono
+REQ-STRATA-GEO,§12.2,proved,pass,,lean,Apgi.L1_point_outside_band
+REQ-STRATA-GEO,§12.2,proved,pass,,lean,Apgi.L2_point_vs_bands
+REQ-STRATA-GEO,§12.2,proved,pass,,lean,Apgi.five_levels_boundary
+REQ-STRATA-GEO,§12.2,proved,pass,,test,test_pipeline_lean.py::test_level_tau_values_and_limitations
+REQ-STRATA-GEO,§12.2,proved,pass,,test,test_registry_equations.py::test_geo_values_match_ssot_table
+REQ-STRATA-GEO,§12.2,proved,pass,,equation,EQ-GEO-1
+REQ-STRATA-GEO,§12.2,proved,pass,,claim,CL-35
+REQ-STRATA-TAUPI,§12.5,proved,pass,,lean,Apgi.tauPiLevel_ge_one
+REQ-STRATA-TAUPI,§12.5,proved,pass,,lean,Apgi.tauPiLevel_step_rule
+REQ-STRATA-TAUPI,§12.5,proved,pass,,test,test_pipeline_lean.py::test_tau_pi_step_rule
+REQ-STRATA-TAUPI,§12.5,proved,pass,,equation,EQ-STEP-1
+REQ-STRATA-TAUPI,§12.5,proved,pass,,claim,CL-35
+REQ-H10,"§12.4, OSF H10",empirical,open,,lean,Apgi.H10Ordering
+REQ-H10,"§12.4, OSF H10",empirical,open,,lean,Apgi.H10Ordering.recovery_lt_integration
+REQ-H10,"§12.4, OSF H10",empirical,open,,lean,Apgi.H10Ordering.silent_below_two
+REQ-H10,"§12.4, OSF H10",empirical,open,,equation,EQ-GEO-1
+REQ-H10,"§12.4, OSF H10",empirical,open,,claim,CL-36
+REQ-LOOP-GAIN,§12.5 EQ-LOOP-1,proved,pass,,lean,Apgi.loopGain_lt_one_of_paper3
+REQ-LOOP-GAIN,§12.5 EQ-LOOP-1,proved,pass,,lean,Apgi.loopGain_scaled_couplings
+REQ-LOOP-GAIN,§12.5 EQ-LOOP-1,proved,pass,,lean,Apgi.loopGain_production_defaults
+REQ-LOOP-GAIN,§12.5 EQ-LOOP-1,proved,pass,,test,test_production.py::test_default_cross_level_loop_gain_subcritical
+REQ-LOOP-GAIN,§12.5 EQ-LOOP-1,proved,pass,,equation,EQ-LOOP-1
+REQ-LOOP-GAIN,§12.5 EQ-LOOP-1,proved,pass,,claim,CL-24
+REQ-LYAPUNOV,§12.5 conjecture,conditional,open,,lean,Apgi.lyapunov_decoupled
+REQ-LYAPUNOV,§12.5 conjecture,conditional,open,,test,test_pipeline_lean.py::test_lyapunov_decoupled
+REQ-LYAPUNOV,§12.5 conjecture,conditional,open,,equation,EQ-LOOP-1
+REQ-LYAPUNOV,§12.5 conjecture,conditional,open,,claim,CL-26
+REQ-LYAPUNOV,§12.5 conjecture,conditional,open,,claim,CL-37
+REQ-TIERS,§3,proved,pass,,lean,Apgi.Tier
+REQ-TIERS,§3,proved,pass,,lean,Apgi.Tier.admits
+REQ-TIERS,§3,proved,pass,,lean,Apgi.tier_examples
+REQ-TIERS,§3,proved,pass,,lean,Apgi.bridge_quantities_cross_tiers
+REQ-TIERS,§3,proved,pass,,lean,Apgi.au_quantity_tier3_only
+REQ-TIERS,§3,proved,pass,,test,test_registry_files.py::test_symbols_unique_and_not_retired
+REQ-TIERS,§3,proved,pass,,equation,EQ-BR-1
+REQ-TIERS,§3,proved,pass,,claim,CL-38
+REQ-BRIDGE-T3-T2,§3.1,assumed,open,,lean,Apgi.tier_exit_needs_au_inverse
+REQ-BRIDGE-T3-T2,§3.1,assumed,open,,lean,Apgi.calibration_constant_au
+REQ-BRIDGE-T3-T2,§3.1,assumed,open,,test,test_bridges.py::test_no_calibration_map_registered
+REQ-BRIDGE-T3-T2,§3.1,assumed,open,,equation,EQ-BR-1
+REQ-BRIDGE-T3-T2,§3.1,assumed,open,,claim,CL-38
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,lean,Apgi.kappa_dimension
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,lean,Apgi.kappa_single_never_retires
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,lean,Apgi.kappa_inert
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,lean,Apgi.kappa_straddle_not_outside
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,lean,Apgi.kappa_consistent_not_retires
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,test,test_bridges.py::test_kappa_rule_twin
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,test,test_bridges.py::test_kappa_has_no_value
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,equation,EQ-BR-2
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,claim,CL-8
+REQ-BRIDGE-KAPPA,§14.2,proved,pass,,claim,CL-39
+REQ-UNITS,"§3, units.json",tested,pass,TC-02,test,test_equations.py::test_au_never_equals_a_physical_unit
+REQ-UNITS,"§3, units.json",tested,pass,TC-02,test,test_conflicts.py::test_kappa_as_mol_atp_per_bit_is_rejected
+REQ-UNITS,"§3, units.json",tested,pass,TC-02,equation,EQ-BR-2
+REQ-UNITS,"§3, units.json",tested,pass,TC-02,claim,CL-8
+REQ-TC-01,§23 TC-01,tested,partial,TC-01,test,test_requirements.py::test_every_record_has_status_axis
+REQ-TC-02,§23 TC-02,tested,pass,TC-02,test,test_equations.py::test_units_are_declared
+REQ-TC-02,§23 TC-02,tested,pass,TC-02,test,test_equations.py::test_ignition_exponent_dimensionless
+REQ-TC-03,§23 TC-03,tested,pass,TC-03,test,test_registry_files.py::test_symbols_unique_and_not_retired
+REQ-TC-04,§23 TC-04,tested,partial,TC-04,test,test_production.py::test_production_core_matches_reference_trajectory
+REQ-TC-05,§23 TC-05,tested,pass,TC-05,test,test_core.py::test_soft_floor_worked_values
+REQ-TC-06,§23 TC-06,tested,pass,TC-06,test,test_core.py::test_pipeline_timestep_invariance_of_hazard
+REQ-TC-06,§23 TC-06,tested,pass,TC-06,test,test_twins.py::test_per_step_bernoulli_is_not_dt_invariant
+REQ-TC-07,§23 TC-07,tested,pass,TC-07,test,test_core.py::test_pipeline_null_operating_point
+REQ-TC-07,§23 TC-07,tested,pass,TC-07,test,test_core.py::test_null_operating_point_drive_mean_zero
+REQ-TC-08,§23 TC-08,tested,not-implemented,TC-08,none,
+REQ-TC-09,§23 TC-09,tested,pass,TC-09,test,test_core.py::test_drive_sign_symmetric
+REQ-TC-09,§23 TC-09,tested,pass,TC-09,test,test_production.py::test_drive_is_sign_symmetric
+REQ-TC-10,§23 TC-10,tested,partial,TC-10,test,test_convergence.py::test_clamp_fraction_reported
+REQ-TC-10,§23 TC-10,tested,partial,TC-10,test,test_pipeline_lean.py::test_traj_inv
+REQ-TC-11,§23 TC-11,tested,pass,TC-11,test,test_core.py::test_pipeline_readout_never_written_back
+REQ-TC-11,§23 TC-11,tested,pass,TC-11,test,test_production.py::test_ne_factor_is_read_out_only
+REQ-TC-12,§23 TC-12,tested,pass,TC-12,test,test_core.py::test_pipeline_exactly_once
+REQ-TC-12,§23 TC-12,tested,pass,TC-12,test,test_production.py::test_reset_increment_inside_allostatic_step
+REQ-TC-13,§23 TC-13,tested,partial,TC-13,test,test_core.py::test_step_rule_at_defaults
+REQ-TC-13,§23 TC-13,tested,partial,TC-13,test,test_convergence.py::test_step_rule_holds_for_refinement_grid
+REQ-TC-14,§23 TC-14,tested,pass,TC-14,test,test_core.py::test_soft_floor_worked_values
+REQ-TC-14,§23 TC-14,tested,pass,TC-14,test,test_production.py::test_manifest_reports_operating_point
+REQ-TC-15,§23 TC-15,tested,pass,TC-15,test,test_core.py::test_tc15_quantitative_signature
+REQ-TC-16,§23 TC-16,tested,pass,TC-16,test,test_registry_files.py::test_configurations_counted_and_consistent
+REQ-TC-17,§23 TC-17,tested,pass,TC-17,test,test_core.py::test_pipeline_estimator_ordering
+REQ-TC-17,§23 TC-17,tested,pass,TC-17,test,test_pipeline_lean.py::test_variance_uses_preupdate_mean
+REQ-TC-18,§23 TC-18,tested,pass,TC-18,test,test_golden_vectors.py::test_seeded_trajectory
+REQ-TC-19,§23 TC-19,tested,partial,TC-19,test,test_golden_vectors.py::test_seeded_trajectory
+REQ-TC-20,§23 TC-20,tested,pass,TC-20,test,test_convergence.py::test_weak_convergence_first_order
+REQ-TC-20,§23 TC-20,tested,pass,TC-20,test,test_convergence.py::test_pipeline_refinement_monotone
+REQ-TC-20,§23 TC-20,tested,pass,TC-20,test,test_convergence.py::test_hazard_invariance_constant_propensity
+REQ-TC-21,§23 TC-21,tested,partial,TC-21,test,test_conflicts.py::test_spec_lean_in_sync
+REQ-TC-21,§23 TC-21,tested,partial,TC-21,test,test_conflicts.py::test_clean_corpus_no_false_positives
+REQ-TC-21,§23 TC-21,tested,partial,TC-21,test,test_traceability.py::test_generated_traceability_files_are_current
+REQ-TC-22,§23 TC-22,tested,pass,TC-22,test,test_equations.py::test_every_lean_theorem_traced_and_audited
+REQ-TC-23,§23 TC-23,tested,pass,TC-23,test,test_conflicts.py::test_euler_precondition_violation
+REQ-TC-24,§23 TC-24,tested,pass,TC-24,test,test_conflicts.py::test_ci_checks_out_the_pinned_production_commits
+REQ-TC-25,§23 TC-25,tested,not-implemented,TC-25,none,
+REQ-TC-26,§23 TC-26,tested,not-implemented,TC-26,none,

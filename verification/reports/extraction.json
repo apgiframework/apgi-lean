@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T01:43:36+00:00",
+  "generated": "2026-11-27T04:14:22+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -1049,7 +1049,7 @@
     },
     "beta_DA": {
       "status": "verified",
-      "param_hash": "53463714c6bc14c2446cbdad5c368380ed92688ec60f73213ffb8efb1108f7ec",
+      "param_hash": "1677f39d4f1999b6309b4d53183cb6082450221b3d9f6ae450b434417aff9cec",
       "evidence": [
         {
           "source": "SRC-MATHSPEC",
@@ -1064,6 +1064,20 @@
           "quote": "Dopaminergic additive bias on the interoceptive error. Additive, never a precision multiplier",
           "status": "found",
           "values": []
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Dopaminergic additive bias on zⁱ | — | 0 | ℝ",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
         }
       ]
     },
@@ -2129,6 +2143,128 @@
           "quote": "Decisive-comparison gate | median range-scaled error < 20%",
           "status": "found",
           "values": []
+        }
+      ]
+    }
+  },
+  "records": {
+    "BR-T3-T2": {
+      "status": "verified",
+      "record_hash": "05c4087e21db9d5696864c2107e144e864747762f095b36a767d6be4f94aea61",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Mapping from Tier-3 surprise (AU) to Tier-2 broadcast information (bits) is unresolved.",
+          "status": "found"
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "AU-to-nat scaling alone (λ_AU) does not supply a bit count.",
+          "status": "found"
+        }
+      ]
+    },
+    "BR-KAPPA-SYN": {
+      "status": "verified",
+      "record_hash": "2cf1375edbf4db36b31d05f2ae06b90f9819f0e2c79504b9dfc28e68686b86b2",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "κ has no registered point estimate and no canonical value.",
+          "status": "found"
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Calibrated 95% intervals wholly outside [10, 10⁴] ATP/bit in ≥ 2 independent datasets or paradigms retire the per-bit bridge",
+          "status": "found"
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "The rule is inert until both legs exist",
+          "status": "found"
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "The registered retirement band applies to κ_syn.",
+          "status": "found"
+        }
+      ]
+    },
+    "BR-LANDAUER": {
+      "status": "verified",
+      "record_hash": "4489a0917986e281e5928e4b0e14a81880750abe76253be3f22abf01606daa0f",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "it is never a falsifier and never a measured neural efficiency",
+          "status": "found"
+        }
+      ]
+    },
+    "BR-SDT-DV": {
+      "status": "verified",
+      "record_hash": "6326b6bb07dd85d359bb8acb9b4e07f51a06b62f9ff7ed7e8139f9f38dcfcb7b",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Changing a registered dependent variable requires a prospective amendment.",
+          "status": "found"
+        }
+      ]
+    },
+    "OBS-S": {
+      "status": "verified",
+      "record_hash": "b08fad79c3147ed1be292a605dbf2674c4076a38f06d60e34ed66e5cc875c0f3",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Latent; stimulus evidence and model-derived error",
+          "status": "found"
+        }
+      ]
+    },
+    "OBS-THETA": {
+      "status": "verified",
+      "record_hash": "54a3a2ad82d8d72291dd7444c648324c14ef027c45c1f7589143fa4d7b9df61b",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Conditional on gain, noise and criterion",
+          "status": "found"
+        }
+      ]
+    },
+    "OBS-B": {
+      "status": "verified",
+      "record_hash": "257fea9ceed4e619a582ff10841183a15cda286cf7f9e17c84366b3e4070b3b9",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Report and access can dissociate",
+          "status": "found"
+        }
+      ]
+    },
+    "OBS-PI-I": {
+      "status": "verified",
+      "record_hash": "e137297040d3195fc8a9644bc4110d52f8fd6d2facbc46ed37e44b161a77c97d",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "HEP is not a direct precision meter (P0 gate)",
+          "status": "found"
         }
       ]
     }

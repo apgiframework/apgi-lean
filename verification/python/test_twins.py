@@ -7,7 +7,7 @@ reference code obeys the same statement, within float64 tolerance.
 import math
 
 import pytest
-from hypothesis import assume, given, settings
+from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
 import apgi_ref as R
@@ -22,7 +22,7 @@ fin = st.floats(min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=F
 au = st.floats(min_value=0.0, max_value=20.0, allow_nan=False)
 unit = st.floats(min_value=0.0, max_value=1.0, allow_nan=False)
 EPS = 1e-12
-settings.register_profile("ci", max_examples=500, deadline=None)
+settings.register_profile("ci", max_examples=500, deadline=None, suppress_health_check=[HealthCheck.too_slow])
 settings.load_profile("ci")
 
 

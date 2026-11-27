@@ -388,8 +388,9 @@ def test_ema_weights_follow_reference_windows():
 
 @divergence("SSOT-P9")
 def test_default_dopamine_bias_is_zero():
-    """SSOT §4.2: β_DA = 0 by default (registry beta_DA)."""
-    assert CFG["beta"] == 0.0
+    """SSOT §4.2: β_DA = 0 by default (registry beta_DA, value verified against SRC-SSOT-V12D; F4)."""
+    assert float(P["beta_DA"]["value"]) == 0.0
+    assert CFG["beta"] == float(P["beta_DA"]["value"])
 
 
 # ------------------------------- TC-04: production core == reference core (Phase A) ----

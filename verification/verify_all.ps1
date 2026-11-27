@@ -9,6 +9,7 @@ Run "generate_lean" { python verification\python\generate_lean.py }
 Run "lake" { lake build --wfail }
 Run "consistency" { python verification\python\check_consistency.py }
 Run "manifest" { python verification\python\make_release_manifest.py }
+Run "traceability" { python verification\python\make_traceability.py }
 Set-Location verification\python
 $env:APGI_IMPL_PATH = "C:\Claude\Projects\apgi-implementation"
 Run "pytest" { python -m pytest -q -rxs -p no:cacheprovider }

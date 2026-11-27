@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import extract_sources as X  # noqa: E402
 from registry import load  # noqa: E402
 
-CORPORA = [Path(r"C:\Claude\Projects\Neuro-Brain\Neuro-Input"), Path(r"C:\Claude\Projects\apgi-lake\apgi-v-1-2")]
+CORPORA = [Path(r"C:\Claude\Projects\Neuro-Brain\Neuro-Input"), Path(r"C:\Claude\Projects\apgi-lake\docs\apgi-v-1-2")]
 
 
 def pages_of(sid):

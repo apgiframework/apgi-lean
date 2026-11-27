@@ -1,0 +1,238 @@
+{
+  "schema": "apgi-bridges/1",
+  "note": "Bridge and measurement assumptions (SSOT §3.1, §14, §15; SSOT §29 lists bridges.json and observables.json as 'to add'). Each record quotes the SSOT; extract_sources.py verifies every quote against the sha256-pinned source, and check_consistency.py fails on a record whose quote was not verified. A bridge is an explicit assumption, never a theorem: 'lean' lists only statements about the bridge's rule or units, never a proof that the bridge holds. A null falsifier carries a reason quoted from, or located in, the SSOT; none is invented here.",
+  "statuses": [
+    "unresolved",
+    "inert",
+    "consistency-check-only",
+    "registered",
+    "tested"
+  ],
+  "bridges": [
+    {
+      "id": "BR-T3-T2",
+      "record_status": "Open",
+      "owner": "Uxod",
+      "tiers": [
+        "Tier 3",
+        "Tier 2"
+      ],
+      "statement": "Tier-3 surprise (AU) maps to Tier-2 broadcast information (bits).",
+      "status": "unresolved",
+      "falsifier": null,
+      "falsifier_unresolved_reason": "The SSOT states the mapping is unresolved and registers no falsifier for it (SSOT §3.1).",
+      "equations": [],
+      "lean": [
+        "Apgi.au_quantity_tier3_only",
+        "Apgi.tier_exit_needs_au_inverse",
+        "Apgi.calibration_constant_au"
+      ],
+      "tests": [
+        "test_bridges.py::test_no_calibration_map_registered"
+      ],
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Mapping from Tier-3 surprise (AU) to Tier-2 broadcast information (bits) is unresolved."
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "AU-to-nat scaling alone (λ_AU) does not supply a bit count."
+        }
+      ],
+      "approval_date": null
+    },
+    {
+      "id": "BR-KAPPA-SYN",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "tiers": [
+        "Tier 1",
+        "Tier 2"
+      ],
+      "statement": "κ_syn (ATP/bit) links event energy to event information at the synaptic estimator level.",
+      "status": "inert",
+      "falsifier": "Calibrated 95% intervals wholly outside [10, 10⁴] ATP/bit in ≥ 2 independent datasets or paradigms retire the per-bit bridge.",
+      "equations": [
+        "EQ-BR-1",
+        "EQ-BR-2"
+      ],
+      "lean": [
+        "Apgi.kappa_dimension",
+        "Apgi.bridge_quantities_cross_tiers",
+        "Apgi.kappa_single_never_retires",
+        "Apgi.kappa_inert",
+        "Apgi.kappa_inside_not_outside",
+        "Apgi.kappa_straddle_not_outside",
+        "Apgi.kappa_consistent_not_retires"
+      ],
+      "tests": [
+        "test_bridges.py::test_kappa_rule_twin",
+        "test_bridges.py::test_kappa_has_no_value"
+      ],
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "κ has no registered point estimate and no canonical value."
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Calibrated 95% intervals wholly outside [10, 10⁴] ATP/bit in ≥ 2 independent datasets or paradigms retire the per-bit bridge"
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "The rule is inert until both legs exist"
+        },
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "The registered retirement band applies to κ_syn."
+        }
+      ],
+      "approval_date": null
+    },
+    {
+      "id": "BR-LANDAUER",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "tiers": [
+        "Tier 1",
+        "Tier 2"
+      ],
+      "statement": "R_L compares event energy with the Landauer cost of a justified erasure count.",
+      "status": "consistency-check-only",
+      "falsifier": null,
+      "falsifier_unresolved_reason": "The SSOT states R_L is never a falsifier (SSOT §14.1).",
+      "equations": [
+        "EQ-BR-3",
+        "EQ-LAND-1"
+      ],
+      "lean": [
+        "Apgi.erasureRatio_ge_one_iff",
+        "Apgi.landauer_310K_within_tolerance"
+      ],
+      "tests": [
+        "test_registry_equations.py::test_twin_kuramoto_reservoir_bridges"
+      ],
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "it is never a falsifier and never a measured neural efficiency"
+        }
+      ],
+      "approval_date": null
+    },
+    {
+      "id": "BR-SDT-DV",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "tiers": [
+        "Tier 3"
+      ],
+      "statement": "Registered dependent variables: Πᵉ claims use d′; threshold claims use criterion c or hit and false-alarm rates jointly (R2).",
+      "status": "tested",
+      "falsifier": null,
+      "falsifier_unresolved_reason": "A dependent-variable assignment is a measurement rule, not a hypothesis; the SSOT attaches no falsifier to it (SSOT §15.1).",
+      "equations": [
+        "EQ-OBS-1",
+        "EQ-OBS-2"
+      ],
+      "lean": [],
+      "tests": [
+        "test_core.py::test_tc15_quantitative_signature"
+      ],
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Changing a registered dependent variable requires a prospective amendment."
+        }
+      ],
+      "approval_date": null
+    }
+  ],
+  "observables": [
+    {
+      "id": "OBS-S",
+      "record_status": "Canonical v1.2",
+      "owner": "Uxod",
+      "construct": "S",
+      "candidate": "Latent; stimulus evidence and model-derived error",
+      "limitation": "No direct EEG equivalent",
+      "validated": false,
+      "falsifier": null,
+      "falsifier_unresolved_reason": "SSOT §15 lists a limitation and no falsifier.",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Latent; stimulus evidence and model-derived error"
+        }
+      ],
+      "approval_date": null
+    },
+    {
+      "id": "OBS-THETA",
+      "record_status": "Canonical v1.2",
+      "owner": "Uxod",
+      "construct": "θ",
+      "candidate": "Latent; criterion c and psychometric threshold",
+      "limitation": "Conditional on gain, noise and criterion",
+      "validated": false,
+      "falsifier": null,
+      "falsifier_unresolved_reason": "SSOT §15 lists a limitation and no falsifier.",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Conditional on gain, noise and criterion"
+        }
+      ],
+      "approval_date": null
+    },
+    {
+      "id": "OBS-B",
+      "record_status": "Canonical v1.2",
+      "owner": "Uxod",
+      "construct": "B",
+      "candidate": "Explicit report or a validated no-report bifurcation marker",
+      "limitation": "Report and access can dissociate",
+      "validated": false,
+      "falsifier": null,
+      "falsifier_unresolved_reason": "SSOT §15 lists a limitation and no falsifier.",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Report and access can dissociate"
+        }
+      ],
+      "approval_date": null
+    },
+    {
+      "id": "OBS-PI-I",
+      "record_status": "Canonical v1.2",
+      "owner": "Uxod",
+      "construct": "Πⁱ",
+      "candidate": "Heartbeat discrimination d′; HEP as secondary index",
+      "limitation": "HEP is not a direct precision meter (P0 gate)",
+      "validated": false,
+      "falsifier": null,
+      "falsifier_unresolved_reason": "HEP validity depends on the Protocol 0 gate (SSOT §30.2); no falsifier is registered in §15.",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "HEP is not a direct precision meter (P0 gate)"
+        }
+      ],
+      "approval_date": null
+    }
+  ]
+}

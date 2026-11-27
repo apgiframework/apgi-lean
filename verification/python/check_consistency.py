@@ -185,9 +185,84 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
     # value, range, unit and evidence, against the currently pinned sources.
     found += extraction_check(P, src_ids)
 
-    # traceability
+    # traceability, bridge evidence, record-status axis (TC-01), axiom pins (TC-22)
     found += traceability(E, C)
+    found += bridge_check()
+    found += record_status_check(P, E, C)
+    found += axiom_check()
     return found
+
+
+RECORD_STATUSES = {"Canonical v1.1", "Canonical v1.2", "Registered", "Proposed", "Extension", "Open",
+                   "Deprecated", "Retired"}  # SSOT §3, record-status axis
+STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
+
+
+def optional(name: str) -> dict:
+    import registry
+    return load(name) if (registry.SPEC / name).exists() else {}
+
+
+def record_status_check(P, E, C) -> list[dict]:
+    """TC-01: every registry record carries exactly one record status, an owner and an approval field."""
+    B = optional("bridges.json")
+    Q = optional("requirements.json")
+    groups = {"parameters.json": P, "equations.json": E, "epistemic-claims.json": C,
+              "bridges.json": B.get("bridges", []) + B.get("observables", []),
+              "requirements.json": Q.get("requirements", [])}
+    out = []
+    for file, recs in groups.items():
+        ids = [r["id"] for r in recs]
+        for d in sorted({i for i in ids if ids.count(i) > 1}):
+            out.append({"check": "duplicate_id", "params": [], "detail": f"{file}: {d} appears twice", "severity": "P0"})
+        for r in recs:
+            why = []
+            if r.get("record_status") not in RECORD_STATUSES:
+                why.append(f"record_status {r.get('record_status')!r}")
+            if not r.get("owner"):
+                why.append("owner")
+            if "approval_date" not in r:
+                why.append("approval_date")
+            if why:
+                out.append({"check": "record_status_missing", "params": [], "detail": f"{file}: {r['id']} lacks {', '.join(why)}", "severity": "P1"})
+    return out
+
+
+def bridge_check() -> list[dict]:
+    """Every bridges.json record must be backed by a verified extraction of its SSOT quotes."""
+    from extract_sources import bridge_records, record_hash
+    path = ROOT / "verification" / "reports" / "extraction.json"
+    report = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    recs = report.get("records", {})
+    out = []
+    for r in bridge_records():
+        e = recs.get(r["id"])
+        why = ("no entry in extraction.json" if e is None else "extraction failed" if e["status"] != "verified"
+               else "record changed since extraction (re-run extract_sources.py --corpus DIR --write)"
+               if e["record_hash"] != record_hash(r) else None)
+        if why:
+            out.append({"check": "bridge_unverified", "params": [], "detail": f"{r['id']}: {why}", "severity": "P1"})
+    return out
+
+
+def axiom_check() -> list[dict]:
+    """TC-22: every pinned axiom list is a subset of [propext, Classical.choice, Quot.sound]; sorryAx or any
+    custom axiom fails. Also rejects `sorry`, `admit` and `axiom` declarations in the Lean sources."""
+    out = []
+    for f in sorted(LEAN_DIR.glob("*.lean")):
+        text = f.read_text(encoding="utf-8")
+        for m in re.finditer(r"info: '(\S+)' depends on axioms: \[([^\]]*)\]", text):
+            extra = {a.strip() for a in m.group(2).split(",")} - STANDARD_AXIOMS
+            if extra:
+                out.append({"check": "nonstandard_axiom", "params": [], "detail": f"{m.group(1)} depends on {sorted(extra)}", "severity": "P0"})
+        code = re.sub(r"/-.*?-/", "", text, flags=re.S)
+        code = re.sub(r"--.*", "", code)
+        for kw in ("sorry", "admit"):
+            if re.search(rf"\b{kw}\b", code):
+                out.append({"check": "sorry_in_source", "params": [], "detail": f"{f.name} contains `{kw}`", "severity": "P0"})
+        if re.search(r"^\s*(?:private\s+|public\s+)?axiom\s", code, re.M):
+            out.append({"check": "custom_axiom", "params": [], "detail": f"{f.name} declares an axiom", "severity": "P0"})
+    return out
 
 
 def extraction_check(P, src_ids) -> list[dict]:
@@ -221,7 +296,7 @@ def extraction_check(P, src_ids) -> list[dict]:
 def lean_decls() -> set[str]:
     names = set()
     for f in LEAN_DIR.glob("*.lean"):
-        for m in re.finditer(r"^(?:noncomputable\s+)?(?:theorem|def|structure|abbrev)\s+(\S+)", f.read_text(encoding="utf-8"), re.M):
+        for m in re.finditer(r"^(?:noncomputable\s+)?(?:theorem|def|structure|abbrev|inductive)\s+(\S+)", f.read_text(encoding="utf-8"), re.M):
             names.add("Apgi." + m.group(1))
     return names
 
@@ -263,6 +338,24 @@ def traceability(E, C) -> list[dict]:
             path = HERE / file
             if not path.exists() or (fn and f"def {fn}(" not in path.read_text(encoding="utf-8")):
                 out.append({"check": "broken_link", "params": [], "detail": f"{eq['id']}: test {t} not found", "severity": "P0"})
+    extra = optional("requirements.json").get("requirements", []) + optional("bridges.json").get("bridges", [])
+    eq_ids = {e["id"] for e in E}
+    cl_ids = {c["id"] for c in C}
+    for r in extra:
+        for n in r.get("lean", []):
+            if n not in decls:
+                out.append({"check": "broken_link", "params": [], "detail": f"{r['id']}: Lean {n} not found", "severity": "P0"})
+        for t in r.get("tests", []):
+            file, _, fn = t.partition("::")
+            path = HERE / file
+            if not path.exists() or (fn and f"def {fn}(" not in path.read_text(encoding="utf-8")):
+                out.append({"check": "broken_link", "params": [], "detail": f"{r['id']}: test {t} not found", "severity": "P0"})
+        for q in r.get("equations", []):
+            if q not in eq_ids:
+                out.append({"check": "broken_link", "params": [], "detail": f"{r['id']}: equation {q} not registered", "severity": "P0"})
+        for q in r.get("claims", []):
+            if q not in cl_ids:
+                out.append({"check": "broken_link", "params": [], "detail": f"{r['id']}: claim {q} not registered", "severity": "P0"})
     for t in sorted(thms - linked):
         out.append({"check": "orphan_theorem", "params": [], "detail": f"{t} is linked to no equation", "severity": "P0"})
     for t in sorted(thms - aud):

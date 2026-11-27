@@ -271,10 +271,35 @@ def core_step(state: dict, x_e: float, x_i: float, p: dict | None = None, u: flo
     s["xhat_e"] += p["eta_pred_e"] * pi_e * eps_e
     s["xhat_i"] += p["eta_pred_i"] * pi_i * eps_i
     s["B_prev"] = B                                                                       # 15
-    log = dict(eps_e=eps_e, eps_i=eps_i, z_e=z_e, z_i=z_i, z_i_eff=z_i_eff, pi_e=pi_e, pi_i=pi_i,
+    raw = (1.0 / (state["s2_e"] + p["eps_stab"]), 1.0 / (state["s2_i"] + p["eps_stab"]),
+           p["g_ach"] * pi_e, g_ne * pi_i)
+    clamped = tuple(not (p["pi_min"] <= x <= p["pi_max"]) for x in raw)
+    log = dict(clamp_pi=any(clamped), clamp_ne=g_ne != p["g_ne"],
+               eps_e=eps_e, eps_i=eps_i, z_e=z_e, z_i=z_i, z_i_eff=z_i_eff, pi_e=pi_e, pi_i=pi_i,
                pi_e_eff=pi_e_eff, pi_i_eff=pi_i_eff, g_ne=g_ne, S_inst=s_inst, theta_eff=th_eff,
                B_prop=b_prop, B=B, C=C, V=V, S_decided=state["S"], theta_decided=state["theta"])
     return s, log
+
+
+def clamp_report(logs) -> dict:
+    """TC-10: fraction of steps on which a precision clamp (Π_min/Π_max) or the NE clamp was active.
+    Lean: Apgi.traj_prec_mem_Icc and Apgi.traj_ne_bound prove the clamped values stay in bounds;
+    this reports how often the clamps bind."""
+    n = len(logs)
+    if n == 0:
+        return {"steps": 0, "precision_clamped_fraction": 0.0, "ne_clamped_fraction": 0.0}
+    return {"steps": n,
+            "precision_clamped_fraction": sum(bool(l["clamp_pi"]) for l in logs) / n,
+            "ne_clamped_fraction": sum(bool(l["clamp_ne"]) for l in logs) / n}
+
+
+def run_core(x_e, x_i, u, p: dict | None = None) -> tuple[dict, list[dict], dict]:
+    """Run the canonical pipeline over input and draw sequences; return (final state, logs, clamp report)."""
+    s, logs = core_state(p), []
+    for a, b, c in zip(x_e, x_i, u):
+        s, log = core_step(s, a, b, p, c)
+        logs.append(log)
+    return s, logs, clamp_report(logs)
 
 
 def operating_point(gamma_sig: float, theta0: float, r_max: float) -> dict:
@@ -488,3 +513,20 @@ def kappa_atp_per_bit(e_bit: float, dG_atp: float = 8.3e-20) -> float:
 def erasure_ratio(E_event: float, N_erase: float, T: float = 310.0) -> float:
     """EQ-BR-3: R_L = E_event/(N_erase·k_B·T·ln 2), a consistency check only."""
     return E_event / (N_erase * landauer(T))
+
+
+# ------------------------------------------------ Apgi/Epistemic.lean twins ----
+KAPPA_BAND = (10.0, 1.0e4)  # ATP/bit, registered retirement band for κ_syn (SSOT §14.2)
+
+
+def kappa_verdict(intervals) -> str:
+    """Registered κ calibration rule (OSF Table 13 H7, Table 17; SSOT §14.2) over 95% intervals
+    (lo, hi) from independent datasets. Lean: Apgi.kappaRetires, Apgi.kappaConsistent,
+    Apgi.kappa_single_never_retires, Apgi.kappa_inert, Apgi.kappa_consistent_not_retires."""
+    lo_b, hi_b = KAPPA_BAND
+    outside = [iv for iv in intervals if iv[1] < lo_b or hi_b < iv[0]]
+    if len(outside) >= 2:
+        return "retired"
+    if len(intervals) >= 2 and all(lo_b <= iv[0] and iv[1] <= hi_b for iv in intervals):
+        return "bridge-consistent"
+    return "indeterminate"
