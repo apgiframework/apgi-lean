@@ -1,10 +1,17 @@
-# APGI formal verification: report (round 70–71, 2026-11-27)
+# APGI formal verification: report (round 72, 2026-11-27)
 
 Scope: the apgi-lean repository (Lean 4 proofs, the machine-readable registry, the Python
 reference implementation and its tests) measured against the APGI Single Source of Truth
 (SSOT), framework v1.2, sha256 18951b65…. Production code is checked through pinned
-cross-tests: apgi-implementation at the pin 72ad050 (two fixes, e0e82cf and d153f6a, are
-committed locally and not pushed) and apgi-validation at f6fec65.
+cross-tests: apgi-implementation at the pin d153f6a (pushed; contains the SSOT-P11 fix
+e0e82cf) and apgi-validation at f6fec65.
+
+Round 72 delta (details in docs/REMAINING-TASKS.md): SSOT-P11 resolved and the pin moved to
+d153f6a; TC-13 / REQ-TC-13 pass; apgi-lean pytest 335 passed, 0 xfailed (Linux VM, production at
+d153f6a); CI observed green on apgi-lean 7aec2c0 and on every apgi-implementation job at d153f6a
+except "lint & types" (F13, red since 72ad050; fix prepared as a patch, ruff and mypy clean,
+production suite 2840 passed, 0 failed). Sections 2–6 below are the round 70–71 evidence; only
+the counts in section 3 and the scores in section 7 are updated.
 
 A Lean proof establishes a consequence of a definition. It is never evidence that APGI
 describes the brain (SSOT §3.4). A recovery result is a property of a model and a design, never
@@ -49,11 +56,10 @@ implemented, and nothing from this round or the production fixes is pushed.
   Pipeline 27, Strata 13, Epistemic 11, Stability 7, Identifiability 19). Start of round: 187.
   189 depend on exactly [propext, Classical.choice, Quot.sound], 7 on a strict subset.
 - Registered equations with a Lean-backed statement: 59 of 59.
-- Requirements (requirements.json): 44; by status 33 pass, 6 partial, 3 open, 2 not implemented.
-- Conformance tests TC-01…TC-26: **18 pass, 6 partial, 2 not implemented** (unchanged).
+- Requirements (requirements.json): 44; by status 34 pass, 5 partial, 3 open, 2 not implemented.
+- Conformance tests TC-01…TC-26: **19 pass, 5 partial, 2 not implemented** (TC-13 now passes).
   Partial: TC-01 (approval dates), TC-04 (apgi_core.full_model), TC-08 (dispositions for two
-  failed parameters; behavior-level recovery), TC-10 (production clamp fraction), TC-13
-  (production pin), TC-21. Not implemented: TC-25, TC-26.
+  failed parameters; behavior-level recovery), TC-10 (production clamp fraction), TC-21. Not implemented: TC-25, TC-26.
 - Claims: 46; 41 proved, 2 assumed (CL-8, CL-46), 3 unresolved (CL-7, CL-26, CL-36).
 
 ## 4. What this round established
@@ -110,24 +116,23 @@ not the independent human review that B-17 and SSOT §32 require.
 
 ## 7. Scores (1–100), initial → final this round
 
-- Architecture 91 → 92
+- Architecture 92 → 92
 - Mathematical correctness 93 → 93
-- Specification coverage 90 → 92
-- Implementation 86 → 87
-- Proof completeness 88 → 89
-- Testing 92 → 94
-- Reproducibility 89 → 89
-- Documentation 88 → 89
-- Publication readiness 68 → 69
-- **Overall 87 → 88**
+- Specification coverage 92 → 93
+- Implementation 87 → 88
+- Proof completeness 89 → 89
+- Testing 94 → 94
+- Reproducibility 89 → 90
+- Documentation 89 → 89
+- Publication readiness 69 → 69
+- **Overall 88 → 89**
 
 Reasons for each score are in docs/REMAINING-TASKS.md ("Rating").
 
 ## 8. Genuine blockers
 
-- Pushes: the github-apgi SSH key is not loaded in this session (`ssh-add -l`: no identities),
-  so neither apgi-lean (this round) nor apgi-implementation (e0e82cf, d153f6a) can be pushed,
-  and no CI run can be observed. The SSOT-P11 closure and pin move follow the push.
+- Pushes: only the author's github-apgi key can push. Pending: this round's apgi-lean commit
+  and the F13 patch for apgi-implementation (`git am`, then push). CI is now observable.
 - Author decisions: the §17 dispositions for τ_θ and η_θ·c₁ (71a), record-status approval
   (61a), operating point (B-13), OSF Amendment 2 (B-14), SSOT text corrections (D1–D10),
   bibliography (B-18).

@@ -1,24 +1,33 @@
 # APGI verification: remaining tasks
 
-State as of 2026-11-27 09:05 ET (round 70–71). Measured against **APGI Single Source of Truth (SSOT), framework v1.2** (docs/apgi-v-1-2/APGI-Single-Source-of-Truth.md, sha256 18951b65…, pinned as SRC-SSOT-V12D). Registry **spec 0.6.0**; the registry hash is written by `generate_lean.py` into Apgi/Spec.lean.
+State as of 2026-11-27 10:20 ET (round 72). Measured against **APGI Single Source of Truth (SSOT), framework v1.2** (docs/apgi-v-1-2/APGI-Single-Source-of-Truth.md, sha256 18951b65…, pinned as SRC-SSOT-V12D). Registry **spec 0.6.0**; the registry hash is written by `generate_lean.py` into Apgi/Spec.lean.
 
 - Repositories, all `main` only:
-  - apgi-lean: the previous round (6167b48) is on origin/main according to the local tracking ref (pushed outside this session; GitHub itself could not be queried from here, see F10). This round is three local commits on top of it (6d5c0f4 code and registry, 5858625 docs, and a follow-up that fixes the report line endings), **not pushed**: the github-apgi key is not loaded in this session's shells (`ssh -T git@github-apgi`: "Permission denied (publickey)"; the agent has no identities).
-  - apgi-implementation: pin **72ad050** (unchanged). Two local commits, **not pushed**: e0e82cf (TC-13 / SSOT-P11 fix, previous round) and **d153f6a** (F11 portability fixes, this round).
+  - apgi-lean: rounds 68–71 are on origin/main (7aec2c0, pushed by the author 2026-11-27); GitHub Actions "APGI verification" **green on 7aec2c0** (run 46016038433). This round (72) is one local commit on top, not yet pushed.
+  - apgi-implementation: main at **d153f6a** (pushed; contains e0e82cf). **New pin d153f6a.** CI on d153f6a: every job green (tests on 3.10–3.13, numerical parity, PyMC parity, reproducibility, K7c, stability, security, performance, wheel, dependency policy) **except "lint & types"**, which has failed since 72ad050 (F13). The fix is prepared as a patch, not yet applied to the author's checkout: `.scratch\0001-CI-restore-the-lint-types-gate-ruff-ruff-format-mypy.patch`.
   - apgi-validation: f6fec65 (unchanged).
 - Local results (this PC, `verification\verify_all.ps1 -Impl .scratch\impl-pin`, production at the pin 72ad050, 08:45–09:01 ET): extraction 93 verified, 0 failed; `lake build --wfail` green (7248 jobs, 10 modules plus the generated Spec); consistency 0 open, 0 unacknowledged, 0 stale; recovery study regenerated (152 s, identical to the previous run); apgi-lean pytest **331 passed, 1 skipped, 4 xfailed**; test_production_validation.py 10 passed, 2 skipped.
-- Rating against the SSOT (1–100, nine dimensions): **overall 87 → 88** this round. Reasons at the end of this file.
+- Round 72 checks (Linux VM, Python 3.10, production at d153f6a; Lean not rebuilt locally, only Spec.lean's hash line changed, so `lake build` is left to CI): consistency 0 open, 0 unacknowledged, 0 stale; apgi-lean pytest **335 passed, 0 xfailed** across all 16 test files except test_production_validation.py (the four SSOT-P11 strict xfails now pass as ordinary tests); generate_lean, release manifest and traceability regenerated.
+- Rating against the SSOT (1–100, nine dimensions): **overall 88 → 89** this round. Reasons at the end of this file.
 
 ## Completion against the SSOT (numerator / denominator)
 
 - Release blockers closed (SSOT §30.1): **10 of 18** (unchanged): B-01, 02, 03, 04, 05, 06, 08, 10, 12, 15. Open: B-07, B-09 (derived and label rows of 54b), B-11 (tag and DOI), B-13, B-14, B-16, B-17, B-18.
-- Conformance tests TC-01…TC-26: **18 pass**, **6 partial** (TC-01 approval pending; TC-04; TC-08, now with all four §17 diagnostics but two gate failures awaiting disposition; TC-10 production clamp fraction; TC-13 production overflow at the pin; TC-21), **2 not implemented** (TC-25, TC-26). Unchanged counts.
+- Conformance tests TC-01…TC-26: **19 pass** (TC-13 added this round), **5 partial** (TC-01 approval pending; TC-04; TC-08, all four §17 diagnostics, two gate failures awaiting disposition; TC-10 production clamp fraction; TC-21), **2 not implemented** (TC-25, TC-26).
 - Lean: **196 theorems in 10 modules** (was 187), every one axiom-pinned with `#guard_msgs`; 189 use exactly [propext, Classical.choice, Quot.sound], 7 a strict subset; no sorry, no admit, no axiom declaration.
 - Equations: 59 of 59 with a Lean-backed statement.
 - Claims: **46** (was 44): 41 proved, 2 assumed (CL-8, CL-46), 3 unresolved (CL-7, CL-26, CL-36).
-- Requirements: 44 (33 pass, 6 partial, 3 open, 2 not implemented).
+- Requirements: 44 (34 pass, 5 partial, 3 open, 2 not implemented).
 
-## Done this round (2026-11-27, tasks 70–71)
+## Done this round (2026-11-27, round 72)
+
+**Pushes confirmed and CI observed.** The author pushed apgi-lean 7aec2c0 and apgi-implementation d153f6a. CI read from the public GitHub API (F10 no longer blocks observation): apgi-lean green on 7aec2c0; apgi-implementation green on every job of d153f6a except "lint & types".
+
+**SSOT-P11 closed; pin moved to d153f6a.** specification/known-conflicts.json: SSOT-P11 `resolved` (fix text moved to `resolution`), production.commit d153f6a152cb…; .github/workflows/lean_action_ci.yml checks out the same commit. REQ-TC-13 `partial` → `pass`; its remaining limitation (overflow is a float64 property, established by tests, not proof) stays on record. Regenerated: Apgi/Spec.lean (registry hash d3afe09c…), verification/reports/{conflicts,release-manifest}.json, traceability.csv, docs/traceability-matrix.md, docs/assumption-inventory.md. Evidence: test_production.py 59 passed, 0 xfailed at d153f6a; full apgi-lean suite 335 passed.
+
+**F13 (apgi-implementation CI): "lint & types" red since 72ad050; fix prepared.** Ruff stopped the job before the format check and mypy ran, so three layers were hidden: ruff I001 (pipeline.py import order) and N812 (test aliases PCFG, PP), 6 files unformatted, and 6 mypy errors (untyped helpers in core/ssot_core.py from e0e82cf; `run_channel(**channel_kwargs: float)` broken by 72ad050's `reference_window: int | None`). Commit "CI: restore the lint & types gate" fixes all three; formatter edits are AST-identical except the moved import; no behaviour change. Verified: ruff 0.16.0 and mypy 1.19.0 clean (105 files); production suite 2840 passed, 12 skipped, 0 failed (per file, Python 3.10). Exported as a patch to .scratch (gitignored) because apgi-implementation is not a connected folder in this session.
+
+## Previous round (2026-11-27, tasks 70–71)
 
 **Task 71 (= 62b): TC-08d–g, the full-pipeline recovery study (TC-08 stays partial).**
 - *The exact part of TC-08g, proved* (Apgi/Identifiability.lean, 9 new theorems, CL-45): EQ-ALLO-1 sees η_θ and the weights c₁, c₂, v₁, v₂ only through η_θ·c₁, η_θ·c₂, η_θ·v₁, η_θ·v₂. Scaling η_θ by a ≠ 0 and the weights by 1/a gives the identical trajectory for every input and draw sequence (`pipeStep_scaleAllo`, `traj_scaleAllo`, `scaleAllo_not_injective`); with η_θ = 0 the weights do not enter at all (`traj_weights_eta_zero`). So η_θ, c₁, v₁, v₂ cannot be recovered separately from any data; only the products can.
@@ -51,16 +60,25 @@ SBC itself is shown not to be vacuous: a likelihood with r_max off by 2× gives 
 
 - **F12 (identifiability, for the author).** Even with every-step event observation, τ_θ and η_θ·c₁ do not pass the §17 gate in either tested design, and η_θ cannot be separated from c₁, v₁, v₂ at all (proved). §17 requires one disposition per failed parameter before data collection: fixed from external measurement, constrained by a stated informative prior, or redesignated as requiring auxiliary measurement (task 71a).
 - **F11** is a code defect, not only an environment issue (above); fixed locally.
-- **F10 (permissions)** unchanged in effect: no push is possible from this session's shells.
-- F2 (operating point, B-13), F3 (TC-15 Appendix-A stimulus), F5 (SSOT-P10), F7 (memory), F8 (17-step loop rejected by SSOT §8), F9 / SSOT-P11 (fixed in e0e82cf, not pushed) are unchanged.
+- **F10 (permissions)** narrowed: pushes still need the author's key, but CI status is now read from the public GitHub API.
+- **F13** (apgi-implementation lint & types gate): fixed in a prepared patch, not yet pushed (above).
+- F2 (operating point, B-13), F3 (TC-15 Appendix-A stimulus), F5 (SSOT-P10), F7 (memory), F8 (17-step loop rejected by SSOT §8), are unchanged. F9 / SSOT-P11 is closed (pin d153f6a).
 
 ## Remaining tasks
 
 ### Next step (one at a time)
 
-**Push both repositories** with the github-apgi key loaded (`ssh-add` the key, then `git -C C:\Claude\Projects\apgi-lake push origin main` and `git -C C:\Claude\Projects\apgi-implementation push origin main`), and confirm CI green on both heads; the pinned-production jobs of apgi-lean expect SSOT-P11 as a strict xfail, and apgi-implementation's CI now gets the pytensor fix.
+**Apply the F13 patch and push both repositories** (github-apgi key loaded):
 
-Then **close SSOT-P11**: in apgi-lean set SSOT-P11 to `resolved` (move its `fix` text to `resolution`), set the production pin to d153f6a (it contains e0e82cf) in specification/known-conflicts.json and .github/workflows/lean_action_ci.yml, run `verification\verify_all.ps1` (default -Impl), commit, push, and confirm CI. REQ-TC-13 then passes.
+```powershell
+git -C C:\Claude\Projects\apgi-implementation am C:\Claude\Projects\apgi-lake\.scratch\0001-CI-restore-the-lint-types-gate-ruff-ruff-format-mypy.patch
+git -C C:\Claude\Projects\apgi-implementation push origin main
+git -C C:\Claude\Projects\apgi-lake push origin main
+```
+
+Then confirm CI: apgi-implementation fully green (including "lint & types"); apgi-lean green with the new pin d153f6a (`lake build` of the regenerated Spec.lean, SSOT-P11 tests passing). The pin stays at d153f6a: the patch changes no behaviour, and `git am` gives the commit a new hash on the author's machine.
+
+After that: **task 71a** (author decision): the §17 disposition for τ_θ and η_θ·c₁.
 
 ### Phase A remainder
 **59.** Put SSOT-P10 under test (hierarchical precision mixing, resonance δ), then fix it in the legacy extension path (apgi-implementation).
@@ -90,17 +108,17 @@ Then **close SSOT-P11**: in apgi-lean set SSOT-P11 to `resolved` (move its `fix`
 
 ## Rating (1–100) against the SSOT
 
-Initial (start of this round, measured: 6167b48 with production at 72ad050, verify_all green, 312 passed) → final (this round, verified locally):
-- Architecture 91 → 92: one canonical model now serves the Lean pipeline (TC-08g is a statement about `pipeStep`), the scalar reference and the vectorized study simulator, and the simulator is twin-checked against the reference. Deduction: the Lean pipeline is still not executed against the golden vectors.
-- Mathematical correctness 93 → 93: 196 theorems, all axiom-pinned; the two new proofs planted-fault checked. Deduction unchanged: several structural theorems remain rfl-level encodings.
-- Specification coverage 90 → 92: all four §17 diagnostics for TC-08d–g; TC-08g's exact part. Deductions: dispositions (71a), behavior-level recovery, L3–L4 qualitative, CFG-FULL undefined.
-- Implementation 86 → 87: F11 fixed in production code (d153f6a). Deductions: nothing of it is pushed, so the pin still carries SSOT-P11; P10 and the clamp report are still open.
-- Proof completeness 88 → 89: the TC-08g degeneracy on whole trajectories. Deductions: coupled Lyapunov conjecture, loop-gain derivation, cusp-to-pipeline link.
-- Testing 92 → 94: 19 new tests, exact SBC with a non-vacuity check, out-of-sample prediction, five new planted faults caught. Deductions: TC-25, TC-26; behavior-level recovery.
-- Reproducibility 89 → 89: the study is seeded, deterministic (two runs identical) and hash-bound to its design and code. Deduction: neither this round nor the previous one has a CI run observed from this session.
-- Documentation 88 → 89: REMAINING-TASKS, VERIFICATION-REPORT, README, regenerated traceability and assumption inventory (CL-46 listed). Deduction: the SSOT's header and §24–§25 are stale (D10).
-- Publication readiness 68 → 69: TC-08 now has every diagnostic §17 asks for, and the result is a concrete author decision (71a) rather than a gap. The release blockers B-07, B-13, B-14, B-16, B-17, B-18 and the tag and DOI are unchanged.
-- **Overall 87 → 88.** A perfect specification score would still not be a claim of scientific truth (SSOT §32).
+Initial (start of round 72 = end of round 70–71, 88) → final (this round, verified as stated above):
+- Architecture 92 → 92.
+- Mathematical correctness 93 → 93: no Lean change except the generated hash line.
+- Specification coverage 92 → 93: TC-13 passes end to end (reference and production). Deductions: dispositions (71a), behavior-level recovery, L3–L4 qualitative, CFG-FULL undefined.
+- Implementation 87 → 88: the pinned production code carries no open P1 divergence (SSOT-P11 closed); the lint/type gate defects are fixed in a prepared commit. Deductions: that commit is not yet pushed; SSOT-P10 and the clamp report are open.
+- Proof completeness 89 → 89.
+- Testing 94 → 94: the four strict xfails became passing tests; the production type gate (mypy) was found not to have run and now passes locally. Deductions: TC-25, TC-26; behavior-level recovery.
+- Reproducibility 89 → 90: CI observed green on apgi-lean 7aec2c0 and on every behavioural job of apgi-implementation d153f6a. Deduction: the lint gate is red until the patch is pushed; `lake build` for this round's commit is not yet observed.
+- Documentation 89 → 89.
+- Publication readiness 69 → 69: the blockers B-07, B-13, B-14, B-16, B-17, B-18, the tag and DOI, and decision 71a are unchanged.
+- **Overall 88 → 89.** A perfect specification score would still not be a claim of scientific truth (SSOT §32).
 
 ---
 
