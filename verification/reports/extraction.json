@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-25T22:29:38+00:00",
+  "generated": "2026-11-27T01:43:36+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -38,9 +38,14 @@
       "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf"
     },
     "SRC-MATHSPEC-V12D": {
-      "sha256": "8f2fe523fa34ad16f65c859435d8213f069cca996c678807f0a7806ae5b24bd1",
+      "sha256": "cd8bde371731663dd0cae6630579887b95caba61f209179c4bfc83c95bb85bc1",
       "found": true,
       "file": "APGI-Mathematical-Specifications.md"
+    },
+    "SRC-SSOT-V12D": {
+      "sha256": "18951b656834a752e5dc99ce8765e1a3244095f3020d740ddaf0f394756e20be",
+      "found": true,
+      "file": "APGI-Single-Source-of-Truth.md"
     }
   },
   "parameters": {
@@ -1352,6 +1357,778 @@
               "match": true
             }
           ]
+        }
+      ]
+    },
+    "mu_0": {
+      "status": "verified",
+      "param_hash": "4d1d75231e66462b240519702c4b87a34313a4c342b2890a048ccec3c5d467e3",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "EMA initial mean and variance | channel | 0, 1 | fixed",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "Sigma_0": {
+      "status": "verified",
+      "param_hash": "2aad94e20d8367ac017088633c26600085db6aaf1689e07e2285e646e75cba46",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "EMA initial mean and variance | channel | 0, 1 | fixed",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "Pi_bar": {
+      "status": "verified",
+      "param_hash": "9e2858b830b244184659dd317886326922aca623bb64bfdf8f6b473b80524606",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Mean clamped precision (calibration block or declared causal window) | AU | measured | > 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "eta_pred": {
+      "status": "verified",
+      "param_hash": "4cb90971d12b24248eb416b9f5dc2c65317ae30c9b73615d01263cb9ad787859",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Prediction learning rates | — | fitted | η_pred·Π_max < 2",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "g_ACh": {
+      "status": "verified",
+      "param_hash": "8b2582a30ba72832826d230ec37b70038664cda2ac15fae81be6e7adf8e908af",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Exteroceptive cholinergic gain | — | 1 | ≥ 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "gamma_V": {
+      "status": "verified",
+      "param_hash": "13048a8c76f008ccfafd474e6229d5986a40bbb5ee153e30779bf4943639dafb",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "BOLD and SCR weights in M̂ | — | fitted | standardized inputs",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "gamma_A_M": {
+      "status": "verified",
+      "param_hash": "4f0c05cb7b1c9369c34f30551ca2140400f8987f2a4fb36cf11734057440a91e",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "BOLD and SCR weights in M̂ | — | fitted | standardized inputs",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "c_1": {
+      "status": "verified",
+      "param_hash": "c2ae645223181608eb297377acfa5a054df033322b9f5eb5a8dca6c12e1bc594",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cost weights (S, previous ignition, action) | AU | fitted | c₂ ≥ 0",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "c_2": {
+      "status": "verified",
+      "param_hash": "e274b6ec84c72225ab63530c7689a802f63fe8befa5a984a22ce46f6b285f777",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cost weights (S, previous ignition, action) | AU | fitted | c₂ ≥ 0",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "c_3": {
+      "status": "verified",
+      "param_hash": "cc0d76a02dbd305a151da9c9479b6172a514641d4a0b78ba3bd2ea69c6850cf6",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cost weights (S, previous ignition, action) | AU | fitted | c₂ ≥ 0",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "gamma_M_theta": {
+      "status": "verified",
+      "param_hash": "797554cc0b23a0730568db9908f3a3a18a40ccbde04568371861bce8a35741e1",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Reduced-form metabolic and arousal coefficients | AU s⁻¹ | fitted",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "gamma_A_theta": {
+      "status": "verified",
+      "param_hash": "557ee296b848045df36f8bc261d65e11f2a7a5316386c607464730854a1b2bd7",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Reduced-form metabolic and arousal coefficients | AU s⁻¹ | fitted",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "T_ant": {
+      "status": "verified",
+      "param_hash": "cc57593f54d2be1012375afd684040ea39c5b68c3ec18120b0e87f7a5da056ae",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Anticipation horizon | s | 0 (reactive) | ≥ 0; estimated",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "u_max": {
+      "status": "verified",
+      "param_hash": "726d418d3bb49bebf9418757152799df58a0d79177fc52b3f7eea76c942d721e",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Urgency amplitude and rise time | AU, s | 0, — | u_max = 0 recovers core",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "tau_u": {
+      "status": "verified",
+      "param_hash": "eae6fe45b4f010586aafeef5599a1871167910f25a8d117273dc489a72b0bcaf",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Urgency amplitude and rise time | AU, s | 0, — | u_max = 0 recovers core",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "tau_ref": {
+      "status": "verified",
+      "param_hash": "83e8865362cdb1b18fd987e3f44935b53941ed7fb5d62d6b7555af7ae24d4fec",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Refractory decay time | s | 0.3 | [0.2, 0.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.3",
+              "registry": "0.3",
+              "match": true
+            },
+            {
+              "field": "range.lo",
+              "document": "0.2",
+              "registry": "0.2",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "delta_ref": {
+      "status": "verified",
+      "param_hash": "9fd99c667434c7e51646f32637da9d536ea8462376c5c919019384f029151b4e",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Refractory increment per event | AU | 0 (off) | [0.1, 0.5] when on (provisional)",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.lo",
+              "document": "0.1",
+              "registry": "0.1",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "tau_fac": {
+      "status": "verified",
+      "param_hash": "0f63e84e3ef74ad5c1f719dc94fb60e0c998b5ad0d8a1f964dc634db8fb442d5",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Biphasic refractory facilitation | s | — | ≈ 0.1 when declared",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.1",
+              "registry": "0.1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "tau_0_geo": {
+      "status": "verified",
+      "param_hash": "acb1646888cc5586f0c7f98da73f918e13911be0390001b5081484ab2fff969c",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Base scale and coarse-graining ratio of τ_ℓ = τ₀·k^ℓ | s, — | 0.05, ≈ 133",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.05",
+              "registry": "0.05",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "k_geo": {
+      "status": "verified",
+      "param_hash": "2bf4b8208077f197c4d9146e662fe4858e2a00f7d7155520f7b97367b2feb4b4",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Base scale and coarse-graining ratio of τ_ℓ = τ₀·k^ℓ | s, — | 0.05, ≈ 133",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "133",
+              "registry": "133",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "h_hier": {
+      "status": "verified",
+      "param_hash": "d68e5b6d5109e798c3b603f011b48891872843f052f4d00026c646b8fb547c7f",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Continuous-gradient endpoints and hierarchy coordinate | s, s, — | participant-estimated | h ∈ [0, 1]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "w_level": {
+      "status": "verified",
+      "param_hash": "fe31676b7af4665fda48d9957cd1409c087084623ce911c79a0aa2e4cf402f05",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Level and reservoir weights | — | uniform at init | ≥ 0, sum to 1",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "gamma_psi": {
+      "status": "verified",
+      "param_hash": "9aad288896f006c1018a090c6b793c2f490148e1e43cb6fff3c682727535e09f",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cross-level influence steepness | — | 2 | [1, 3]",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "2",
+              "registry": "2",
+              "match": true
+            },
+            {
+              "field": "range.lo",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "3",
+              "registry": "3",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "kappa_down": {
+      "status": "verified",
+      "param_hash": "ebafb2dd58563f4777c7f0a8d38f4525539b4f3083ad6dff8835e135706e85b6",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cross-level threshold modulation | — | — | [0.1, 0.5], [0.05, 0.2]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.1",
+              "registry": "0.1",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "kappa_up": {
+      "status": "verified",
+      "param_hash": "66b60109b3000ee3a8cd1d5b6ad14961ad92de48a08e0787da4afa4f2b492de7",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cross-level threshold modulation | — | — | [0.1, 0.5], [0.05, 0.2]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.05",
+              "registry": "0.05",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.2",
+              "registry": "0.2",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "kappa_nn": {
+      "status": "verified",
+      "param_hash": "54a2fa287c7bf2481150568f733ddb30bfff1b21effaa2e12eb95c20917be98e",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Nearest-neighbor coupling constant | — | — | [0, 1)",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "1",
+              "registry": "1",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "C_down_tau_Pi": {
+      "status": "verified",
+      "param_hash": "ec579a79b1633ff2338b2fc2236892571f3d51de241d7e718b0621f582b19bf5",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "C_down·τ_Π ∈ [0.1, 0.5]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.1",
+              "registry": "0.1",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.5",
+              "registry": "0.5",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "C_up_tau_Pi": {
+      "status": "verified",
+      "param_hash": "5bc3136c4980f9fe4e30be2104b6ada1a6c0b4e9edd2c9297e3aec54eefdd046",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "C_up·τ_Π ∈ [0.05, 0.2]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.05",
+              "registry": "0.05",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.2",
+              "registry": "0.2",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "N_res": {
+      "status": "verified",
+      "param_hash": "0392357918527671f763b2f27b70347198010242c342882c10f18d8be7a651c3",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Reservoir size | units | ≈ 10³ | ≥ 10³ for quantitative claims",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "10³",
+              "registry": "1000",
+              "match": true
+            },
+            {
+              "field": "range.lo",
+              "document": "10³",
+              "registry": "1000",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "a_cusp": {
+      "status": "verified",
+      "param_hash": "36693c0dae3ba29a3be3ef3e1b0d4178e85e3ef682305329eb461ac04783e3bc",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cusp splitting factor and scale | —, AU | — | a < 0 needed for bistability",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.hi",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "u_0": {
+      "status": "verified",
+      "param_hash": "293ad91978e2fa0a2a80f19dc37ec82ef9004c970541c954c068e86e90ae708f",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Cusp splitting factor and scale | —, AU | — | a < 0 needed for bistability",
+          "status": "found",
+          "values": []
+        }
+      ]
+    },
+    "kappa_syn": {
+      "status": "verified",
+      "param_hash": "0c611c352461e53bfe9bf175f67f01171a0ea259b383c224ce1d4a2b830633ab",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "retirement band [10, 10⁴] for κ_syn",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "10",
+              "registry": "10",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "10⁴",
+              "registry": "1e4",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "alpha_psy": {
+      "status": "verified",
+      "param_hash": "cf7da852c6b11c854dbc5818dffb147265bca8a1b08582879d0576c38e1b4604",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "confirm: HDI lower ≥ 10 and ΔAIC > 10",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "10",
+              "registry": "10",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "lambda_lapse": {
+      "status": "verified",
+      "param_hash": "248aa9cba2d42fe1198fe6b065c73d39b9b860ffa2fde2343fd57a7f8cf95238",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "λ_lapse ∈ [0, 0.05]",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0",
+              "registry": "0",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.05",
+              "registry": "0.05",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "r_HIGH": {
+      "status": "verified",
+      "param_hash": "6e42b121bbcb6eb8fde9b1a36395ca2c5223f25de278270d4b41bd2aa5d3b3bd",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "HIGH-tier recovery target | Pearson r > 0.85",
+          "status": "found",
+          "values": [
+            {
+              "field": "value",
+              "document": "0.85",
+              "registry": "0.85",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "alpha_DFA": {
+      "status": "verified",
+      "param_hash": "367a07bfc93ccb6d24e99fc13b0b3c69504cf8b14917a258ab6cbe9390be68dd",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "DFA exponent, fGn convention | 0.85–0.95 broadband; falsifier < 0.70",
+          "status": "found",
+          "values": [
+            {
+              "field": "range.lo",
+              "document": "0.85",
+              "registry": "0.85",
+              "match": true
+            },
+            {
+              "field": "range.hi",
+              "document": "0.95",
+              "registry": "0.95",
+              "match": true
+            }
+          ]
+        }
+      ]
+    },
+    "err_gate": {
+      "status": "verified",
+      "param_hash": "2373b83c98f15960bad043852f2e1ee98b0714e69a0caa432234dcb76e1cf5c0",
+      "evidence": [
+        {
+          "source": "SRC-SSOT-V12D",
+          "page": 1,
+          "quote": "Decisive-comparison gate | median range-scaled error < 20%",
+          "status": "found",
+          "values": []
         }
       ]
     }

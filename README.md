@@ -20,7 +20,10 @@ apgi/                         Lean project root (lakefile.toml, lean-toolchain)
 ├── Apgi/
 │   ├── Spec.lean             GENERATED from parameters.json (hash-pinned)
 │   ├── Pilot.lean            pilot theorems, unit types, self-enforcing axiom audit
-│   └── Dynamics.lean         hazard, leaky integrator, NE clamp, allostatic step, Ψ, Πⁱ_eff, cusp iff
+│   ├── Dynamics.lean         hazard, leaky integrator, NE clamp, allostatic step, Ψ, Πⁱ_eff, cusp iff
+│   ├── Core.lean             SSOT minimal core: excess drive iff |z| ≥ m₀, m₀ = √(2/π), hard-threshold
+│   │                         limit, read-out non-interference, exactly-once reset, cusp folds
+│   └── Extensions.lean       EQ-PRED/DA/URG/OBS/NORM/GEO/GRAD/PSI-SMALL/LOOP/KUR/MS statements
 └── verification/
     ├── python/               generator, checker, extractor, tests, report
     └── reports/              conflicts.json, proof-status.json, verification-report.md

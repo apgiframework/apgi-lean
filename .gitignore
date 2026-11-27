@@ -14,3 +14,14 @@ __pycache__/
 /Claude outputs/
 # v1.2 source drafts: never commit (public repo; sources are pinned by sha256 only)
 /apgi-v-1-2/
+/docs/apgi-v-1-2/
+/docs/APGI-Single-Source-of-Truth.md
+# local run logs and scratch (verification/verify_all.ps1 writes .verify.log)
+/.build.log
+/.core.log
+/.run.log
+/.verify.log
+/.cmd.txt
+/run_bg.ps1
+/.scratch/
+/verify_all.ps1

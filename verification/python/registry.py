@@ -9,7 +9,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "specification"
 SPEC_FILES = ("parameters.json", "equations.json", "units.json",
-              "epistemic-claims.json", "source-manifest.json", "known-conflicts.json")
+              "epistemic-claims.json", "source-manifest.json", "known-conflicts.json",
+              "symbols.json", "configurations.json", "revisions.json")
 
 
 def load(name: str) -> dict:

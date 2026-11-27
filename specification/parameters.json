@@ -1,6 +1,6 @@
 {
   "schema": "apgi-parameters/2",
-  "spec_version": "0.4.0",
+  "spec_version": "0.5.0",
   "note": "verification: 'project-notes' = recorded from the author's notes, not yet matched to a pinned source; 'extracted' = every evidence quote was found on the stated page of the sha256-pinned source and states the registry value (verification/reports/extraction.json); 'computed' = exact constant. Evidence pages are 1-based PDF page indices, not printed page labels. Quotes are short and matched after removing whitespace, brackets and dashes, which the PDF text layer drops. A range with kind 'support' states only the admissible sign or support (e.g. τ_Π > 0), not a calibrated interval; precondition checks treat its bounds as unknown.",
   "parameters": [
     {"id": "theta_floor", "symbol": "θ_floor", "lean_name": "θ_floor", "lean_type": "Apgi.Threshold", "value": "0", "unit": "AU",
@@ -317,7 +317,192 @@
      "definition": "Serotonergic additive offset in θ_eff, read-out only (EQ-THEFF-1); never written back to θ. Default 0. Sign hypothesis β_5HT > 0 (R17, proposed).",
      "source": "SRC-MATHSPEC-V12D", "version": "0.4.0", "verification": "extracted", "epistemic": "model-assumption",
      "evidence": [
-       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "The default value is β_5HT = 0 (no serotonergic modulation)", "states": {"value": "0"}}]}
+       {"source": "SRC-MATHSPEC-V12D", "page": 1, "quote": "The default value is β_5HT = 0 (no serotonergic modulation)", "states": {"value": "0"}}]},
+    {"id": "mu_0", "symbol": "μ(0)", "lean_name": null, "value": "0", "unit": "dimensionless", "range": null, "role": "initial_condition",
+     "definition": "Initial mean of the precision EMA (EQ-EMA-1/2), in channel units; fixed.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "EMA initial mean and variance | channel | 0, 1 | fixed", "states": {"value": "0"}}]},
+    {"id": "Sigma_0", "symbol": "Σ(0)", "lean_name": null, "value": "1", "unit": "dimensionless", "range": null, "role": "initial_condition",
+     "definition": "Initial variance of the precision EMA (EQ-EMA-1), in channel units²; fixed.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "EMA initial mean and variance | channel | 0, 1 | fixed", "states": {"value": "1"}}]},
+    {"id": "Pi_bar", "symbol": "Π̄", "lean_name": null, "value": null, "unit": "AU", "range": {"lo": "0", "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "normalizer",
+     "definition": "Mean clamped precision of a channel over the calibration block or a declared causal window; Π_rel = Π_eff/Π̄ (EQ-PREC-REL-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "measured",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Mean clamped precision (calibration block or declared causal window) | AU | measured | > 0", "states": {"range.lo": "0"}}]},
+    {"id": "eta_pred", "symbol": "η_pred,e, η_pred,i", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0", "lo_closed": false, "hi": "0.2", "hi_closed": false, "kind": "stability_bound"}, "role": "learning_rate",
+     "definition": "Channel-specific prediction learning rates of EQ-PRED-1; stability requires η_pred·Π_max < 2, i.e. η_pred < 0.2 at Π_max = 10 (Lean: Apgi.pred_contraction).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Prediction learning rates | — | fitted | η_pred·Π_max < 2", "states": {}}]},
+    {"id": "g_ACh", "symbol": "g_ACh", "lean_name": null, "value": "1", "unit": "dimensionless", "range": {"lo": "0", "lo_closed": true, "hi": null, "hi_closed": false, "kind": "support"}, "role": "gain",
+     "definition": "Exteroceptive cholinergic gain, Πᵉ_eff = clip(g_ACh·Πᵉ) (EQ-PREC-ACH-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Exteroceptive cholinergic gain | — | 1 | ≥ 0", "states": {"value": "1"}}]},
+    {"id": "gamma_V", "symbol": "γ_V", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": null, "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "weight",
+     "definition": "Weight of standardized vmPFC BOLD in M̂(c,a) (EQ-SM-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "BOLD and SCR weights in M̂ | — | fitted | standardized inputs", "states": {}}]},
+    {"id": "gamma_A_M", "symbol": "γ_A^M", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": null, "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "weight",
+     "definition": "Weight of standardized anticipatory SCR in M̂(c,a) (EQ-SM-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "BOLD and SCR weights in M̂ | — | fitted | standardized inputs", "states": {}}]},
+    {"id": "c_1", "symbol": "c₁", "lean_name": null, "value": null, "unit": "AU", "range": {"lo": null, "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "weight",
+     "definition": "Cost weight on the accumulated signal S in C(t) (EQ-COST-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cost weights (S, previous ignition, action) | AU | fitted | c₂ ≥ 0", "states": {}}]},
+    {"id": "c_2", "symbol": "c₂", "lean_name": null, "value": null, "unit": "AU", "range": {"lo": "0", "lo_closed": true, "hi": null, "hi_closed": false, "kind": "support"}, "role": "weight",
+     "definition": "Cost weight on the previous ignition B(t−1) in C(t) (EQ-COST-1); the non-negative ignition cost.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cost weights (S, previous ignition, action) | AU | fitted | c₂ ≥ 0", "states": {"range.lo": "0"}}]},
+    {"id": "c_3", "symbol": "c₃", "lean_name": null, "value": null, "unit": "AU", "range": {"lo": null, "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "weight",
+     "definition": "Optional cost weight on action cost ‖a_t‖ (EQ-COST-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cost weights (S, previous ignition, action) | AU | fitted | c₂ ≥ 0", "states": {}}]},
+    {"id": "gamma_M_theta", "symbol": "γ_M^θ", "lean_name": null, "value": null, "unit": "AU/s", "range": {"lo": null, "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "coefficient",
+     "definition": "Reduced-form metabolic-deficit coefficient (EQ-ALLO-R1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Reduced-form metabolic and arousal coefficients | AU s⁻¹ | fitted", "states": {}}]},
+    {"id": "gamma_A_theta", "symbol": "γ_A^θ", "lean_name": null, "value": null, "unit": "AU/s", "range": {"lo": null, "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "coefficient",
+     "definition": "Reduced-form arousal coefficient (EQ-ALLO-R1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Reduced-form metabolic and arousal coefficients | AU s⁻¹ | fitted", "states": {}}]},
+    {"id": "T_ant", "symbol": "T_ant", "lean_name": null, "value": "0", "unit": "s", "range": {"lo": "0", "lo_closed": true, "hi": null, "hi_closed": false, "kind": "support"}, "role": "horizon",
+     "definition": "Anticipation horizon of EQ-ANT-1; T_ant = 0 recovers the reactive EQ-ALLO-1.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "proposed",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Anticipation horizon | s | 0 (reactive) | ≥ 0; estimated", "states": {"value": "0", "range.lo": "0"}}]},
+    {"id": "u_max", "symbol": "u_max", "lean_name": null, "value": "0", "unit": "AU", "range": {"lo": "0", "lo_closed": true, "hi": null, "hi_closed": false, "kind": "support"}, "role": "amplitude",
+     "definition": "Urgency amplitude of EQ-URG-1; u_max = 0 recovers the core.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "extension",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Urgency amplitude and rise time | AU, s | 0, — | u_max = 0 recovers core", "states": {"value": "0"}}]},
+    {"id": "tau_u", "symbol": "τ_u", "lean_name": null, "value": null, "unit": "s", "range": {"lo": "0", "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "time_constant",
+     "definition": "Urgency rise time of EQ-URG-1.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "extension",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Urgency amplitude and rise time | AU, s | 0, — | u_max = 0 recovers core", "states": {}}]},
+    {"id": "tau_ref", "symbol": "τ_ref", "lean_name": null, "value": "0.3", "unit": "s", "range": {"lo": "0.2", "lo_closed": true, "hi": "0.5", "hi_closed": true}, "role": "time_constant",
+     "definition": "Refractory decay time of EQ-REF-1.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "extension",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Refractory decay time | s | 0.3 | [0.2, 0.5]", "states": {"value": "0.3", "range.lo": "0.2", "range.hi": "0.5"}}]},
+    {"id": "delta_ref", "symbol": "δ_ref", "lean_name": null, "value": "0", "unit": "AU", "range": {"lo": "0.1", "lo_closed": true, "hi": "0.5", "hi_closed": true, "kind": "provisional_when_on"}, "role": "increment",
+     "definition": "Refractory increment per event (EQ-REF-1); 0 (off) by default, [0.1, 0.5] AU when on (provisional).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "extension",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Refractory increment per event | AU | 0 (off) | [0.1, 0.5] when on (provisional)", "states": {"value": "0", "range.lo": "0.1", "range.hi": "0.5"}}]},
+    {"id": "tau_fac", "symbol": "τ_fac", "lean_name": null, "value": "0.1", "unit": "s", "range": null, "role": "time_constant",
+     "definition": "Facilitation time of the biphasic refractory kernel (R5), ≈ 0.1 s when declared.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "proposed",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Biphasic refractory facilitation | s | — | ≈ 0.1 when declared", "states": {"value": "0.1"}}]},
+    {"id": "tau_0_geo", "symbol": "τ₀", "lean_name": null, "value": "0.05", "unit": "s", "range": null, "role": "time_constant",
+     "definition": "Base scale of the geometric sampling τ_ℓ = τ₀·k^ℓ (EQ-GEO-1; analytic sampling only, R9).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Base scale and coarse-graining ratio of τ_ℓ = τ₀·k^ℓ | s, — | 0.05, ≈ 133", "states": {"value": "0.05"}}]},
+    {"id": "k_geo", "symbol": "k", "lean_name": null, "value": "133", "unit": "dimensionless", "range": null, "role": "ratio",
+     "definition": "Coarse-graining ratio of EQ-GEO-1 (≈ 133; the level count is boundary-sensitive, k > 133.3 yields four levels).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Base scale and coarse-graining ratio of τ_ℓ = τ₀·k^ℓ | s, — | 0.05, ≈ 133", "states": {"value": "133"}}]},
+    {"id": "h_hier", "symbol": "h", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0", "lo_closed": true, "hi": "1", "hi_closed": true}, "role": "coordinate",
+     "definition": "Hierarchy coordinate of the continuous timescale gradient EQ-GRAD-1.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Continuous-gradient endpoints and hierarchy coordinate | s, s, — | participant-estimated | h ∈ [0, 1]", "states": {"range.lo": "0", "range.hi": "1"}}]},
+    {"id": "w_level", "symbol": "w_ℓ, w_res", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0", "lo_closed": true, "hi": null, "hi_closed": false, "kind": "support"}, "role": "weight",
+     "definition": "Level and reservoir weights of EQ-MS-2; non-negative, sum to 1, uniform at initialization; w_ℓ ∝ k^−ℓ is prohibited.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "fitted",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Level and reservoir weights | — | uniform at init | ≥ 0, sum to 1", "states": {"range.lo": "0"}}]},
+    {"id": "gamma_psi", "symbol": "γ_ψ", "lean_name": null, "value": "2", "unit": "dimensionless", "range": {"lo": "1", "lo_closed": true, "hi": "3", "hi_closed": true}, "role": "steepness",
+     "definition": "Cross-level influence steepness in ψ(z) = tanh(γ_ψ·z) (EQ-PSI-SMALL-1, EQ-LOOP-1).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cross-level influence steepness | — | 2 | [1, 3]", "states": {"value": "2", "range.lo": "1", "range.hi": "3"}}]},
+    {"id": "kappa_down", "symbol": "κ_down", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0.1", "lo_closed": true, "hi": "0.5", "hi_closed": true}, "role": "coupling",
+     "definition": "Top-down threshold modulation of the relaxation target (EQ-MS-4). Distinct from the precision coupling C_down.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cross-level threshold modulation | — | — | [0.1, 0.5], [0.05, 0.2]", "states": {"range.lo": "0.1", "range.hi": "0.5"}}]},
+    {"id": "kappa_up", "symbol": "κ_up", "lean_name": null, "value": "0", "unit": "dimensionless", "range": {"lo": "0.05", "lo_closed": true, "hi": "0.2", "hi_closed": true}, "role": "coupling",
+     "definition": "Bottom-up cascade gating in θ_eff only (EQ-THEFF-1); 0 with the hierarchy off.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cross-level threshold modulation | — | — | [0.1, 0.5], [0.05, 0.2]", "states": {"range.lo": "0.05", "range.hi": "0.2"}}]},
+    {"id": "kappa_nn", "symbol": "κ_{k,k+1}", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0", "lo_closed": true, "hi": "1", "hi_closed": false}, "role": "coupling",
+     "definition": "Nearest-neighbour coupling constant; multi-step influences are descriptive products, not free parameters.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Nearest-neighbor coupling constant | — | — | [0, 1)", "states": {"range.lo": "0", "range.hi": "1"}}]},
+    {"id": "C_down_tau_Pi", "symbol": "C_down·τ_Π", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0.1", "lo_closed": true, "hi": "0.5", "hi_closed": true}, "role": "gain",
+     "definition": "Dimensionless top-down precision coupling gain (Paper 3 v1.2); with C_up·τ_Π and γ_ψ ∈ [1, 3] it keeps EQ-LOOP-1 below 1 (Lean: Apgi.loopGain_lt_one_of_paper3). Resolves SSOT-R3.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "C_down·τ_Π ∈ [0.1, 0.5]", "states": {"range.lo": "0.1", "range.hi": "0.5"}}]},
+    {"id": "C_up_tau_Pi", "symbol": "C_up·τ_Π", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0.05", "lo_closed": true, "hi": "0.2", "hi_closed": true}, "role": "gain",
+     "definition": "Dimensionless bottom-up precision coupling gain (Paper 3 v1.2). Resolves SSOT-R3.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "C_up·τ_Π ∈ [0.05, 0.2]", "states": {"range.lo": "0.05", "range.hi": "0.2"}}]},
+    {"id": "N_res", "symbol": "N", "lean_name": null, "value": "1000", "unit": "dimensionless", "range": {"lo": "1000", "lo_closed": true, "hi": null, "hi_closed": false, "kind": "quantitative_claims"}, "role": "size",
+     "definition": "Reservoir size in units; ≥ 10³ for quantitative claims.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "model-assumption",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Reservoir size | units | ≈ 10³ | ≥ 10³ for quantitative claims", "states": {"value": {"text": "10³"}, "range.lo": {"text": "10³"}}}]},
+    {"id": "a_cusp", "symbol": "a", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": null, "lo_closed": false, "hi": "0", "hi_closed": false, "kind": "support"}, "role": "splitting_factor",
+     "definition": "Cusp splitting factor of EQ-CUSP-1; a < 0 is necessary for bistability (Lean: Apgi.cusp_unique_equilibrium).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cusp splitting factor and scale | —, AU | — | a < 0 needed for bistability", "states": {"range.hi": "0"}}]},
+    {"id": "u_0", "symbol": "u₀", "lean_name": null, "value": null, "unit": "AU", "range": {"lo": "0", "lo_closed": false, "hi": null, "hi_closed": false, "kind": "support"}, "role": "scale",
+     "definition": "Accumulator scale of θ̃ = (θ_eff − S)/u₀ (EQ-CUSP-1/2); hysteresis width 4u₀(−a/3)^{3/2}.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "definition",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Cusp splitting factor and scale | —, AU | — | a < 0 needed for bistability", "states": {}}]},
+    {"id": "kappa_syn", "symbol": "κ_syn", "lean_name": null, "value": null, "unit": "ATP/bit", "range": {"lo": "10", "lo_closed": true, "hi": "1e4", "hi_closed": true, "kind": "retirement_band"}, "role": "bridge",
+     "definition": "κ at the synaptic level of description (R12). The registered retirement band [10, 10⁴] ATP/bit applies to κ_syn only.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "uncalibrated",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "retirement band [10, 10⁴] for κ_syn", "states": {"range.lo": "10", "range.hi": {"text": "10⁴"}}}]},
+    {"id": "alpha_psy", "symbol": "α_psy", "lean_name": null, "value": "10", "unit": "dimensionless", "range": null, "role": "decision_threshold",
+     "definition": "Pred 1.E: Weibull shape k on linear contrast; confirmed when the population 95% HDI lower bound ≥ 10 and ΔAIC > 10.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "registered",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "confirm: HDI lower ≥ 10 and ΔAIC > 10", "states": {"value": "10"}}]},
+    {"id": "lambda_lapse", "symbol": "λ_lapse", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0", "lo_closed": true, "hi": "0.05", "hi_closed": true}, "role": "nuisance",
+     "definition": "Lapse rate of EQ-OBS-2, free in [0, 0.05] (Pred 1.E).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "registered",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "λ_lapse ∈ [0, 0.05]", "states": {"range.lo": "0", "range.hi": "0.05"}}]},
+    {"id": "r_HIGH", "symbol": "r_HIGH", "lean_name": null, "value": "0.85", "unit": "dimensionless", "range": null, "role": "recovery_target",
+     "definition": "HIGH-tier parameter-recovery target, Pearson r > 0.85 (registered target; not yet established).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "registered",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "HIGH-tier recovery target | Pearson r > 0.85", "states": {"value": "0.85"}}]},
+    {"id": "alpha_DFA", "symbol": "α_DFA", "lean_name": null, "value": null, "unit": "dimensionless", "range": {"lo": "0.85", "lo_closed": true, "hi": "0.95", "hi_closed": true, "kind": "registered_prediction"}, "role": "prediction",
+     "definition": "DFA exponent (fGn convention), MS-H1: 0.85–0.95 broadband; falsifier < 0.70 in two datasets.",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "registered",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "DFA exponent, fGn convention | 0.85–0.95 broadband; falsifier < 0.70", "states": {"range.lo": "0.85", "range.hi": "0.95"}}]},
+    {"id": "err_gate", "symbol": "err_gate", "lean_name": null, "value": "0.2", "unit": "dimensionless", "range": null, "role": "gate",
+     "definition": "Decisive-comparison gate: median range-scaled recovery error < 20% (proposed reading, pending amendment).",
+     "source": "SRC-SSOT-V12D", "version": "0.5.0", "verification": "extracted", "epistemic": "proposed",
+     "evidence": [
+       {"source": "SRC-SSOT-V12D", "page": 1, "quote": "Decisive-comparison gate | median range-scaled error < 20%", "states": {}}]}
   ],
   "retired_parameters": [
     {"id": "lambda_theta", "reason": "λ_θ does not occur in the published v1.1 corpus. The threshold mean-reversion rate is γ_θ = 1/τ_θ (gamma_theta); the allostatic learning rate is η_θ (eta_theta). Resolves KC-LAMBDA."},

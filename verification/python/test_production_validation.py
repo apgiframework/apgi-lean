@@ -43,8 +43,21 @@ TH_LO, TH_HI = float(TH["lo"]), float(TH["hi"])
 
 
 def divergence(pv_id):
+    """open → strict xfail; declared_variant → skipped (the code is labelled as not the minimal core,
+    see test_declared_variants_are_labelled); resolved → must pass."""
     d = DIV[pv_id]
+    if d["status"] == "declared_variant":
+        return pytest.mark.skip(reason=f"{pv_id}: declared variant ({d.get('resolution', '')})")
     return pytest.mark.xfail(d["status"] == "open", strict=True, reason=f"{pv_id}: {d['summary']}")
+
+
+def test_declared_variants_are_labelled():
+    """SSOT §9: a module that is not the minimal core carries its model form, so no result from it can
+    pass as a minimal-core prediction (SSOT-V1: apgi_core.model is the energy-form variant)."""
+    for d in DIV.values():
+        if d["status"] == "declared_variant":
+            mod = pytest.importorskip(d["module"])
+            assert getattr(mod, "MODEL_FORM", None) == d["model_form"], d["id"]
 
 
 # --------------------------------------------- equivalence with apgi_ref ----

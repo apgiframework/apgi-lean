@@ -286,7 +286,7 @@ def test_precision_uses_variance_before_current_sample():
 @divergence("SSOT-P3")
 def test_default_accumulator_is_exact_leak():
     """EQ-LEAK-1: without an ignition, S(t+1) = (1 − λ)·S(t) + λ·S_inst(t), deterministic."""
-    p = _pipe(beta=0.0)
+    p = _pipe(beta=0.0, stochastic_ignition=False)  # hard limit, S < θ_eff: no ignition by construction
     p.S = 0.2
     r = _step(p, 1.0, 0.0)
     assert r["B"] == 0
@@ -297,7 +297,7 @@ def test_default_accumulator_is_exact_leak():
 def test_signal_state_is_signed():
     """S is signed and never overwritten by a compression (log1p is a read-out only, SSOT §5.5/§6.4):
     from S = −0.3 with zero error the state stays negative."""
-    p = _pipe(beta=0.0)
+    p = _pipe(beta=0.0, stochastic_ignition=False)
     p.S = -0.3
     assert _step(p, 0.0, 0.0)["S"] < 0
 
@@ -390,3 +390,61 @@ def test_ema_weights_follow_reference_windows():
 def test_default_dopamine_bias_is_zero():
     """SSOT §4.2: β_DA = 0 by default (registry beta_DA)."""
     assert CFG["beta"] == 0.0
+
+
+# ------------------------------- TC-04: production core == reference core (Phase A) ----
+class _FixedDraws:
+    """Feeds the production hazard sampler the same uniform draws apgi_ref.core_step receives."""
+
+    def __init__(self, us):
+        self._it = iter(us)
+
+    def random(self):
+        return next(self._it)
+
+
+def _ref_params(cfg):
+    return dict(dt=cfg["dt"], tau_S=cfg["tau_s"], theta0=cfg["theta_base"], tau_theta=cfg["tau_theta"],
+                theta_floor=cfg["theta_clip_min"], eta_theta=cfg["eta"], delta_reset=cfg["delta"],
+                rho_retain=cfg["RHO_RETAIN"], gamma_sig=1.0 / cfg["ignite_tau"], r_max=cfg["r_max"],
+                c1=cfg["c1"], c2=cfg["c2"], v1=cfg["v1"], v2=cfg["v2"], g_ach=cfg["g_ach"], g_ne=cfg["g_ne"],
+                gamma_ne=cfg["gamma_ne"] or 0.0, beta_da=cfg["beta"], beta_5ht=cfg["beta_5ht"],
+                tau_ref=cfg["tau_ref"], delta_ref=cfg["delta_ref"], pi_min=cfg["pi_min"], pi_max=cfg["pi_max"],
+                pi_bar_e=cfg["pi_bar_e"], pi_bar_i=cfg["pi_bar_i"], eta_pred_e=cfg["eta_pred_e"],
+                eta_pred_i=cfg["eta_pred_i"], T_e=cfg["T_window_e"], T_i=cfg["T_window_i"], eps_stab=cfg["eps"])
+
+
+@pytest.mark.parametrize("over", [{}, {"delta_ref": 0.3, "delta": 0.05}], ids=["CFG-CORE", "CFG-CORE-R"])
+def test_production_core_matches_reference_trajectory(over):
+    """TC-04 / EQ-PIPE-1: the default production pipeline (model_form "ssot_core") and
+    apgi_ref.core_step produce the same S_inst, θ_eff, Bₜ, B(t), S, θ for 400 seeded steps."""
+    import numpy as np
+
+    p = _pipe(**over)
+    assert p.model_form == "ssot_core"
+    rng = np.random.default_rng(10101)
+    n = 400
+    xe = rng.standard_normal(n) + np.where((np.arange(n) % 100) >= 60, 1.5, 0.0)
+    xi = rng.standard_normal(n)
+    us = rng.random(n)
+    p.rng = _FixedDraws(us)
+    ref_p = _ref_params(p.config)
+    s = R.core_state(ref_p)
+    fired = 0
+    for k in range(n):
+        r = _step(p, float(xe[k]), float(xi[k]))
+        s, log = R.core_step(s, float(xe[k]), float(xi[k]), ref_p, u=float(us[k]))
+        assert r["B"] == log["B"], k
+        fired += r["B"]
+        for a, b in (("S_inst", "S_inst"), ("theta_eff", "theta_eff"), ("B_prop", "B_prop")):
+            assert r[a] == pytest.approx(log[b], rel=1e-9, abs=1e-12), (k, a)
+        assert r["S"] == pytest.approx(s["S"], rel=1e-9, abs=1e-12), k
+        assert r["theta"] == pytest.approx(s["theta"], rel=1e-9, abs=1e-12), k
+    assert 0 < fired < n
+
+
+def test_extensions_are_labelled_legacy():
+    """SSOT §9: an enabled extension runs the v1.1 pipeline and says so (model_form and manifest)."""
+    p = _pipe(use_hierarchical=True)
+    assert p.model_form == "legacy_v1_1" and "hierarchical" in p.extensions_active
+    assert p.manifest()["model_form"] == "legacy_v1_1"

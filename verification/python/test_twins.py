@@ -314,3 +314,97 @@ def test_prec_eff_monotone_marker(g, pb, beta, m1, m2):
 def test_prec_clamp_bounds(x):
     """Lean: Apgi.precClamp_mem_Icc with the canonical clamp [0.1, 10] AU."""
     assert 0.1 <= R.prec_clamp(0.1, 10.0, x) <= 10.0
+
+
+# ----------------------------------------------------- task 55: Apgi/Core.lean ----
+zz = st.floats(min_value=-6.0, max_value=6.0, allow_nan=False)
+pp = st.floats(min_value=0.0, max_value=10.0, allow_nan=False)
+
+
+@given(zz, pp, pp)
+def test_drive_term_monotone_iff(z, p1, p2):
+    """Lean: Apgi.driveTerm_monotone_iff, Apgi.driveTerm_strictAnti_of_lt."""
+    p1, p2 = min(p1, p2), max(p1, p2)
+    lo, hi = R.drive_term(p1, z), R.drive_term(p2, z)
+    if abs(z) >= R.M0:
+        assert lo <= hi + EPS
+    elif p1 < p2:
+        assert hi < lo
+
+
+@given(zz, pp, pp, zz, zz, fin)
+def test_ignites_drive_monotone_precision(ze, p1, p2, pi, zi, theta):
+    """Lean: Apgi.ignites_drive_monotone_precision."""
+    assume(abs(ze) >= R.M0)
+    p1, p2 = min(p1, p2), max(p1, p2)
+    if R.ignites(R.drive(p1, ze, pi, zi), theta):
+        assert R.drive(p2, ze, pi, zi) >= R.drive(p1, ze, pi, zi) - EPS
+
+
+@given(pp, zz, pp, zz)
+def test_drive_sign_symmetric_twin(pe, ze, pi, zi):
+    """Lean: Apgi.drive_sign_symmetric, Apgi.drive_zero_at_m0."""
+    assert R.drive(pe, -ze, pi, -zi) == R.drive(pe, ze, pi, zi)
+    assert R.drive(1.0, R.M0, 1.0, -R.M0) == pytest.approx(0.0, abs=EPS)
+
+
+def test_mean_abs_std_normal():
+    """Lean: Apgi.meanAbsStdNormal_eq, Apgi.integral_abs_mul_exp_neg_half_sq."""
+    assert R.mean_abs_std_normal() == pytest.approx(math.sqrt(2.0 / math.pi), rel=1e-9)
+    assert R.mean_abs_std_normal() == pytest.approx(R.M0, rel=1e-9)
+
+
+@given(st.floats(min_value=-5, max_value=5), st.floats(min_value=0.05, max_value=5))
+def test_ignition_prob_hard_threshold_limit(theta, gap):
+    """Lean: Apgi.ignitionProb_at_threshold, Apgi.ignitionProb_tendsto_one, Apgi.ignitionProb_tendsto_zero."""
+    assert R.ignition_prob(7.5, theta, theta) == 0.5
+    k = 2000.0 / gap
+    assert R.ignition_prob(k, theta + gap, theta) > 1 - 1e-12
+    assert R.ignition_prob(k, theta - gap, theta) < 1e-12
+
+
+@given(st.floats(min_value=-3, max_value=3), st.floats(min_value=-3, max_value=3),
+       st.floats(min_value=-0.5, max_value=0.5), st.floats(min_value=0, max_value=2),
+       st.floats(min_value=0, max_value=2), st.floats(min_value=0.0, max_value=2.0))
+def test_readout_noninterference(x_e, x_i, gamma_ne, beta_5ht, u_urg, kappa):
+    """Lean: Apgi.coreStep_readout_noninterference, Apgi.coreStep_theta_from_state.
+    Same sampled B ⇒ same successor state, whatever the read-out modulators. |γ_NE| ≤ 0.5 keeps the
+    NE clamp inactive: the clamped g_NE is shared with Πⁱ_eff (EQ-NE-1), so it is not a pure read-out."""
+    s0 = R.core_state()
+    a, _ = R.core_step(s0, x_e, x_i, u=1.0)
+    b, _ = R.core_step(s0, x_e, x_i, {"gamma_ne": gamma_ne, "beta_5ht": beta_5ht, "u_urg": u_urg,
+                                     "kappa_up": kappa}, u=1.0)
+    for key in ("S", "theta", "r"):
+        assert a[key] == b[key]
+
+
+@given(st.floats(min_value=0.0, max_value=1.0), st.floats(min_value=0.1, max_value=0.5),
+       st.floats(min_value=0.0, max_value=2.0), st.floats(min_value=0.001, max_value=1.0))
+def test_exactly_once_increments(theta, delta, C, dt):
+    """Lean: Apgi.decay_allostatic_exactly_once, Apgi.coreStep_refractory_exactly_once,
+    Apgi.coreStep_retention_exactly_once."""
+    t1 = R.decay_step(R.allostatic_step(theta, 0.1, C, 0.0, delta, 1), 0.35, dt, 20.0)
+    t0 = R.decay_step(R.allostatic_step(theta, 0.1, C, 0.0, delta, 0), 0.35, dt, 20.0)
+    assert t1 - t0 == pytest.approx(delta * math.exp(-dt / 20.0), rel=1e-9)
+    r1 = R.refractory_step(0.2, 1, dt, 0.3, delta)
+    r0 = R.refractory_step(0.2, 0, dt, 0.3, delta)
+    assert r1 - r0 == pytest.approx(delta, rel=1e-12)
+    assert R.reset(R.reset(1.0, 1, 0.3), 0, 0.3) == pytest.approx(0.3)
+
+
+@given(st.floats(min_value=-5, max_value=-0.01), st.floats(min_value=-10, max_value=10))
+def test_cusp_fold_iff_three_equilibria(a, th):
+    """Lean: Apgi.cusp_discriminant_iff_fold."""
+    fold = R.cusp_fold(a)
+    assume(abs(abs(th) - fold) > 1e-6 * max(1.0, fold))
+    assert (R.cusp_discriminant(a, th) < 0) == (abs(th) < fold)
+    assert (len(R.cusp_equilibria(a, th)) == 3) == (abs(th) < fold)
+
+
+@given(st.floats(min_value=-5, max_value=-0.05), st.floats(min_value=0.1, max_value=3),
+       st.floats(min_value=-2, max_value=2), st.floats(min_value=1e-3, max_value=2))
+def test_cusp_monostable_past_folds(a, u0, theta_eff, extra):
+    """Lean: Apgi.cusp_monostable_of_ignition, Apgi.cusp_monostable_of_extinction."""
+    w = R.cusp_hysteresis_width(a, u0) / 2.0
+    for S in (theta_eff + w + extra, theta_eff - w - extra):
+        assert len(R.cusp_equilibria(a, (theta_eff - S) / u0)) == 1

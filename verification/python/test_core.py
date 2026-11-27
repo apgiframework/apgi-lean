@@ -218,3 +218,44 @@ def test_pipeline_threshold_signature():
     h1, f1 = rates(0.35, 3.0)
     h2, f2 = rates(0.80, 3.0)
     assert h2 < h1 and f2 < f1
+
+
+def _sdt_rates(theta0=0.35, pe=1.0, amp=1.5, n=300, seed=40404, W=30, S0=5, S1=25):
+    """Yes/no detection on the reference loop: a 300 ms trial window, a 200 ms exteroceptive pulse on
+    signal trials, per-step hazard, γ_sig = 5, r_max = 10 s⁻¹, τ_S = 300 ms. The state is warmed up on
+    10 s of noise once, so the reference windows are full, then copied for every trial.
+    Πᵉ_rel is set through Π̄ₑ = 1/pe. Returns hit rate, FA rate, d′ and c (log-linear correction)."""
+    from statistics import NormalDist
+    Z = NormalDist().inv_cdf
+    rng = np.random.default_rng(seed)
+    p = {"theta0": theta0, "r_max": 10.0, "gamma_sig": 5.0, "pi_bar_e": 1.0 / pe}
+    s0 = R.core_state(p)
+    for _ in range(1000):
+        s0, _ = R.core_step(s0, rng.standard_normal(), rng.standard_normal(), p, u=1.0)
+    s0["S"] = 0.0
+    hits = fas = 0
+    for trial in range(n):
+        s = {**s0, "ref_e": list(s0["ref_e"]), "ref_i": list(s0["ref_i"])}
+        sig, fired = trial % 2 == 0, 0
+        for k in range(W):
+            xe = (amp if sig and S0 <= k < S1 else 0.0) + rng.standard_normal()
+            s, log = R.core_step(s, xe, rng.standard_normal(), p, u=rng.random())
+            fired |= log["B"]
+        hits += fired and sig
+        fas += fired and not sig
+    H, F = (hits + 0.5) / (n / 2 + 1), (fas + 0.5) / (n / 2 + 1)
+    return H, F, Z(H) - Z(F), -(Z(H) + Z(F)) / 2
+
+
+def test_tc15_quantitative_signature():
+    """TC-15 (R2), quantitative fixture (task 56). Recorded values at seed 40404:
+    θ₀ 0.35 → 0.80: c −0.10 → +1.30, d′ 0.66 → 0.46; Πᵉ_rel 0.7 → 1.4: d′ 0.52 → 0.94, FA 0.401 → 0.407.
+    A threshold shift is a criterion shift; an exteroceptive-precision shift is a sensitivity shift
+    with the false-alarm rate held. Same direction as SSOT Appendix A; the stimulus differs, so the
+    magnitudes are this fixture's own."""
+    _, f1, d1, c1 = _sdt_rates(theta0=0.35)
+    _, f2, d2, c2 = _sdt_rates(theta0=0.80)
+    assert c2 - c1 >= 1.0 and abs(d2 - d1) <= 0.3 and f2 < f1
+    _, fa, da, _ = _sdt_rates(pe=0.7)
+    _, fb, db, _ = _sdt_rates(pe=1.4)
+    assert db - da >= 0.3 and abs(fb - fa) <= 0.03

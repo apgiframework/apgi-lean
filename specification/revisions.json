@@ -1,0 +1,24 @@
+{
+  "schema": "apgi-revisions/1",
+  "note": "Scientific revisions R1–R18 of APGI v1.2 (SSOT §21). Amendment-required items stay governed by the registered rule until OSF Amendment 2 is filed.",
+  "revisions": [
+    {"id": "R1", "title": "Soft-threshold propensity floor", "type": "Derived; reporting rule", "status": "Adopted", "action": "Operating point open (B-13); TC-14 reported by apgi_ref.operating_point", "test": "test_core.py::test_soft_floor_worked_values"},
+    {"id": "R2", "title": "Signal-detection signature of the core", "type": "Reporting rule", "status": "Adopted", "action": "Conformance fixture TC-15", "test": "test_core.py::test_tc15_quantitative_signature"},
+    {"id": "R3", "title": "Additive vs. normalized channel interaction", "type": "Extension (Severity B)", "status": "Adopted", "action": "Additive default; EQ-NORM-1 registered", "test": "test_registry_equations.py::test_norm_gains"},
+    {"id": "R4", "title": "Pred 0.B and ACh assignment contradiction", "type": "Amendment required", "status": "Open", "action": "OSF Amendment 2 before Protocol 0 runs (B-14)", "test": null},
+    {"id": "R5", "title": "Refractory substrate and discriminating test", "type": "Proposed (Severity C)", "status": "Recorded", "action": "Biphasic kernel τ_fac registered as proposed", "test": null},
+    {"id": "R6", "title": "NE sign; tonic vs. phasic", "type": "Reporting rule", "status": "Adopted", "action": "γ_NE has no default sign; KC-GAMMA-NE-SIGN flags the draft", "test": "test_conflicts.py"},
+    {"id": "R7", "title": "Urgency and competing cost mechanisms", "type": "Extension, default off", "status": "Adopted", "action": "θ* derivation open; EQ-URG-1 registered", "test": "test_registry_equations.py::test_urgency"},
+    {"id": "R8", "title": "Scalar threshold vs. selective metabolic prediction", "type": "Amendment required", "status": "Open", "action": "OSF Amendment 2 before Protocol 4 collects data (B-14)", "test": null},
+    {"id": "R9", "title": "Continuous timescale gradient and anchors", "type": "Reporting rule", "status": "Adopted", "action": "EQ-GRAD-1 registered", "test": "test_registry_equations.py::test_gradient_endpoints"},
+    {"id": "R10", "title": "Registered steepness test limitations", "type": "Amendment required", "status": "Open", "action": "OSF Amendment 2 before the Protocol 1 steepness test (B-14)", "test": null},
+    {"id": "R11", "title": "Critical-slowing safeguards", "type": "Amendment required for 6.C changes", "status": "Open", "action": "Safeguard 1 MUST run before unblinding", "test": null},
+    {"id": "R12", "title": "Level-dependent thermodynamic cost", "type": "Reporting rule", "status": "Adopted", "action": "κ_syn registered with the retirement band", "test": "test_registry_equations.py::test_bridges"},
+    {"id": "R13", "title": "Named computational comparators", "type": "Reporting rule", "status": "Adopted", "action": "CMP-01…CMP-11 in the SSOT", "test": null},
+    {"id": "R14", "title": "Stimulus-offset ignition", "type": "Proposed, exploratory", "status": "Recorded", "action": "Register the Cogitate reanalysis as exploratory before examining data", "test": null},
+    {"id": "R15", "title": "Somatic-marker estimate and awareness", "type": "Reporting rule", "status": "Adopted", "action": "Trial-level knowledge probe for any Pred 2.C claim", "test": null},
+    {"id": "R16", "title": "HEP measurement constraints", "type": "Reporting rule", "status": "Adopted", "action": "Posterior-insula control site for Pred 5.B", "test": null},
+    {"id": "R17", "title": "Serotonin sign hypothesis", "type": "Proposed extension (Tier 3)", "status": "Recorded", "action": "β_5HT read-out placement retained", "test": "test_core.py::test_theta_eff_reductions"},
+    {"id": "R18", "title": "Bistable perception benchmark", "type": "Exploratory benchmark", "status": "Recorded", "action": "No decision weight", "test": null}
+  ]
+}

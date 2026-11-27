@@ -15,10 +15,10 @@ CI fails if this file is out of date (`generate_lean.py --check`).
 namespace Apgi
 
 /-- Registry version this file was generated from. -/
-def specVersion : String := "0.4.0"
+def specVersion : String := "0.5.0"
 
 /-- SHA-256 of the specification files this file was generated from. -/
-def specHash : String := "578147ad04dd3b30e2af0e3f7d66ea8df732b57a39af0a2c4ca455a20ff54509"
+def specHash : String := "d513822e541e73ea029f66bc91337a2ca4d735b3516146077debe45105a03401"
 
 /-- `theta_floor` (AU) — SRC-MATHSPEC, role: state_invariant. -/
 noncomputable def θ_floor : ℝ := 0

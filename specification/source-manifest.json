@@ -2,7 +2,7 @@
   "schema": "apgi-source-manifest/2",
   "note": "Source documents are traced, never overwritten, and never committed: this public repository stores only their sha256 and revision. extract_sources.py --corpus DIR locates each file by sha256, so a changed document is detected as a pin mismatch. A used source with a null sha256 is reported as UNPINNED. Published sources are the Zenodo release cited in 'release'; several PDF file names still say 'Version 1.0' although their content is release v1.1.",
   "release": {"name": "APGI series, Zenodo release v1.1", "date": "2026-10-22", "concept_doi": "10.5281/zenodo.23551315"},
-  "precedence": ["SRC-NOTATION", "SRC-MATHSPEC", "SRC-DYN", "SRC-OSF", "SRC-PRED-REG", "SRC-MATHSPEC-V12D"],
+  "precedence": ["SRC-NOTATION", "SRC-MATHSPEC", "SRC-DYN", "SRC-OSF", "SRC-PRED-REG", "SRC-MATHSPEC-V12D", "SRC-SSOT-V12D"],
   "precedence_rule": "On notation, symbols and units the Notation Appendix governs; on equations and numerical worked values the Mathematical Specification governs; pre-registered criteria follow the OSF pre-registration. Unpublished drafts rank last.",
   "sources": [
     {"id": "SRC-NOTATION", "title": "APGI Notation Appendix", "kind": "pdf", "revision": "v1.1 (2026-10-22)",
@@ -28,10 +28,14 @@
     {"id": "SRC-PAPER1", "title": "Thresholds make consciousness selective (Paper 1)", "kind": "pdf", "revision": "v1.1 (2026-10-22)",
      "file": "Pesochin (2026) - Thresholds make consciousness selective- Allostatic precision-gated ignition via predictive processing.pdf", "pages": 57,
      "sha256": "3c38b1184aa3638e00f528d05a120678346b1fb78d26edd266255f11623a9d08"},
-    {"id": "SRC-MATHSPEC-V12D", "title": "APGI Mathematical Specification, v1.2 working draft (unpublished)", "kind": "md", "revision": "v1.2 draft (2026-11-24), §7.7 added; §2.6 τ_Π ≥ 1 s and α_Π ≥ 0",
+    {"id": "SRC-MATHSPEC-V12D", "title": "APGI Mathematical Specification, v1.2 working draft (unpublished)", "kind": "md", "revision": "v1.2 draft (2026-11-26), §7.7 added; §2.6 τ_Π ≥ 1 s and α_Π ≥ 0; D9: no default sign for γ_NE (Table 1, §4.4)",
      "file": "APGI-Mathematical-Specifications.md", "pages": 1,
-     "sha256": "8f2fe523fa34ad16f65c859435d8213f069cca996c678807f0a7806ae5b24bd1",
+     "sha256": "cd8bde371731663dd0cae6630579887b95caba61f209179c4bfc83c95bb85bc1",
      "note": "Unpublished working draft for Zenodo release v1.2, kept outside version control (git-ignored apgi-v-1-2/). It carries the cusp normal form (§7.7, EQ-CUSP-1), which the published v1.1 corpus does not contain. Any edit to the draft changes this pin; re-hash with extract_sources.py --hash. After the v1.2 release, re-source EQ-CUSP-1 to the published PDF and retire this entry (task 25)."},
+    {"id": "SRC-SSOT-V12D", "title": "APGI Single Source of Truth (Master Technical Reference), framework v1.2 working draft (unpublished)", "kind": "md", "revision": "v1.2 draft (2026-11-25)",
+     "file": "APGI-Single-Source-of-Truth.md", "pages": 1,
+     "sha256": "18951b656834a752e5dc99ce8765e1a3244095f3020d740ddaf0f394756e20be",
+     "note": "Governance-layer draft, kept with the other v1.2 drafts. Source of the task-54 parameter rows that the published v1.1 corpus does not state (SSOT §4 tables). Ranks last: the SSOT makes the registry authoritative, so these rows are re-sourced to the published v1.2 Math Spec or Notation Appendix at task 25 and this entry is then retired. Any edit to the draft changes this pin; re-hash with extract_sources.py --hash."},
     {"id": "SRC-CODATA", "title": "SI 2019 exact defining constants (BIPM)", "kind": "external", "revision": "SI-2019", "sha256": null, "file": null}
   ],
   "retired_sources": [

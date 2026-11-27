@@ -1,0 +1,56 @@
+{
+  "schema": "apgi-release-manifest/1",
+  "framework_version": "APGI v1.2 (working draft)",
+  "spec_version": "0.5.0",
+  "registry_hash": "d513822e541e73ea029f66bc91337a2ca4d735b3516146077debe45105a03401",
+  "release": {
+    "tag": null,
+    "doi": null,
+    "note": "Filled in when the v1.2 Zenodo release is minted (task 25, B-11)."
+  },
+  "licenses": {
+    "text_and_records": "CC-BY-4.0",
+    "data": "consent-compatible access terms (per dataset)"
+  },
+  "repositories": [
+    {
+      "name": "apgiframework/apgi-lean",
+      "commit": "HEAD of main at release",
+      "license": "MIT",
+      "license_file": "LICENSE"
+    },
+    {
+      "name": "apgiframework/apgi-implementation",
+      "commit": "72ad050366fcd98ec32e286c6b63376b11565cb1",
+      "license": "MIT",
+      "license_file": "LICENSE"
+    },
+    {
+      "name": "apgiframework/apgi-validation",
+      "commit": "f6fec658727f105c4735717ae30c9132f02d8988",
+      "license": "MIT",
+      "license_file": "LICENSE"
+    }
+  ],
+  "toolchain": "leanprover/lean4:v4.36.0",
+  "files": {
+    "specification/parameters.json": "7825b96ddd977e158d7ff45bb56bd3a3e541b6a6b66395f7506bb891870e2345",
+    "specification/equations.json": "577da824f4793d9fac6d3e734f279c6f0368808e35afd197ffabbcaf1236856f",
+    "specification/units.json": "a3213cce0ee652fdabb062b5369ea67f60fd43aa216e7889defc251fe216672d",
+    "specification/epistemic-claims.json": "97cf2b94222c74f1db7de209b34149e29735434beeb5dbdc9da2dd0519b447e7",
+    "specification/source-manifest.json": "d4676729b7af961ddbdd0afdf16d9d7b0fd9edc91cbbdcc6f260252dd279ffb4",
+    "specification/known-conflicts.json": "4c9ed2a50c7e413a99d2cc0bee0d119ac2c4390a3e8234e277d0fb9d31bd9ad1",
+    "specification/symbols.json": "825c5f57bde30d31feeeef9595f1d0075e672493c9c2822464b3a516ebfd55ef",
+    "specification/configurations.json": "db1198b9c28c88548c6d122bc18a7873391f8a8168a8fd839ece6e651c2546a1",
+    "specification/revisions.json": "fd21ef8aa862fd73fb9580993dc0a6d66ce22f97c2cfad2787633505d16e7837",
+    "Apgi/Basic.lean": "a88fef4d3efa63c9f9f5c948dd5ba1de3ea09d828ce8388ee83fa3d039e734a4",
+    "Apgi/Core.lean": "e5037965d4ac73781146aa5dcb8e69c8b57a6dfc63631a8cc94381c04816ff0f",
+    "Apgi/Coverage.lean": "1a5e18eeeefed31be2360e1db563c96ba5fd7c3a3e6f41ab32e1c3663386e300",
+    "Apgi/Dynamics.lean": "cc1e0059ec11e03bbba8a5bd384342da9c81a3babc36ee1a643f521cc0cb7fd5",
+    "Apgi/Extensions.lean": "b8e917fba860742670e5b986e8ffdf89eed860bb1a42dfa3eb785efb3ec9bae9",
+    "Apgi/Pilot.lean": "77133e3067f129d519123cd23cfbc03cbaa6c935d0ef8bda55fc8045cdf9d3be",
+    "Apgi/Spec.lean": "0b0bc393870469a88e9a7dc78830b35635e506f6e1e18cf9a1a29b7afcc24981",
+    "Apgi.lean": "6bdc040dd7b6032331187bc633f3bc7e59c27d859d34f1016cd61112ab662188",
+    "verification/python/golden_vectors.json": "a1b12ce04ea7c8122987492ad1854b8d6a45ef4b7f7a777a16450bcccf310ecb"
+  }
+}

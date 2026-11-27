@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: apgiframework/apgi-implementation
-          ref: a9b2878b6d0e7297eaebfdb99555d77e3f8efad1
+          ref: 72ad050366fcd98ec32e286c6b63376b11565cb1
           path: apgi-implementation
       - uses: actions/setup-python@v6
         with:
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: apgiframework/apgi-validation
-          ref: 811aee236ef251ad7a39dbca977fa91968fd5050
+          ref: f6fec658727f105c4735717ae30c9132f02d8988
           path: apgi-validation
       # Same interpreter and lock file as apgi-validation's own CI: unpinned on
       # 3.12 its requirements pull a pytensor that does not build.

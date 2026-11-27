@@ -282,3 +282,209 @@ def operating_point(gamma_sig: float, theta0: float, r_max: float) -> dict:
     r_max·σ(−γ_sig·θ₀) (s⁻¹, before noise in S; EQ-FLOOR-1)."""
     floor = sigmoid(-gamma_sig * theta0)
     return {"gamma_sig_theta0": gamma_sig * theta0, "propensity_floor": floor, "baseline_rate": r_max * floor}
+
+
+# ------------------------------------------------- task 55 twins (Apgi/Core.lean) ----
+def drive_term(p: float, z: float, m: float = M0) -> float:
+    """EQ-DRIVE-1, one channel: Π_rel·|z|_ex. Lean: Apgi.driveTerm_monotone_iff (monotone in Π_rel iff |z| ≥ m₀)."""
+    return p * excess(z, m)
+
+
+def mean_abs_std_normal() -> float:
+    """EQ-EXCESS-1: E|z| for z ~ N(0, 1) by quadrature, (∫|x|e^{−x²/2}dx)/√(2π). Lean: Apgi.meanAbsStdNormal_eq."""
+    import mpmath as mp  # pinned in requirements.txt; no SciPy dependency in the base job
+
+    val = mp.quad(lambda x: abs(x) * mp.exp(-x * x / 2), [-mp.inf, 0, mp.inf])
+    return float(val / mp.sqrt(2 * mp.pi))
+
+
+def cusp_fold(a: float) -> float:
+    """EQ-CUSP-2: fold distance 2(−a/3)^{3/2} in θ̃ units (a < 0). Lean: Apgi.cusp_discriminant_iff_fold."""
+    c = -a / 3.0
+    return 2.0 * c * math.sqrt(c)
+
+
+def cusp_hysteresis_width(a: float, u0: float) -> float:
+    """EQ-CUSP-2: hysteresis width 4u₀(−a/3)^{3/2} in AU."""
+    return 2.0 * u0 * cusp_fold(a)
+
+
+# ------------------------------------- task 54: remaining SSOT equations (spec 0.5.0) ----
+def prediction_error(x: float, xhat: float) -> float:
+    """EQ-ERR-1: ε = x − x̂ (signed)."""
+    return x - xhat
+
+
+def prediction_update(xhat: float, eta_pred: float, pi: float, eps: float) -> float:
+    """EQ-PRED-1: x̂ ← x̂ + η_pred·Π·ε (stable while η_pred·Π_max < 2)."""
+    return xhat + eta_pred * pi * eps
+
+
+def prec_ach(g_ach: float, pi_e: float, lo: float = 0.1, hi: float = 10.0) -> float:
+    """EQ-PREC-ACH-1: Πᵉ_eff = clip(g_ACh·Πᵉ, Π_min, Π_max)."""
+    return prec_clamp(lo, hi, g_ach * pi_e)
+
+
+def somatic_marker(gamma_v: float, bold: float, gamma_a: float, scr: float) -> float:
+    """EQ-SM-1: M̂ = clip(γ_V·BOLD_vmPFC + γ_A^M·SCR, −2, +2)."""
+    return max(-2.0, min(2.0, gamma_v * bold + gamma_a * scr))
+
+
+def da_bias(z_i: float, beta_da: float) -> float:
+    """EQ-DA-1: zⁱ_eff = zⁱ + β_DA."""
+    return z_i + beta_da
+
+
+def allostatic_rate(theta, theta0, tau_theta, eta, C, V, delta=0.0, impulses=0.0, xi=0.0):
+    """EQ-ALLO-C1: dθ/dt = −(θ − θ₀)/τ_θ + η_θ[C − V] + δ_reset·Σδ_D + ξ_θ (impulse mass given per unit time)."""
+    return -(theta - theta0) / tau_theta + eta * (C - V) + delta * impulses + xi
+
+
+def allostatic_rate_reduced(theta, theta0, tau_theta, gamma_m, s_met, gamma_a, arousal, xi=0.0):
+    """EQ-ALLO-R1: dθ/dt = −(θ − θ₀)/τ_θ + γ_M^θ[1 − S_met] + γ_A^θ·A + ξ_θ."""
+    return -(theta - theta0) / tau_theta + gamma_m * (1.0 - s_met) + gamma_a * arousal + xi
+
+
+def anticipated_cost(cost_path, t_index: int, horizon_steps: int) -> float:
+    """EQ-ANT-1 (deterministic path): Ĉ(t) = C(t + T_ant); T_ant = 0 recovers EQ-ALLO-1."""
+    return cost_path[min(len(cost_path) - 1, t_index + horizon_steps)]
+
+
+def cost(S: float, B_prev: int, c1: float, c2: float, c3: float = 0.0, action: float = 0.0) -> float:
+    """EQ-COST-1: C = c₁·S + c₂·B(t−1) [+ c₃‖a‖]."""
+    return c1 * S + c2 * B_prev + c3 * action
+
+
+def info_value(z_e: float, z_i_eff: float, v1: float, v2: float) -> float:
+    """EQ-VAL-1: V = v₁|zᵉ| + v₂|zⁱ_eff|."""
+    return v1 * abs(z_e) + v2 * abs(z_i_eff)
+
+
+def urgency(t_ep: float, u_max: float, tau_u: float) -> float:
+    """EQ-URG-1: u(t) = u_max(1 − exp(−t_ep/τ_u)) ≥ 0; u_max = 0 recovers the core."""
+    return u_max * -math.expm1(-(t_ep / tau_u))
+
+
+def p_hit(r_max: float, props, dt: float) -> float:
+    """EQ-OBS-1: P(hit) = 1 − exp(−r_max·Σ_W B_t·dt)."""
+    return -math.expm1(-(r_max * sum(props) * dt))
+
+
+def p_report(phit: float, g: float, lapse: float) -> float:
+    """EQ-OBS-2: P(report) = g + (1 − g − λ_lapse)·P(hit)."""
+    return g + (1.0 - g - lapse) * phit
+
+
+def cusp_ignites(S: float, theta_eff: float, a: float, u0: float) -> bool:
+    """EQ-CUSP-2 ignition fold: S > θ_eff + 2u₀(−a/3)^{3/2}."""
+    return S > theta_eff + u0 * cusp_fold(a)
+
+
+def cusp_extinguishes(S: float, theta_eff: float, a: float, u0: float) -> bool:
+    """EQ-CUSP-2 extinction fold: S < θ_eff − 2u₀(−a/3)^{3/2}."""
+    return S < theta_eff - u0 * cusp_fold(a)
+
+
+def norm_gains(pe: float, pi: float) -> tuple[float, float]:
+    """EQ-NORM-1: Πᵉ_norm = 2Πᵉ/(Πᵉ + Πⁱ), Πⁱ_norm = 2Πⁱ/(Πᵉ + Πⁱ) (budget 2; equal gains → core)."""
+    return 2.0 * pe / (pe + pi), 2.0 * pi / (pe + pi)
+
+
+def geo_timescale(level: int, tau0: float = 0.05, k: float = 133.0) -> float:
+    """EQ-GEO-1: τ_ℓ = τ₀·k^ℓ (analytic sampling points only, R9)."""
+    return tau0 * k ** level
+
+
+def gradient_timescale(h: float, tau_min: float, tau_max: float) -> float:
+    """EQ-GRAD-1: log τ(h) = log τ_min + h·log(τ_max/τ_min), h ∈ [0, 1]."""
+    return math.exp(math.log(tau_min) + h * math.log(tau_max / tau_min))
+
+
+def psi_small(z: float, gamma_psi: float) -> float:
+    """EQ-PSI-SMALL-1: ψ(z) = tanh(γ_ψ·z)."""
+    return math.tanh(gamma_psi * z)
+
+
+def prec_ode_rate(pi_l, eps_l, pi_up, z_down, tau_pi, alpha_pi, c_down, c_up, gamma_psi):
+    """EQ-PREC-ODE-1: dΠ_ℓ/dt = −Π_ℓ/τ_Π + α_Π|ε_ℓ| + C_down(Π_{ℓ+1} − Π_ℓ) + C_up·ψ(z_{ℓ−1})."""
+    return -pi_l / tau_pi + alpha_pi * abs(eps_l) + c_down * (pi_up - pi_l) + c_up * psi_small(z_down, gamma_psi)
+
+
+def loop_gain(c_down: float, c_up: float, tau_pi: float, gamma_psi: float) -> float:
+    """EQ-LOOP-1: (C_down·τ_Π)·(C_up·τ_Π)·γ_ψ² (design heuristic: < 1)."""
+    return (c_down * tau_pi) * (c_up * tau_pi) * gamma_psi ** 2
+
+
+def psi_excess(z: float, a_plus, a_minus, g_plus, g_minus, m_psi: float) -> float:
+    """|Ψ(z)|_ex = |Ψ(z)| − m_Ψ (EQ-MS-1)."""
+    return abs(psi(a_plus, a_minus, g_plus, g_minus, z)) - m_psi
+
+
+def ms_drive(pi_rel: float, psi_ex: float, gamma: float = 1.0) -> float:
+    """EQ-MS-1: S_inst,ℓ = Π_rel,ℓ·|Ψ(z_ℓ)|_ex·Γ_ℓ."""
+    return pi_rel * psi_ex * gamma
+
+
+def ms_global(weights, drives, w_res: float = 0.0, s_res: float = 0.0) -> float:
+    """EQ-MS-2: S_global = Σ w_ℓ S_inst,ℓ + w_res S_res, weights ≥ 0 summing to 1."""
+    tot = sum(weights) + w_res
+    if any(w < 0 for w in weights) or w_res < 0 or abs(tot - 1.0) > 1e-9:
+        raise ValueError("EQ-MS-2 weights must be non-negative and sum to 1")
+    return sum(w * d for w, d in zip(weights, drives)) + w_res * s_res
+
+
+def ms_integrated(weights, prec, gammas, G, w_res: float = 0.0, s_res: float = 0.0) -> float:
+    """EQ-MS-3 (integrate-then-weight): S = Σ w_ℓ·Π_ℓ^eff·Γ_ℓ·G_ℓ + w_res·S_res."""
+    return sum(w * p * g * gl for w, p, g, gl in zip(weights, prec, gammas, G)) + w_res * s_res
+
+
+def ms_threshold_target(theta0_l: float, kappa_down: float, pi_up: float, pi_max: float, phase_up: float) -> float:
+    """EQ-MS-4: θ₀,ℓ(t) = θ₀,ℓ[1 + κ_down(Π_{ℓ+1}/Π_max)cos φ̄_{ℓ+1}], bounded in [0.5, 1.5]·θ₀,ℓ."""
+    f = 1.0 + kappa_down * (pi_up / pi_max) * math.cos(phase_up)
+    return theta0_l * max(0.5, min(1.5, f))
+
+
+def kuramoto_order(phases) -> tuple[float, float]:
+    """EQ-KUR-1: R = |Σ exp(iφ)|/N and Γ = R²."""
+    n = len(phases)
+    re = sum(math.cos(p) for p in phases) / n
+    im = sum(math.sin(p) for p in phases) / n
+    R = math.hypot(re, im)
+    return R, R * R
+
+
+def kuramoto_rate(i: int, phases, omega: float, K: float, xi: float = 0.0, inter=()) -> float:
+    """EQ-KUR-2: dφ_i/dt = ω_i + (K/N)Σ_j sin(φ_j − φ_i) + Σ_m K_ℓm R_m sin(φ̄_m − φ_i) + ξ.
+    `inter` is a sequence of (K_lm, R_m, mean_phase_m)."""
+    n = len(phases)
+    own = (K / n) * sum(math.sin(pj - phases[i]) for pj in phases)
+    cross = sum(k * r * math.sin(ph - phases[i]) for k, r, ph in inter)
+    return omega + own + cross + xi
+
+
+def reservoir_step(x, W_res, W_in, u, xi=None, f=np.tanh):
+    """EQ-RES-1: x(t+1) = f(W_res x(t) + W_in u(t) + ξ_t)."""
+    pre = np.asarray(W_res) @ np.asarray(x) + np.asarray(W_in) @ np.atleast_1d(u)
+    if xi is not None:
+        pre = pre + xi
+    return f(pre)
+
+
+def reservoir_readout(W_out, x) -> float:
+    """EQ-RES-2: S_res = [W_outᵀ x]₊ (rectified, never subtracts from S)."""
+    return max(0.0, float(np.dot(W_out, x)))
+
+
+def energy_per_bit(E_event: float, N_b: float) -> float:
+    """EQ-BR-1: e_bit = E_event/N_b, J/bit."""
+    return E_event / N_b
+
+
+def kappa_atp_per_bit(e_bit: float, dG_atp: float = 8.3e-20) -> float:
+    """EQ-BR-2: κ = e_bit/|ΔG_ATP|, ATP molecules per bit (never mol/bit)."""
+    return e_bit / abs(dG_atp)
+
+
+def erasure_ratio(E_event: float, N_erase: float, T: float = 310.0) -> float:
+    """EQ-BR-3: R_L = E_event/(N_erase·k_B·T·ln 2), a consistency check only."""
+    return E_event / (N_erase * landauer(T))

@@ -8,6 +8,7 @@
     "1/AU":          {"au": -1},
     "s":             {"time": 1},
     "1/s":           {"time": -1},
+    "AU/s":          {"au": 1, "time": -1},
     "J":             {"energy": 1},
     "J/K":           {"energy": 1, "temperature": -1},
     "K":             {"temperature": 1},
