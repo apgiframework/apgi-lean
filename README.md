@@ -94,6 +94,10 @@ python verification/python/extract_sources.py --corpus path/to/published-pdfs --
 1. Edit `specification/*.json` (never the generated `Apgi/Spec.lean` or the generated docs).
 2. `python verification/python/generate_lean.py` — proofs that break report a real change.
 3. `python verification/python/make_traceability.py` — regenerates the matrix and inventory.
+   Where the v1.2 SSOT draft is present (docs/apgi-v-1-2/, not under version control),
+   `python verification/python/make_ssot_tables.py` regenerates its registry-derived parts
+   (header, golden vectors, Lean status, theorem and claim registers) and re-pins it; run it
+   before source extraction and `generate_lean.py`.
 4. Resolving a conflict? Set its entry in `known-conflicts.json` to `"resolved"`;
    the checker fails on stale entries so the record cannot drift.
 

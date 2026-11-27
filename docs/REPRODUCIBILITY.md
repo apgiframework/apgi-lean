@@ -44,8 +44,9 @@ a top-level `utils`):
 APGI_VALIDATION_PATH=/path/to/apgi-validation python -m pytest -q -rxs test_production_validation.py
 ```
 
-On Windows, `verification/verify_all.ps1` runs the whole routine, including source extraction,
-and writes `.verify.log`.
+On Windows, `verification/verify_all.ps1` runs the whole routine, including the SSOT
+regeneration (`make_ssot_tables.py`, which re-pins SRC-SSOT-V12D) and source extraction, and
+writes `.verify.log`.
 
 ## 3. Source pins (needs the corpus)
 

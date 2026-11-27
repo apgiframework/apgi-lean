@@ -6,9 +6,11 @@ Set-Location C:\Claude\Projects\apgi-lake
 $log = "C:\Claude\Projects\apgi-lake\.verify.log"
 function Run($name, $block) { "=== $name ===" | Out-File -Encoding utf8 -Append $log; (& $block 2>&1 | Out-String -Width 300) | Out-File -Encoding utf8 -Append $log; "--- exit $LASTEXITCODE" | Out-File -Encoding utf8 -Append $log }
 "START $(Get-Date -Format o) impl=$Impl ($(git -C $Impl rev-parse --short HEAD))" | Out-File -Encoding utf8 $log
+Run "ssot-tables" { python verification\python\make_ssot_tables.py }   # D10: registry-derived SSOT parts; re-pins SRC-SSOT-V12D
 Run "extract" { python verification\python\extract_sources.py --corpus C:\Claude\Projects\Neuro-Brain\Neuro-Input --corpus C:\Claude\Projects\apgi-lake\docs\apgi-v-1-2 --write }
 Run "generate_lean" { python verification\python\generate_lean.py }
 Run "lake" { lake build --wfail }
+$leanOk = ($LASTEXITCODE -eq 0)
 Run "consistency" { python verification\python\check_consistency.py }
 Run "manifest" { python verification\python\make_release_manifest.py }
 Run "traceability" { python verification\python\make_traceability.py }
@@ -18,9 +20,12 @@ Run "production-report" { python verification\python\production_report.py }   # 
 Remove-Item Env:APGI_IMPL_PATH
 Set-Location verification\python
 $env:APGI_IMPL_PATH = $Impl
-Run "pytest" { python -m pytest -q -rxs -p no:cacheprovider }
+Run "pytest" { python -m pytest -q -rxs -p no:cacheprovider --junitxml=..\reports\junit.xml }
 Remove-Item Env:APGI_IMPL_PATH
 $env:APGI_VALIDATION_PATH = "C:\Claude\Projects\apgi-validation"
 Run "pytest-validation" { python -m pytest -q -rxs -p no:cacheprovider test_production_validation.py }
 Remove-Item Env:APGI_VALIDATION_PATH
+Set-Location C:\Claude\Projects\apgi-lake
+if ($leanOk) { Run "report" { python verification\python\make_report.py --junit verification\reports\junit.xml --lean-ok } }   # proof-status.json, verification-report.md
+else { Run "report" { python verification\python\make_report.py --junit verification\reports\junit.xml --lean-log failed } }
 "END $(Get-Date -Format o)" | Out-File -Encoding utf8 -Append $log
