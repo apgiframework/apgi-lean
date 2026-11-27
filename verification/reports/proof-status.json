@@ -1,15 +1,114 @@
 {
-  "generated": "2026-11-25T11:11:36+00:00",
-  "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8",
-  "spec_lean_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8",
-  "spec_version": "0.3.1",
+  "generated": "2026-11-27T20:37:32+00:00",
+  "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000",
+  "spec_lean_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000",
+  "spec_version": "0.6.0",
   "lean_build": "passed",
   "python_tests": {
-    "passed": 91,
+    "passed": 264,
     "failed": 0,
-    "total": 93
+    "total": 265
   },
   "theorems": [
+    {
+      "name": "Apgi.H10Ordering.recovery_lt_integration",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.H10Ordering.silent_below_two",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.L0_outside_ignition_model",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.L1_point_outside_band",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.L2_point_vs_bands",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.alloPath_hasDerivAt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-C1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.alloReduced_hasDerivAt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-R1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.anticipated_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ANT-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.au_quantity_tier3_only",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.bridge_quantities_cross_tiers",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.calibration_constant_au",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
     {
       "name": "Apgi.clampedUpdate_floor",
       "audited": true,
@@ -17,7 +116,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.convex_update_mem_Icc",
@@ -26,7 +125,61 @@
       "equations": [
         "EQ-UPD-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.coreStep_readout_noninterference",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.coreStep_refractory_exactly_once",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-REF-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.coreStep_retention_exactly_once",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-RESET-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.coreStep_theta_from_state",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.costC_div",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-COST-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.costC_monotone_ignition",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-COST-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.cuspV_hasDerivAt",
@@ -35,7 +188,34 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.cusp_discriminant_iff_fold",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.cusp_monostable_of_extinction",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.cusp_monostable_of_ignition",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-CUSP-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.cusp_three_equilibria",
@@ -44,7 +224,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.cusp_three_equilibria_converse",
@@ -53,7 +233,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.cusp_three_equilibria_iff",
@@ -62,7 +242,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.cusp_two_equilibria_witness",
@@ -71,7 +251,7 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.cusp_unique_equilibrium",
@@ -80,7 +260,16 @@
       "equations": [
         "EQ-CUSP-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.da_salience_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DA-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.decayGain_mem_Icc",
@@ -89,7 +278,7 @@
       "equations": [
         "EQ-DECAY-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.decayStep_monotone",
@@ -98,7 +287,16 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.decay_allostatic_exactly_once",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.decay_step_mem_Icc",
@@ -107,7 +305,124 @@
       "equations": [
         "EQ-DECAY-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.decideAfterAccumulation_strictMono_drive",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.driveLower_nonpos",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.driveTerm_ge",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.driveTerm_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.driveTerm_monotone_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.driveTerm_strictAnti_of_lt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.drive_sign_symmetric",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.drive_zero_at_m0",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.emaAlpha_mem_Ioo",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EMA-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.emaMean_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EMA-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.emaVar_at_mean",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EMA-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.emaVar_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EMA-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.erasureRatio_ge_one_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-3"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.euler_step_mem_Icc",
@@ -116,16 +431,125 @@
       "equations": [
         "EQ-EULER-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.euler_step_mem_Icc_of_stepRule",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STEP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.five_levels_boundary",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.floor_le_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-FLOOR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.floor_le_one_percent_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-FLOOR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.gain_product_not_injective",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.geoTau_succ",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.gradTau_monotone",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GRAD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.gradTau_one",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GRAD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.gradTau_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GRAD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.hazardLik_not_injective",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.hazardLik_rescale",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.hazardLik_shift",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.hazardProb_mem_Icc",
       "audited": true,
       "lean": "passed",
       "equations": [
-        "EQ-HAZARD-1"
+        "EQ-HAZARD-1",
+        "EQ-OBS-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.hazardProb_monotone_propensity",
@@ -134,7 +558,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.hazard_antitone_threshold",
@@ -143,7 +567,7 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.hazard_n_steps",
@@ -152,16 +576,17 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.hazard_survival_add",
       "audited": true,
       "lean": "passed",
       "equations": [
-        "EQ-HAZARD-1"
+        "EQ-HAZARD-1",
+        "EQ-OBS-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.hazard_two_steps",
@@ -170,7 +595,16 @@
       "equations": [
         "EQ-HAZARD-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.idx_injective",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.ignites_antitone_threshold",
@@ -179,7 +613,16 @@
       "equations": [
         "EQ-IGN-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignites_drive_monotone_precision",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.ignites_monotone_precision",
@@ -188,7 +631,7 @@
       "equations": [
         "EQ-PREC-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.ignitionProb_antitone_threshold",
@@ -197,7 +640,206 @@
       "equations": [
         "EQ-IGN-2"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignitionProb_at_threshold",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignitionProb_rescale",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignitionProb_shift",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignitionProb_strictMono_S",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignitionProb_tendsto_one",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignitionProb_tendsto_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.ignition_levels",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.integral_Ioi_mul_exp_neg_half_sq",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EXCESS-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.integral_abs_mul_exp_neg_half_sq",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EXCESS-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappaATP_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_consistent_not_retires",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_dimension",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_inert",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_inside_not_outside",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_of_energy",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-1",
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_single_never_retires",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kappa_straddle_not_outside",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kurRate_synchronized",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-KUR-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.kuramotoGate_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-KUR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.landauerE_pos",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LAND-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.landauer_300K_below",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LAND-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.landauer_310K_within_tolerance",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LAND-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.leakGain_mem_Ioo",
@@ -206,7 +848,7 @@
       "equations": [
         "EQ-LEAK-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.leak_step_mem_Icc",
@@ -215,7 +857,7 @@
       "equations": [
         "EQ-LEAK-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.leak_two_steps",
@@ -224,7 +866,126 @@
       "equations": [
         "EQ-LEAK-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.levelTau_strictMono",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.levelTau_values",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.loopGain_lt_one_of_paper3",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LOOP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.loopGain_production_defaults",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LOOP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.loopGain_scaled_couplings",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LOOP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.lyapunov_decoupled",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LOOP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.meanAbsStdNormal_eq",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EXCESS-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.msDrive_gate_monotone",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-MS-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.msDrive_gate_one",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-MS-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.msDrive_sign_symmetric",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-MS-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.msGlobal_ge",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-MS-2",
+        "EQ-MS-3"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.msGlobal_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-MS-2",
+        "EQ-MS-3"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.msTarget_band",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-MS-4"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.neClamp_bound",
@@ -233,7 +994,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.neClamp_nonneg",
@@ -242,7 +1003,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.neClamp_of_le",
@@ -251,7 +1012,16 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.neClamp_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.neFactor_band",
@@ -260,7 +1030,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.neFactor_mem_Icc",
@@ -269,7 +1039,7 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.neThreshold_pos",
@@ -278,7 +1048,34 @@
       "equations": [
         "EQ-NE-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.normGain_antitone_other",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NORM-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.normGain_budget",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NORM-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.normGain_equal",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NORM-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.operatingRange_invariant_of_target",
@@ -287,7 +1084,7 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.operatingRange_not_invariant",
@@ -296,16 +1093,216 @@
       "equations": [
         "EQ-THR-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.orders_differ",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pReport_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-OBS-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pReport_monotone",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-OBS-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeInv_step",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_B_cases",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_B_eq_one_iff",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_Sinst_ge",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_Sinst_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_estimators_separate",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_ignition_measure",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_ne_bound",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeLog_prec_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_core",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_decision_input_independent",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_exactly_once",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-RESET-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_gain_product",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_readout_noninterference",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-THEFF-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_reference_excludes_current",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_scaleAllo",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_theta_from_state",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-THEFF-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_variance_uses_preupdate_mean",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-EMA-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pipeStep_weights_eta_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.precClamp_mem_Icc",
       "audited": true,
       "lean": "passed",
       "equations": [
-        "EQ-PREC-SM-1"
+        "EQ-PREC-SM-1",
+        "EQ-PREC-ACH-1",
+        "EQ-SM-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.precEff_monotone_marker",
@@ -314,7 +1311,7 @@
       "equations": [
         "EQ-PREC-SM-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.precEff_nonneg",
@@ -323,7 +1320,124 @@
       "equations": [
         "EQ-PREC-SM-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.precOdeRate_pure_decay",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-ODE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.precOdeRate_strictAnti",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-ODE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.precRaw_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.precRel_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-REL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.precRel_self",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-REL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.predError_antisymm",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ERR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.predError_self",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ERR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pred_contraction",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PRED-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.pred_error_update",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PRED-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.propensity_path_rescale",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-IGN-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.psiSmall_abs_lt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PSI-SMALL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.psiSmall_odd",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PSI-SMALL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.psiSmall_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PSI-SMALL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.psi_abs_lt",
@@ -332,7 +1446,7 @@
       "equations": [
         "EQ-PSI-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.psi_odd_of_symmetric",
@@ -341,7 +1455,7 @@
       "equations": [
         "EQ-PSI-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.psi_symmetric",
@@ -350,7 +1464,142 @@
       "equations": [
         "EQ-PSI-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.resReadout_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-RES-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.resStep_abs_lt",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-RES-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.retain_leak_ge",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LEAK-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.sampler_volume",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.scaleAllo_not_injective",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.standardize_abs_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.standardize_after_update_shrinks",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.standardize_at_mean",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.standardize_monotone",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.standardize_odd",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.stepRule_gain_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STEP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.tauPiLevel_ge_one",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STEP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.tauPiLevel_step_rule",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STEP-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.thresholdStep_antitone_value",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-VAL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.thresholdStep_eta_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.thresholdStep_floor",
@@ -359,7 +1608,7 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.thresholdStep_monotone_drive",
@@ -368,7 +1617,7 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     },
     {
       "name": "Apgi.thresholdStep_monotone_ignition",
@@ -377,7 +1626,160 @@
       "equations": [
         "EQ-ALLO-1"
       ],
-      "registry_hash": "3fc0faa0d29965c1b531412fbea7b63914e4e521df4b520d9d8912cd1d7538d8"
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.thresholdStep_scale",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.tier_examples",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.tier_exit_needs_au_inverse",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-BR-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_S_le",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-LEAK-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_S_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-DRIVE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_denoms_pos",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-STD-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_gain_product",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_inv",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PIPE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_ne_bound",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-NE-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_prec_mem_Icc",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-PREC-2"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_scaleAllo",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.traj_weights_eta_zero",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-ALLO-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.urgency_monotone",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-URG-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.urgency_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-URG-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.urgency_off",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-URG-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.valueV_div",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-VAL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
+    },
+    {
+      "name": "Apgi.valueV_nonneg",
+      "audited": true,
+      "lean": "passed",
+      "equations": [
+        "EQ-VAL-1"
+      ],
+      "registry_hash": "4359d6116df482f5e226ab564c838bfc134afde04f5a16cfc1d5c66c73d96000"
     }
   ],
   "claims": [
@@ -393,6 +1795,10 @@
         "EQ-IGN-1",
         "EQ-IGN-2"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.ignites_antitone_threshold",
@@ -415,6 +1821,10 @@
       "equations": [
         "EQ-THR-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.clampedUpdate_floor",
@@ -434,6 +1844,10 @@
       "equations": [
         "EQ-THR-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.operatingRange_not_invariant",
@@ -456,6 +1870,10 @@
       "equations": [
         "EQ-CUSP-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.cusp_unique_equilibrium",
@@ -477,6 +1895,10 @@
         "EQ-CUSP-1"
       ],
       "note": "Sufficiency proved first (cusp_three_equilibria); the converse (task 28) makes it an equivalence. Twins: test_cusp_three_equilibria, test_cusp_three_equilibria_converse, test_cusp_discriminant.",
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.cusp_three_equilibria",
@@ -503,6 +1925,10 @@
       "equations": [
         "EQ-EULER-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.euler_step_mem_Icc",
@@ -519,6 +1945,10 @@
       "equations": [
         "EQ-CUSP-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [],
       "reported_status": "unresolved"
     },
@@ -531,6 +1961,10 @@
         "EQ-LAND-1"
       ],
       "note": "Replaces the draft claim 'κ ≈ 1,700, dimensionless overhead'. Uncalibrated by the corpus's own statement (Notation Appendix p22).",
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [],
       "reported_status": "assumed"
     },
@@ -545,6 +1979,10 @@
       "equations": [
         "EQ-DECAY-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.decayGain_mem_Icc",
@@ -571,6 +2009,10 @@
         "EQ-HAZARD-1"
       ],
       "note": "Backs PD-HAZARD. Per-step Bernoulli(Bₜ) sampling is not dt-invariant (test_per_step_bernoulli_is_not_dt_invariant).",
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.hazardProb_mem_Icc",
@@ -602,6 +2044,10 @@
         "EQ-HAZARD-1",
         "EQ-IGN-2"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.hazard_antitone_threshold",
@@ -622,6 +2068,10 @@
       "equations": [
         "EQ-LEAK-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.leakGain_mem_Ioo",
@@ -650,6 +2100,10 @@
       "equations": [
         "EQ-NE-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.neClamp_bound",
@@ -678,6 +2132,10 @@
       "equations": [
         "EQ-ALLO-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.thresholdStep_floor",
@@ -706,6 +2164,10 @@
       "equations": [
         "EQ-PSI-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.psi_abs_lt",
@@ -734,6 +2196,10 @@
       "equations": [
         "EQ-PREC-SM-1"
       ],
+      "record_status": "Canonical v1.2",
+      "status_basis": "listed in the SSOT §24.3 claim register",
+      "owner": "Uxod",
+      "approval_date": null,
       "evidence_state": [
         {
           "ref": "Apgi.precEff_nonneg",
@@ -749,6 +2215,1179 @@
         }
       ],
       "reported_status": "proved"
+    },
+    {
+      "id": "CL-17",
+      "text": "The canonical drive Π_rel·(|z| − m₀) is monotone in Π_rel if and only if |z| ≥ m₀; below m₀ it is strictly decreasing, so more precision on a smaller-than-expected error makes ignition harder. Equal-magnitude errors of opposite sign contribute equally.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.driveTerm_monotone_iff",
+        "Apgi.driveTerm_strictAnti_of_lt",
+        "Apgi.ignites_drive_monotone_precision",
+        "Apgi.drive_sign_symmetric",
+        "Apgi.drive_zero_at_m0"
+      ],
+      "equations": [
+        "EQ-DRIVE-1",
+        "EQ-EXCESS-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.driveTerm_monotone_iff",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.driveTerm_strictAnti_of_lt",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.ignites_drive_monotone_precision",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.drive_sign_symmetric",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.drive_zero_at_m0",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-18",
+      "text": "m₀ = E|z| = √(2/π) for a standard normal z (∫|x|e^{−x²/2}dx = 2).",
+      "status": "proved",
+      "evidence": [
+        "Apgi.integral_Ioi_mul_exp_neg_half_sq",
+        "Apgi.integral_abs_mul_exp_neg_half_sq",
+        "Apgi.meanAbsStdNormal_eq"
+      ],
+      "equations": [
+        "EQ-EXCESS-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.integral_Ioi_mul_exp_neg_half_sq",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.integral_abs_mul_exp_neg_half_sq",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.meanAbsStdNormal_eq",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-19",
+      "text": "Bₜ = 1/2 at S = θ_eff for every γ_sig; as γ_sig → ∞ the propensity tends to 1 above and 0 below threshold, recovering the strict hard threshold.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.ignitionProb_at_threshold",
+        "Apgi.ignitionProb_tendsto_one",
+        "Apgi.ignitionProb_tendsto_zero"
+      ],
+      "equations": [
+        "EQ-IGN-2",
+        "EQ-IGN-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.ignitionProb_at_threshold",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.ignitionProb_tendsto_one",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.ignitionProb_tendsto_zero",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-20",
+      "text": "In the canonical step, θ_eff enters the successor state only through the sampled event B(t); the next θ is computed from the state θ; one ignition adds exactly one δ_reset (decayed once), one δ_ref and one retention.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.coreStep_readout_noninterference",
+        "Apgi.coreStep_theta_from_state",
+        "Apgi.decay_allostatic_exactly_once",
+        "Apgi.coreStep_refractory_exactly_once",
+        "Apgi.coreStep_retention_exactly_once"
+      ],
+      "equations": [
+        "EQ-PIPE-1",
+        "EQ-THEFF-1",
+        "EQ-ALLO-1",
+        "EQ-REF-1",
+        "EQ-RESET-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.coreStep_readout_noninterference",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.coreStep_theta_from_state",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.decay_allostatic_exactly_once",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.coreStep_refractory_exactly_once",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.coreStep_retention_exactly_once",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-21",
+      "text": "For a < 0, three cusp equilibria exist iff |θ̃| < 2(−a/3)^{3/2}; past the ignition or extinction fold the system is monostable.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.cusp_discriminant_iff_fold",
+        "Apgi.cusp_monostable_of_ignition",
+        "Apgi.cusp_monostable_of_extinction"
+      ],
+      "equations": [
+        "EQ-CUSP-2"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.cusp_discriminant_iff_fold",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.cusp_monostable_of_ignition",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.cusp_monostable_of_extinction",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-22",
+      "text": "The learning rule contracts the prediction error for 0 < η_pred·Π < 2; the dopamine bias raises salience exactly while zⁱ > −β_DA/2.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.pred_error_update",
+        "Apgi.pred_contraction",
+        "Apgi.da_salience_iff"
+      ],
+      "equations": [
+        "EQ-PRED-1",
+        "EQ-DA-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.pred_error_update",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pred_contraction",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.da_salience_iff",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-23",
+      "text": "Divisive normalization keeps a budget of 2, reduces to the core at equal gains, and lowers exteroceptive gain when interoceptive gain rises.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.normGain_budget",
+        "Apgi.normGain_equal",
+        "Apgi.normGain_antitone_other"
+      ],
+      "equations": [
+        "EQ-NORM-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.normGain_budget",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.normGain_equal",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.normGain_antitone_other",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-24",
+      "text": "Inside the Paper 3 dimensionless gains (C_down·τ_Π ≤ 0.5, C_up·τ_Π ≤ 0.2) and γ_ψ ≤ 3 the loop gain is below 1; the former production defaults give 2 × 10⁴ and the adopted scaled couplings give 0.02. This is a design heuristic, not a stability proof.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.loopGain_lt_one_of_paper3",
+        "Apgi.loopGain_production_defaults",
+        "Apgi.loopGain_scaled_couplings"
+      ],
+      "equations": [
+        "EQ-LOOP-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.loopGain_lt_one_of_paper3",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.loopGain_production_defaults",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.loopGain_scaled_couplings",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-25",
+      "text": "Urgency is non-negative, non-decreasing and vanishes at u_max = 0; P(report) lies in [g, 1 − λ_lapse] and rises with P(hit); the geometric and continuous timescale forms hit their endpoints and are monotone; ψ is bounded and odd; Γ = R² ∈ [0, 1]; aggregation stays between the extreme level drives; the hierarchical target stays in [0.5, 1.5]·θ₀,ℓ.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.urgency_nonneg",
+        "Apgi.urgency_monotone",
+        "Apgi.urgency_off",
+        "Apgi.pReport_mem_Icc",
+        "Apgi.pReport_monotone",
+        "Apgi.geoTau_succ",
+        "Apgi.gradTau_zero",
+        "Apgi.gradTau_one",
+        "Apgi.gradTau_monotone",
+        "Apgi.psiSmall_zero",
+        "Apgi.psiSmall_abs_lt",
+        "Apgi.psiSmall_odd",
+        "Apgi.kuramotoGate_mem_Icc",
+        "Apgi.msGlobal_le",
+        "Apgi.msGlobal_ge",
+        "Apgi.msTarget_band"
+      ],
+      "equations": [
+        "EQ-URG-1",
+        "EQ-OBS-2",
+        "EQ-GEO-1",
+        "EQ-GRAD-1",
+        "EQ-PSI-SMALL-1",
+        "EQ-KUR-1",
+        "EQ-MS-2",
+        "EQ-MS-4"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.urgency_nonneg",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.urgency_monotone",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.urgency_off",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pReport_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pReport_monotone",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.geoTau_succ",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.gradTau_zero",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.gradTau_one",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.gradTau_monotone",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.psiSmall_zero",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.psiSmall_abs_lt",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.psiSmall_odd",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kuramotoGate_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.msGlobal_le",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.msGlobal_ge",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.msTarget_band",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-26",
+      "text": "Lyapunov conjecture (SSOT §12.5): V = Σ_ℓ[(Π_ℓ − Π_ℓ*)² + (θ_ℓ − θ_ℓ*)²] satisfies V̇ ≤ −λV with λ ≥ min(1/τ_Π, 1/τ_θ)·(1 − loop gain). Not proved; needs the closed-loop linearization.",
+      "status": "unresolved",
+      "evidence": [],
+      "equations": [
+        "EQ-PREC-ODE-1",
+        "EQ-LOOP-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [],
+      "reported_status": "unresolved"
+    },
+    {
+      "id": "CL-27",
+      "text": "Estimator rules: ε is antisymmetric and vanishes at x̂ = x; z vanishes at μ_ref, is odd about it and monotone in ε; α_EMA ∈ (0, 1); the EMA mean stays between μ and ε; the variance stays non-negative and only shrinks for a sample at the mean (mean-centred, not E[ε²]); Π_rel = 1 at Π̄ and inherits the clamp scaled by 1/Π̄.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.predError_self",
+        "Apgi.predError_antisymm",
+        "Apgi.standardize_at_mean",
+        "Apgi.standardize_odd",
+        "Apgi.standardize_monotone",
+        "Apgi.emaAlpha_mem_Ioo",
+        "Apgi.emaMean_mem_Icc",
+        "Apgi.emaVar_nonneg",
+        "Apgi.emaVar_at_mean",
+        "Apgi.precRel_self",
+        "Apgi.precRel_mem_Icc"
+      ],
+      "equations": [
+        "EQ-ERR-1",
+        "EQ-STD-1",
+        "EQ-EMA-1",
+        "EQ-EMA-2",
+        "EQ-PREC-REL-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.predError_self",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.predError_antisymm",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.standardize_at_mean",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.standardize_odd",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.standardize_monotone",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.emaAlpha_mem_Ioo",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.emaMean_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.emaVar_nonneg",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.emaVar_at_mean",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.precRel_self",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.precRel_mem_Icc",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-28",
+      "text": "The soft floor σ(−γ_sig·θ_eff) is ≤ ε iff γ_sig·θ_eff ≥ log(1/ε − 1), so a floor ≤ 0.01 needs γ_sig·θ_eff ≥ log 99; the step rule dt ≤ τ/10 implies the forward-Euler bound.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.floor_le_iff",
+        "Apgi.floor_le_one_percent_iff",
+        "Apgi.euler_step_mem_Icc_of_stepRule"
+      ],
+      "equations": [
+        "EQ-FLOOR-1",
+        "EQ-STEP-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.floor_le_iff",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.floor_le_one_percent_iff",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.euler_step_mem_Icc_of_stepRule",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-29",
+      "text": "Between events the continuous threshold form (and its reduced measurable form) is solved by θ* + (θ(0) − θ*)e^{−t/τ} with θ* = θ₀ + τ·D; T_ant = 0 recovers the reactive cost; V ≥ 0, C is monotone in the previous ignition, and more information value never raises the next threshold.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.alloPath_hasDerivAt",
+        "Apgi.alloReduced_hasDerivAt",
+        "Apgi.anticipated_zero",
+        "Apgi.valueV_nonneg",
+        "Apgi.costC_monotone_ignition",
+        "Apgi.thresholdStep_antitone_value"
+      ],
+      "equations": [
+        "EQ-ALLO-C1",
+        "EQ-ALLO-R1",
+        "EQ-ANT-1",
+        "EQ-COST-1",
+        "EQ-VAL-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.alloPath_hasDerivAt",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.alloReduced_hasDerivAt",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.anticipated_zero",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.valueV_nonneg",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.costC_monotone_ignition",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.thresholdStep_antitone_value",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-30",
+      "text": "The precision-ODE rate is strictly decreasing in Π_ℓ and reduces to pure decay without drive or coupling; level salience is sign-symmetric under the symmetric Ψ and monotone in the gate; a synchronized Kuramoto level drifts at ω; the tanh reservoir state is bounded and its readout is non-negative.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.precOdeRate_strictAnti",
+        "Apgi.precOdeRate_pure_decay",
+        "Apgi.msDrive_sign_symmetric",
+        "Apgi.msDrive_gate_one",
+        "Apgi.msDrive_gate_monotone",
+        "Apgi.kurRate_synchronized",
+        "Apgi.resStep_abs_lt",
+        "Apgi.resReadout_nonneg"
+      ],
+      "equations": [
+        "EQ-PREC-ODE-1",
+        "EQ-MS-1",
+        "EQ-KUR-2",
+        "EQ-RES-1",
+        "EQ-RES-2"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.precOdeRate_strictAnti",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.precOdeRate_pure_decay",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.msDrive_sign_symmetric",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.msDrive_gate_one",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.msDrive_gate_monotone",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kurRate_synchronized",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.resStep_abs_lt",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.resReadout_nonneg",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-31",
+      "text": "E_L(310 K) = k_B·310·ln 2 lies within 0.5% of 2.97 × 10⁻²¹ J, and the 300 K value is below 2.88 × 10⁻²¹ J; κ = E_event/(N_b·|ΔG_ATP|) ≥ 0; R_L ≥ 1 iff E_event ≥ N_erase·E_L. These are unit and arithmetic facts, not measurements of neural efficiency.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.landauerE_pos",
+        "Apgi.landauer_310K_within_tolerance",
+        "Apgi.landauer_300K_below",
+        "Apgi.kappaATP_nonneg",
+        "Apgi.kappa_of_energy",
+        "Apgi.erasureRatio_ge_one_iff"
+      ],
+      "equations": [
+        "EQ-LAND-1",
+        "EQ-BR-1",
+        "EQ-BR-2",
+        "EQ-BR-3"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.landauerE_pos",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.landauer_310K_within_tolerance",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.landauer_300K_below",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kappaATP_nonneg",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kappa_of_energy",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.erasureRatio_ge_one_iff",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-32",
+      "text": "Along every trajectory of the canonical 15-step pipeline, for every input sequence and every sequence of uniform draws, Σ ≥ 0 in both channels, θ ≥ θ_floor, r ≥ 0, B_prev ∈ {0, 1}, S ≥ −m₀·(Π_max/Π̄ᵉ + Π_max/Π̄ⁱ), every precision stays in [Π_min, Π_max] and |γ_NE|·g_NE ≤ 0.5 (any reference estimator; admissible parameters). An upper bound on S holds only under an explicit bound on S_inst.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.traj_inv",
+        "Apgi.traj_prec_mem_Icc",
+        "Apgi.traj_ne_bound",
+        "Apgi.pipeLog_Sinst_ge",
+        "Apgi.traj_S_le"
+      ],
+      "equations": [
+        "EQ-PIPE-1",
+        "EQ-PREC-2",
+        "EQ-NE-1",
+        "EQ-DRIVE-1",
+        "EQ-LEAK-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.traj_inv",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_prec_mem_Icc",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_ne_bound",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pipeLog_Sinst_ge",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_S_le",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-33",
+      "text": "The ignition decision at t (B_t and B(t)) does not depend on the inputs at t; under the rejected 17-step order 'ignition after accumulation' it depends strictly on the current drive, and 'statistics before standardization' shrinks z by (1 − α). The canonical and rejected orders are therefore not equivalent.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.pipeStep_decision_input_independent",
+        "Apgi.decideAfterAccumulation_strictMono_drive",
+        "Apgi.orders_differ",
+        "Apgi.standardize_after_update_shrinks"
+      ],
+      "equations": [
+        "EQ-PIPE-1",
+        "EQ-STD-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.pipeStep_decision_input_independent",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.decideAfterAccumulation_strictMono_drive",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.orders_differ",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.standardize_after_update_shrinks",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-34",
+      "text": "With a uniform draw on [0, 1], the pipeline's sampled event has probability 1 − exp(−r_max·B_t·dt) (EQ-HAZARD-1).",
+      "status": "proved",
+      "evidence": [
+        "Apgi.sampler_volume",
+        "Apgi.pipeLog_ignition_measure"
+      ],
+      "equations": [
+        "EQ-HAZARD-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.sampler_volume",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pipeLog_ignition_measure",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-35",
+      "text": "Level 0 lies outside the ignition model; at τ₀ = 50 ms and k = 133 the L1 point value 6.65 s lies above the L1 band [0.1, 3] s and the L2 point value 14.74 min lies below the L2 integration window [25, 30] min but inside the operational band [1, 30] min; five levels fit the 50 ms – 6 month span at k = 133 and not at k = 134; τ_Π = max(1 s, τ_ℓ/10) meets dt₀ = 10 ms ≤ τ_Π/10 on every level.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.L0_outside_ignition_model",
+        "Apgi.L1_point_outside_band",
+        "Apgi.L2_point_vs_bands",
+        "Apgi.five_levels_boundary",
+        "Apgi.tauPiLevel_step_rule"
+      ],
+      "equations": [
+        "EQ-GEO-1",
+        "EQ-STEP-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.L0_outside_ignition_model",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.L1_point_outside_band",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.L2_point_vs_bands",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.five_levels_boundary",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.tauPiLevel_step_rule",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-36",
+      "text": "OSF H10: τ_int,ℓ > τ_ign,ℓ > τ_θ,ℓ for ℓ ≥ 2. A registered empirical hypothesis, stated in Lean as the hypothesis Apgi.H10Ordering and never proved; it constrains nothing at L0–L1 (Apgi.H10Ordering.silent_below_two).",
+      "status": "unresolved",
+      "evidence": [],
+      "equations": [
+        "EQ-GEO-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [],
+      "reported_status": "unresolved"
+    },
+    {
+      "id": "CL-37",
+      "text": "The §12.5 Lyapunov bound V̇ ≤ −min(1/τ_Π, 1/τ_θ)·(1 − loop gain)·V holds in the decoupled limit (zero coupling, zero forcing, loop gain 0). The coupled conjecture remains CL-26.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.lyapunov_decoupled"
+      ],
+      "equations": [
+        "EQ-LOOP-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.lyapunov_decoupled",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-38",
+      "text": "A quantity that carries AU is Tier 3 only; multiplying it by any constant free of AU⁻¹ keeps it out of Tiers 1–2, so a Tier-3 bridge needs a registered calibration constant with an AU⁻¹ factor (units.json registers none). κ and e_bit are bridge quantities that belong to no single tier.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.au_quantity_tier3_only",
+        "Apgi.tier_exit_needs_au_inverse",
+        "Apgi.calibration_constant_au",
+        "Apgi.bridge_quantities_cross_tiers"
+      ],
+      "equations": [
+        "EQ-BR-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.au_quantity_tier3_only",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.tier_exit_needs_au_inverse",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.calibration_constant_au",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.bridge_quantities_cross_tiers",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-39",
+      "text": "The registered κ calibration rule never retires the bridge on one dataset, is inert with no calibrated estimate, never counts a straddling interval, and cannot return both bridge-consistent and retired on the same data.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.kappa_single_never_retires",
+        "Apgi.kappa_inert",
+        "Apgi.kappa_straddle_not_outside",
+        "Apgi.kappa_consistent_not_retires"
+      ],
+      "equations": [
+        "EQ-BR-2"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.kappa_single_never_retires",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kappa_inert",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kappa_straddle_not_outside",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.kappa_consistent_not_retires",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-40",
+      "text": "Division by zero cannot occur in the canonical step: with ε_stab > 0 and a nonnegative reference spread, every denominator (σ_ref + ε_stab, Σ + ε_stab, both channels) is positive along every trajectory, for every input and draw sequence.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.traj_denoms_pos",
+        "Apgi.precRaw_le"
+      ],
+      "equations": [
+        "EQ-STD-1",
+        "EQ-PREC-2"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.traj_denoms_pos",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.precRaw_le",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-41",
+      "text": "The drive is bounded above by Π_max/Π̄ᵉ·|εᵉ − μᵉ_ref|/ε_stab + Π_max/Π̄ⁱ·(|εⁱ − μⁱ_ref|/ε_stab + |β_DA|); with the unconditional floor, S stays in [L, U] on every trajectory whose errors keep that bound at most U.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.standardize_abs_le",
+        "Apgi.pipeLog_Sinst_le",
+        "Apgi.traj_S_mem_Icc"
+      ],
+      "equations": [
+        "EQ-DRIVE-1",
+        "EQ-STD-1",
+        "EQ-PIPE-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.standardize_abs_le",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pipeLog_Sinst_le",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_S_mem_Icc",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-42",
+      "text": "EQ-STEP-1 (dt ≤ τ/10) bounds every per-step gain 1 − exp(−dt/τ), the leak λ and α_EMA alike, by 1/10.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.stepRule_gain_le"
+      ],
+      "equations": [
+        "EQ-STEP-1",
+        "EQ-LEAK-1",
+        "EQ-EMA-2"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.stepRule_gain_le",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-43",
+      "text": "TC-08a and TC-08c: a common offset of S and θ_eff, and the joint rescaling S′ = aS + b, θ′ = aθ + b, γ′ = γ/a (a ≠ 0), leave the event-sequence likelihood unchanged; (γ_sig, S, θ) is not identifiable from event data unless the scale is fixed.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.ignitionProb_shift",
+        "Apgi.ignitionProb_rescale",
+        "Apgi.hazardLik_shift",
+        "Apgi.hazardLik_rescale",
+        "Apgi.hazardLik_not_injective"
+      ],
+      "equations": [
+        "EQ-IGN-2",
+        "EQ-HAZARD-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.ignitionProb_shift",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.ignitionProb_rescale",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.hazardLik_shift",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.hazardLik_rescale",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.hazardLik_not_injective",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-44",
+      "text": "TC-08b: with γ_NE = 0, g_NE, β_SM and M̂ enter the whole pipeline only through g_NE·exp(β_SM·M̂); distinct settings with the same product give identical trajectories for every input and draw sequence.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.pipeStep_gain_product",
+        "Apgi.traj_gain_product",
+        "Apgi.gain_product_not_injective"
+      ],
+      "equations": [
+        "EQ-PREC-SM-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.pipeStep_gain_product",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_gain_product",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.gain_product_not_injective",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-45",
+      "text": "TC-08g: EQ-ALLO-1 sees η_θ and the cost and value weights c₁, c₂, v₁, v₂ only through the products η_θ·c₁, η_θ·c₂, η_θ·v₁, η_θ·v₂: scaling η_θ by a ≠ 0 and the four weights by 1/a gives the identical trajectory for every input and draw sequence, and with η_θ = 0 the weights do not enter at all.",
+      "status": "proved",
+      "evidence": [
+        "Apgi.pipeStep_scaleAllo",
+        "Apgi.traj_scaleAllo",
+        "Apgi.scaleAllo_not_injective",
+        "Apgi.pipeStep_weights_eta_zero",
+        "Apgi.traj_weights_eta_zero"
+      ],
+      "equations": [
+        "EQ-ALLO-1",
+        "EQ-COST-1",
+        "EQ-VAL-1"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "added by the verification registry after the SSOT draft; enters the SSOT at D10",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "Apgi.pipeStep_scaleAllo",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_scaleAllo",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.scaleAllo_not_injective",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.pipeStep_weights_eta_zero",
+          "state": "passed"
+        },
+        {
+          "ref": "Apgi.traj_weights_eta_zero",
+          "state": "passed"
+        }
+      ],
+      "reported_status": "proved"
+    },
+    {
+      "id": "CL-46",
+      "text": "Recovery bound used by the full-pipeline study (task 62b): a behavioral report (EQ-OBS-1/2) is a parameter-free randomized function of the every-step event sequence B(t), so the Fisher information it carries about any pipeline parameter is at most that of B(t) (data-processing inequality for Fisher information). A parameter unidentified from B(t) is therefore unidentified from reports.",
+      "status": "assumed",
+      "evidence": [
+        "standard result, not formalized here: Zamir, R. (1998), A proof of the Fisher information inequality via a data processing argument, IEEE Trans. Inf. Theory 44(3), 1246-1250",
+        "verification/python/recovery_pipeline.py (module docstring)"
+      ],
+      "equations": [
+        "EQ-HAZARD-1",
+        "EQ-OBS-1",
+        "EQ-OBS-2"
+      ],
+      "record_status": "Proposed",
+      "status_basis": "assumption of the verification study, not an SSOT claim; listed in docs/assumption-inventory.md",
+      "owner": "Uxod",
+      "approval_date": null,
+      "evidence_state": [
+        {
+          "ref": "standard result, not formalized here: Zamir, R. (1998), A proof of the Fisher information inequality via a data processing argument, IEEE Trans. Inf. Theory 44(3), 1246-1250",
+          "state": "missing"
+        },
+        {
+          "ref": "verification/python/recovery_pipeline.py (module docstring)",
+          "state": "missing"
+        }
+      ],
+      "reported_status": "assumed"
     }
   ],
   "pilot_criteria": [
@@ -765,17 +3404,17 @@
     {
       "criterion": "Lean theorems compile without sorry or unapproved axioms",
       "met": true,
-      "evidence": "lake build --wfail: passed; 41/41 theorems axiom-audited via #guard_msgs"
+      "evidence": "lake build --wfail: passed; 196/196 theorems axiom-audited via #guard_msgs"
     },
     {
       "criterion": "Mathematical results are linked to exact specification revisions",
       "met": true,
-      "evidence": "Spec.lean hash matches registry 3fc0faa0d299"
+      "evidence": "Spec.lean hash matches registry 4359d6116df4"
     },
     {
       "criterion": "Python tests pass the APGI numerical tolerances (1e-9)",
       "met": true,
-      "evidence": "6/6 golden-vector tests passed"
+      "evidence": "15/15 golden-vector tests passed"
     },
     {
       "criterion": "Continuous integration produces a reproducible verification report",

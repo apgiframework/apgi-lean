@@ -1,9 +1,9 @@
 # APGI Verification Report
 
-- Generated: 2026-11-25T11:11:36+00:00
-- Spec version: 0.3.1 · registry hash `3fc0faa0d29965c1…`
+- Generated: 2026-11-27T20:37:32+00:00
+- Spec version: 0.6.0 · registry hash `4359d6116df482f5…`
 - Lean build (`lake build --wfail`): **passed**
-- Python test functions: **91 passed, 0 failed** of 93 (parametrised cases collapsed)
+- Python test functions: **264 passed, 0 failed** of 265 (parametrised cases collapsed)
 - Pilot criteria met: **6 of 7**
 
 > A Lean proof establishes a consequence of a definition. It is not evidence that APGI describes the brain.
@@ -12,9 +12,9 @@
 
 - ✅ **Every canonical parameter has a source identifier, unit, version, and documented range** — all parameters complete
 - ✅ **Known discrepancies produce explicit failures** — 0 open conflicts tracked; seeded suite passed
-- ✅ **Lean theorems compile without sorry or unapproved axioms** — lake build --wfail: passed; 41/41 theorems axiom-audited via #guard_msgs
-- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry 3fc0faa0d299
-- ✅ **Python tests pass the APGI numerical tolerances (1e-9)** — 6/6 golden-vector tests passed
+- ✅ **Lean theorems compile without sorry or unapproved axioms** — lake build --wfail: passed; 196/196 theorems axiom-audited via #guard_msgs
+- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry 4359d6116df4
+- ✅ **Python tests pass the APGI numerical tolerances (1e-9)** — 15/15 golden-vector tests passed
 - ❌ **Continuous integration produces a reproducible verification report** — generated locally (CI run required)
 - ✅ **No mathematical proof is described as empirical confirmation of APGI** — no claim cites a Lean theorem as empirical evidence
 
@@ -35,56 +35,241 @@
 - **CL-14** The canonical threshold step (Eq. 26, exact decay, floor) respects θ_floor; with δ_reset ≥ 0 an ignition never lowers the next threshold, and with η_θ ≥ 0 a larger C − V never lowers it. — `Apgi.thresholdStep_floor` (passed), `Apgi.thresholdStep_monotone_ignition` (passed), `Apgi.thresholdStep_monotone_drive` (passed)
 - **CL-15** Ψ(z) is strictly bounded by max(α⁺, α⁻); with α⁺ = α⁻ and γ⁺ = γ⁻ it reduces to α·tanh(γ·z), which is odd. — `Apgi.psi_abs_lt` (passed), `Apgi.psi_symmetric` (passed), `Apgi.psi_odd_of_symmetric` (passed)
 - **CL-16** With β_SM ≥ 0, Πⁱ_eff is non-negative and non-decreasing in M̂(c,a); the hard clamp keeps it in [Π_min, Π_max]. — `Apgi.precEff_nonneg` (passed), `Apgi.precEff_monotone_marker` (passed), `Apgi.precClamp_mem_Icc` (passed)
+- **CL-17** The canonical drive Π_rel·(|z| − m₀) is monotone in Π_rel if and only if |z| ≥ m₀; below m₀ it is strictly decreasing, so more precision on a smaller-than-expected error makes ignition harder. Equal-magnitude errors of opposite sign contribute equally. — `Apgi.driveTerm_monotone_iff` (passed), `Apgi.driveTerm_strictAnti_of_lt` (passed), `Apgi.ignites_drive_monotone_precision` (passed), `Apgi.drive_sign_symmetric` (passed), `Apgi.drive_zero_at_m0` (passed)
+- **CL-18** m₀ = E|z| = √(2/π) for a standard normal z (∫|x|e^{−x²/2}dx = 2). — `Apgi.integral_Ioi_mul_exp_neg_half_sq` (passed), `Apgi.integral_abs_mul_exp_neg_half_sq` (passed), `Apgi.meanAbsStdNormal_eq` (passed)
+- **CL-19** Bₜ = 1/2 at S = θ_eff for every γ_sig; as γ_sig → ∞ the propensity tends to 1 above and 0 below threshold, recovering the strict hard threshold. — `Apgi.ignitionProb_at_threshold` (passed), `Apgi.ignitionProb_tendsto_one` (passed), `Apgi.ignitionProb_tendsto_zero` (passed)
+- **CL-20** In the canonical step, θ_eff enters the successor state only through the sampled event B(t); the next θ is computed from the state θ; one ignition adds exactly one δ_reset (decayed once), one δ_ref and one retention. — `Apgi.coreStep_readout_noninterference` (passed), `Apgi.coreStep_theta_from_state` (passed), `Apgi.decay_allostatic_exactly_once` (passed), `Apgi.coreStep_refractory_exactly_once` (passed), `Apgi.coreStep_retention_exactly_once` (passed)
+- **CL-21** For a < 0, three cusp equilibria exist iff |θ̃| < 2(−a/3)^{3/2}; past the ignition or extinction fold the system is monostable. — `Apgi.cusp_discriminant_iff_fold` (passed), `Apgi.cusp_monostable_of_ignition` (passed), `Apgi.cusp_monostable_of_extinction` (passed)
+- **CL-22** The learning rule contracts the prediction error for 0 < η_pred·Π < 2; the dopamine bias raises salience exactly while zⁱ > −β_DA/2. — `Apgi.pred_error_update` (passed), `Apgi.pred_contraction` (passed), `Apgi.da_salience_iff` (passed)
+- **CL-23** Divisive normalization keeps a budget of 2, reduces to the core at equal gains, and lowers exteroceptive gain when interoceptive gain rises. — `Apgi.normGain_budget` (passed), `Apgi.normGain_equal` (passed), `Apgi.normGain_antitone_other` (passed)
+- **CL-24** Inside the Paper 3 dimensionless gains (C_down·τ_Π ≤ 0.5, C_up·τ_Π ≤ 0.2) and γ_ψ ≤ 3 the loop gain is below 1; the former production defaults give 2 × 10⁴ and the adopted scaled couplings give 0.02. This is a design heuristic, not a stability proof. — `Apgi.loopGain_lt_one_of_paper3` (passed), `Apgi.loopGain_production_defaults` (passed), `Apgi.loopGain_scaled_couplings` (passed)
+- **CL-25** Urgency is non-negative, non-decreasing and vanishes at u_max = 0; P(report) lies in [g, 1 − λ_lapse] and rises with P(hit); the geometric and continuous timescale forms hit their endpoints and are monotone; ψ is bounded and odd; Γ = R² ∈ [0, 1]; aggregation stays between the extreme level drives; the hierarchical target stays in [0.5, 1.5]·θ₀,ℓ. — `Apgi.urgency_nonneg` (passed), `Apgi.urgency_monotone` (passed), `Apgi.urgency_off` (passed), `Apgi.pReport_mem_Icc` (passed), `Apgi.pReport_monotone` (passed), `Apgi.geoTau_succ` (passed), `Apgi.gradTau_zero` (passed), `Apgi.gradTau_one` (passed), `Apgi.gradTau_monotone` (passed), `Apgi.psiSmall_zero` (passed), `Apgi.psiSmall_abs_lt` (passed), `Apgi.psiSmall_odd` (passed), `Apgi.kuramotoGate_mem_Icc` (passed), `Apgi.msGlobal_le` (passed), `Apgi.msGlobal_ge` (passed), `Apgi.msTarget_band` (passed)
+- **CL-27** Estimator rules: ε is antisymmetric and vanishes at x̂ = x; z vanishes at μ_ref, is odd about it and monotone in ε; α_EMA ∈ (0, 1); the EMA mean stays between μ and ε; the variance stays non-negative and only shrinks for a sample at the mean (mean-centred, not E[ε²]); Π_rel = 1 at Π̄ and inherits the clamp scaled by 1/Π̄. — `Apgi.predError_self` (passed), `Apgi.predError_antisymm` (passed), `Apgi.standardize_at_mean` (passed), `Apgi.standardize_odd` (passed), `Apgi.standardize_monotone` (passed), `Apgi.emaAlpha_mem_Ioo` (passed), `Apgi.emaMean_mem_Icc` (passed), `Apgi.emaVar_nonneg` (passed), `Apgi.emaVar_at_mean` (passed), `Apgi.precRel_self` (passed), `Apgi.precRel_mem_Icc` (passed)
+- **CL-28** The soft floor σ(−γ_sig·θ_eff) is ≤ ε iff γ_sig·θ_eff ≥ log(1/ε − 1), so a floor ≤ 0.01 needs γ_sig·θ_eff ≥ log 99; the step rule dt ≤ τ/10 implies the forward-Euler bound. — `Apgi.floor_le_iff` (passed), `Apgi.floor_le_one_percent_iff` (passed), `Apgi.euler_step_mem_Icc_of_stepRule` (passed)
+- **CL-29** Between events the continuous threshold form (and its reduced measurable form) is solved by θ* + (θ(0) − θ*)e^{−t/τ} with θ* = θ₀ + τ·D; T_ant = 0 recovers the reactive cost; V ≥ 0, C is monotone in the previous ignition, and more information value never raises the next threshold. — `Apgi.alloPath_hasDerivAt` (passed), `Apgi.alloReduced_hasDerivAt` (passed), `Apgi.anticipated_zero` (passed), `Apgi.valueV_nonneg` (passed), `Apgi.costC_monotone_ignition` (passed), `Apgi.thresholdStep_antitone_value` (passed)
+- **CL-30** The precision-ODE rate is strictly decreasing in Π_ℓ and reduces to pure decay without drive or coupling; level salience is sign-symmetric under the symmetric Ψ and monotone in the gate; a synchronized Kuramoto level drifts at ω; the tanh reservoir state is bounded and its readout is non-negative. — `Apgi.precOdeRate_strictAnti` (passed), `Apgi.precOdeRate_pure_decay` (passed), `Apgi.msDrive_sign_symmetric` (passed), `Apgi.msDrive_gate_one` (passed), `Apgi.msDrive_gate_monotone` (passed), `Apgi.kurRate_synchronized` (passed), `Apgi.resStep_abs_lt` (passed), `Apgi.resReadout_nonneg` (passed)
+- **CL-31** E_L(310 K) = k_B·310·ln 2 lies within 0.5% of 2.97 × 10⁻²¹ J, and the 300 K value is below 2.88 × 10⁻²¹ J; κ = E_event/(N_b·|ΔG_ATP|) ≥ 0; R_L ≥ 1 iff E_event ≥ N_erase·E_L. These are unit and arithmetic facts, not measurements of neural efficiency. — `Apgi.landauerE_pos` (passed), `Apgi.landauer_310K_within_tolerance` (passed), `Apgi.landauer_300K_below` (passed), `Apgi.kappaATP_nonneg` (passed), `Apgi.kappa_of_energy` (passed), `Apgi.erasureRatio_ge_one_iff` (passed)
+- **CL-32** Along every trajectory of the canonical 15-step pipeline, for every input sequence and every sequence of uniform draws, Σ ≥ 0 in both channels, θ ≥ θ_floor, r ≥ 0, B_prev ∈ {0, 1}, S ≥ −m₀·(Π_max/Π̄ᵉ + Π_max/Π̄ⁱ), every precision stays in [Π_min, Π_max] and |γ_NE|·g_NE ≤ 0.5 (any reference estimator; admissible parameters). An upper bound on S holds only under an explicit bound on S_inst. — `Apgi.traj_inv` (passed), `Apgi.traj_prec_mem_Icc` (passed), `Apgi.traj_ne_bound` (passed), `Apgi.pipeLog_Sinst_ge` (passed), `Apgi.traj_S_le` (passed)
+- **CL-33** The ignition decision at t (B_t and B(t)) does not depend on the inputs at t; under the rejected 17-step order 'ignition after accumulation' it depends strictly on the current drive, and 'statistics before standardization' shrinks z by (1 − α). The canonical and rejected orders are therefore not equivalent. — `Apgi.pipeStep_decision_input_independent` (passed), `Apgi.decideAfterAccumulation_strictMono_drive` (passed), `Apgi.orders_differ` (passed), `Apgi.standardize_after_update_shrinks` (passed)
+- **CL-34** With a uniform draw on [0, 1], the pipeline's sampled event has probability 1 − exp(−r_max·B_t·dt) (EQ-HAZARD-1). — `Apgi.sampler_volume` (passed), `Apgi.pipeLog_ignition_measure` (passed)
+- **CL-35** Level 0 lies outside the ignition model; at τ₀ = 50 ms and k = 133 the L1 point value 6.65 s lies above the L1 band [0.1, 3] s and the L2 point value 14.74 min lies below the L2 integration window [25, 30] min but inside the operational band [1, 30] min; five levels fit the 50 ms – 6 month span at k = 133 and not at k = 134; τ_Π = max(1 s, τ_ℓ/10) meets dt₀ = 10 ms ≤ τ_Π/10 on every level. — `Apgi.L0_outside_ignition_model` (passed), `Apgi.L1_point_outside_band` (passed), `Apgi.L2_point_vs_bands` (passed), `Apgi.five_levels_boundary` (passed), `Apgi.tauPiLevel_step_rule` (passed)
+- **CL-37** The §12.5 Lyapunov bound V̇ ≤ −min(1/τ_Π, 1/τ_θ)·(1 − loop gain)·V holds in the decoupled limit (zero coupling, zero forcing, loop gain 0). The coupled conjecture remains CL-26. — `Apgi.lyapunov_decoupled` (passed)
+- **CL-38** A quantity that carries AU is Tier 3 only; multiplying it by any constant free of AU⁻¹ keeps it out of Tiers 1–2, so a Tier-3 bridge needs a registered calibration constant with an AU⁻¹ factor (units.json registers none). κ and e_bit are bridge quantities that belong to no single tier. — `Apgi.au_quantity_tier3_only` (passed), `Apgi.tier_exit_needs_au_inverse` (passed), `Apgi.calibration_constant_au` (passed), `Apgi.bridge_quantities_cross_tiers` (passed)
+- **CL-39** The registered κ calibration rule never retires the bridge on one dataset, is inert with no calibrated estimate, never counts a straddling interval, and cannot return both bridge-consistent and retired on the same data. — `Apgi.kappa_single_never_retires` (passed), `Apgi.kappa_inert` (passed), `Apgi.kappa_straddle_not_outside` (passed), `Apgi.kappa_consistent_not_retires` (passed)
+- **CL-40** Division by zero cannot occur in the canonical step: with ε_stab > 0 and a nonnegative reference spread, every denominator (σ_ref + ε_stab, Σ + ε_stab, both channels) is positive along every trajectory, for every input and draw sequence. — `Apgi.traj_denoms_pos` (passed), `Apgi.precRaw_le` (passed)
+- **CL-41** The drive is bounded above by Π_max/Π̄ᵉ·|εᵉ − μᵉ_ref|/ε_stab + Π_max/Π̄ⁱ·(|εⁱ − μⁱ_ref|/ε_stab + |β_DA|); with the unconditional floor, S stays in [L, U] on every trajectory whose errors keep that bound at most U. — `Apgi.standardize_abs_le` (passed), `Apgi.pipeLog_Sinst_le` (passed), `Apgi.traj_S_mem_Icc` (passed)
+- **CL-42** EQ-STEP-1 (dt ≤ τ/10) bounds every per-step gain 1 − exp(−dt/τ), the leak λ and α_EMA alike, by 1/10. — `Apgi.stepRule_gain_le` (passed)
+- **CL-43** TC-08a and TC-08c: a common offset of S and θ_eff, and the joint rescaling S′ = aS + b, θ′ = aθ + b, γ′ = γ/a (a ≠ 0), leave the event-sequence likelihood unchanged; (γ_sig, S, θ) is not identifiable from event data unless the scale is fixed. — `Apgi.ignitionProb_shift` (passed), `Apgi.ignitionProb_rescale` (passed), `Apgi.hazardLik_shift` (passed), `Apgi.hazardLik_rescale` (passed), `Apgi.hazardLik_not_injective` (passed)
+- **CL-44** TC-08b: with γ_NE = 0, g_NE, β_SM and M̂ enter the whole pipeline only through g_NE·exp(β_SM·M̂); distinct settings with the same product give identical trajectories for every input and draw sequence. — `Apgi.pipeStep_gain_product` (passed), `Apgi.traj_gain_product` (passed), `Apgi.gain_product_not_injective` (passed)
+- **CL-45** TC-08g: EQ-ALLO-1 sees η_θ and the cost and value weights c₁, c₂, v₁, v₂ only through the products η_θ·c₁, η_θ·c₂, η_θ·v₁, η_θ·v₂: scaling η_θ by a ≠ 0 and the four weights by 1/a gives the identical trajectory for every input and draw sequence, and with η_θ = 0 the weights do not enter at all. — `Apgi.pipeStep_scaleAllo` (passed), `Apgi.traj_scaleAllo` (passed), `Apgi.scaleAllo_not_injective` (passed), `Apgi.pipeStep_weights_eta_zero` (passed), `Apgi.traj_weights_eta_zero` (passed)
 
 ### Assumed
 - **CL-8** κ (ATP per bit of ignition-event information) has no canonical value; published sensitivity calculations span 3 × 10³ to 10⁹ ATP/bit. — no evidence registered
+- **CL-46** Recovery bound used by the full-pipeline study (task 62b): a behavioral report (EQ-OBS-1/2) is a parameter-free randomized function of the every-step event sequence B(t), so the Fisher information it carries about any pipeline parameter is at most that of B(t) (data-processing inequality for Fisher information). A parameter unidentified from B(t) is therefore unidentified from reports. — `standard result, not formalized here: Zamir, R. (1998), A proof of the Fisher information inequality via a data processing argument, IEEE Trans. Inf. Theory 44(3), 1246-1250` (missing), `verification/python/recovery_pipeline.py (module docstring)` (missing)
 
 ### Unresolved
 - **CL-7** APGI's hysteresis prediction (Innovation 4) holds in human data. — no evidence registered
+- **CL-26** Lyapunov conjecture (SSOT §12.5): V = Σ_ℓ[(Π_ℓ − Π_ℓ*)² + (θ_ℓ − θ_ℓ*)²] satisfies V̇ ≤ −λV with λ ≥ min(1/τ_Π, 1/τ_θ)·(1 − loop gain). Not proved; needs the closed-loop linearization. — no evidence registered
+- **CL-36** OSF H10: τ_int,ℓ > τ_ign,ℓ > τ_θ,ℓ for ℓ ≥ 2. A registered empirical hypothesis, stated in Lean as the hypothesis Apgi.H10Ordering and never proved; it constrains nothing at L0–L1 (Apgi.H10Ordering.silent_below_two). — no evidence registered
 
 ## Theorems
 
+- `Apgi.H10Ordering.recovery_lt_integration` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.H10Ordering.silent_below_two` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.L0_outside_ignition_model` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.L1_point_outside_band` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.L2_point_vs_bands` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.alloPath_hasDerivAt` — EQ-ALLO-C1 — axiom audit: pinned
+- `Apgi.alloReduced_hasDerivAt` — EQ-ALLO-R1 — axiom audit: pinned
+- `Apgi.anticipated_zero` — EQ-ANT-1 — axiom audit: pinned
+- `Apgi.au_quantity_tier3_only` — EQ-BR-1 — axiom audit: pinned
+- `Apgi.bridge_quantities_cross_tiers` — EQ-BR-1 — axiom audit: pinned
+- `Apgi.calibration_constant_au` — EQ-BR-1 — axiom audit: pinned
 - `Apgi.clampedUpdate_floor` — EQ-THR-1 — axiom audit: pinned
 - `Apgi.convex_update_mem_Icc` — EQ-UPD-1 — axiom audit: pinned
+- `Apgi.coreStep_readout_noninterference` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.coreStep_refractory_exactly_once` — EQ-REF-1 — axiom audit: pinned
+- `Apgi.coreStep_retention_exactly_once` — EQ-RESET-1 — axiom audit: pinned
+- `Apgi.coreStep_theta_from_state` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.costC_div` — EQ-COST-1 — axiom audit: pinned
+- `Apgi.costC_monotone_ignition` — EQ-COST-1 — axiom audit: pinned
 - `Apgi.cuspV_hasDerivAt` — EQ-CUSP-1 — axiom audit: pinned
+- `Apgi.cusp_discriminant_iff_fold` — EQ-CUSP-2 — axiom audit: pinned
+- `Apgi.cusp_monostable_of_extinction` — EQ-CUSP-2 — axiom audit: pinned
+- `Apgi.cusp_monostable_of_ignition` — EQ-CUSP-2 — axiom audit: pinned
 - `Apgi.cusp_three_equilibria` — EQ-CUSP-1 — axiom audit: pinned
 - `Apgi.cusp_three_equilibria_converse` — EQ-CUSP-1 — axiom audit: pinned
 - `Apgi.cusp_three_equilibria_iff` — EQ-CUSP-1 — axiom audit: pinned
 - `Apgi.cusp_two_equilibria_witness` — EQ-CUSP-1 — axiom audit: pinned
 - `Apgi.cusp_unique_equilibrium` — EQ-CUSP-1 — axiom audit: pinned
+- `Apgi.da_salience_iff` — EQ-DA-1 — axiom audit: pinned
 - `Apgi.decayGain_mem_Icc` — EQ-DECAY-1 — axiom audit: pinned
 - `Apgi.decayStep_monotone` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.decay_allostatic_exactly_once` — EQ-ALLO-1 — axiom audit: pinned
 - `Apgi.decay_step_mem_Icc` — EQ-DECAY-1 — axiom audit: pinned
+- `Apgi.decideAfterAccumulation_strictMono_drive` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.driveLower_nonpos` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.driveTerm_ge` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.driveTerm_le` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.driveTerm_monotone_iff` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.driveTerm_strictAnti_of_lt` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.drive_sign_symmetric` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.drive_zero_at_m0` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.emaAlpha_mem_Ioo` — EQ-EMA-2 — axiom audit: pinned
+- `Apgi.emaMean_mem_Icc` — EQ-EMA-2 — axiom audit: pinned
+- `Apgi.emaVar_at_mean` — EQ-EMA-1 — axiom audit: pinned
+- `Apgi.emaVar_nonneg` — EQ-EMA-1 — axiom audit: pinned
+- `Apgi.erasureRatio_ge_one_iff` — EQ-BR-3 — axiom audit: pinned
 - `Apgi.euler_step_mem_Icc` — EQ-EULER-1 — axiom audit: pinned
-- `Apgi.hazardProb_mem_Icc` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.euler_step_mem_Icc_of_stepRule` — EQ-STEP-1 — axiom audit: pinned
+- `Apgi.five_levels_boundary` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.floor_le_iff` — EQ-FLOOR-1 — axiom audit: pinned
+- `Apgi.floor_le_one_percent_iff` — EQ-FLOOR-1 — axiom audit: pinned
+- `Apgi.gain_product_not_injective` — EQ-PREC-SM-1 — axiom audit: pinned
+- `Apgi.geoTau_succ` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.gradTau_monotone` — EQ-GRAD-1 — axiom audit: pinned
+- `Apgi.gradTau_one` — EQ-GRAD-1 — axiom audit: pinned
+- `Apgi.gradTau_zero` — EQ-GRAD-1 — axiom audit: pinned
+- `Apgi.hazardLik_not_injective` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.hazardLik_rescale` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.hazardLik_shift` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.hazardProb_mem_Icc` — EQ-HAZARD-1, EQ-OBS-1 — axiom audit: pinned
 - `Apgi.hazardProb_monotone_propensity` — EQ-HAZARD-1 — axiom audit: pinned
 - `Apgi.hazard_antitone_threshold` — EQ-HAZARD-1 — axiom audit: pinned
 - `Apgi.hazard_n_steps` — EQ-HAZARD-1 — axiom audit: pinned
-- `Apgi.hazard_survival_add` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.hazard_survival_add` — EQ-HAZARD-1, EQ-OBS-1 — axiom audit: pinned
 - `Apgi.hazard_two_steps` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.idx_injective` — EQ-GEO-1 — axiom audit: pinned
 - `Apgi.ignites_antitone_threshold` — EQ-IGN-1 — axiom audit: pinned
+- `Apgi.ignites_drive_monotone_precision` — EQ-DRIVE-1 — axiom audit: pinned
 - `Apgi.ignites_monotone_precision` — EQ-PREC-1 — axiom audit: pinned
 - `Apgi.ignitionProb_antitone_threshold` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.ignitionProb_at_threshold` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.ignitionProb_rescale` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.ignitionProb_shift` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.ignitionProb_strictMono_S` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.ignitionProb_tendsto_one` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.ignitionProb_tendsto_zero` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.ignition_levels` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.integral_Ioi_mul_exp_neg_half_sq` — EQ-EXCESS-1 — axiom audit: pinned
+- `Apgi.integral_abs_mul_exp_neg_half_sq` — EQ-EXCESS-1 — axiom audit: pinned
+- `Apgi.kappaATP_nonneg` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_consistent_not_retires` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_dimension` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_inert` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_inside_not_outside` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_of_energy` — EQ-BR-1, EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_single_never_retires` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kappa_straddle_not_outside` — EQ-BR-2 — axiom audit: pinned
+- `Apgi.kurRate_synchronized` — EQ-KUR-2 — axiom audit: pinned
+- `Apgi.kuramotoGate_mem_Icc` — EQ-KUR-1 — axiom audit: pinned
+- `Apgi.landauerE_pos` — EQ-LAND-1 — axiom audit: pinned
+- `Apgi.landauer_300K_below` — EQ-LAND-1 — axiom audit: pinned
+- `Apgi.landauer_310K_within_tolerance` — EQ-LAND-1 — axiom audit: pinned
 - `Apgi.leakGain_mem_Ioo` — EQ-LEAK-1 — axiom audit: pinned
 - `Apgi.leak_step_mem_Icc` — EQ-LEAK-1 — axiom audit: pinned
 - `Apgi.leak_two_steps` — EQ-LEAK-1 — axiom audit: pinned
+- `Apgi.levelTau_strictMono` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.levelTau_values` — EQ-GEO-1 — axiom audit: pinned
+- `Apgi.loopGain_lt_one_of_paper3` — EQ-LOOP-1 — axiom audit: pinned
+- `Apgi.loopGain_production_defaults` — EQ-LOOP-1 — axiom audit: pinned
+- `Apgi.loopGain_scaled_couplings` — EQ-LOOP-1 — axiom audit: pinned
+- `Apgi.lyapunov_decoupled` — EQ-LOOP-1 — axiom audit: pinned
+- `Apgi.meanAbsStdNormal_eq` — EQ-EXCESS-1 — axiom audit: pinned
+- `Apgi.msDrive_gate_monotone` — EQ-MS-1 — axiom audit: pinned
+- `Apgi.msDrive_gate_one` — EQ-MS-1 — axiom audit: pinned
+- `Apgi.msDrive_sign_symmetric` — EQ-MS-1 — axiom audit: pinned
+- `Apgi.msGlobal_ge` — EQ-MS-2, EQ-MS-3 — axiom audit: pinned
+- `Apgi.msGlobal_le` — EQ-MS-2, EQ-MS-3 — axiom audit: pinned
+- `Apgi.msTarget_band` — EQ-MS-4 — axiom audit: pinned
 - `Apgi.neClamp_bound` — EQ-NE-1 — axiom audit: pinned
 - `Apgi.neClamp_nonneg` — EQ-NE-1 — axiom audit: pinned
 - `Apgi.neClamp_of_le` — EQ-NE-1 — axiom audit: pinned
+- `Apgi.neClamp_zero` — EQ-NE-1 — axiom audit: pinned
 - `Apgi.neFactor_band` — EQ-NE-1 — axiom audit: pinned
 - `Apgi.neFactor_mem_Icc` — EQ-NE-1 — axiom audit: pinned
 - `Apgi.neThreshold_pos` — EQ-NE-1 — axiom audit: pinned
+- `Apgi.normGain_antitone_other` — EQ-NORM-1 — axiom audit: pinned
+- `Apgi.normGain_budget` — EQ-NORM-1 — axiom audit: pinned
+- `Apgi.normGain_equal` — EQ-NORM-1 — axiom audit: pinned
 - `Apgi.operatingRange_invariant_of_target` — EQ-THR-1 — axiom audit: pinned
 - `Apgi.operatingRange_not_invariant` — EQ-THR-1 — axiom audit: pinned
-- `Apgi.precClamp_mem_Icc` — EQ-PREC-SM-1 — axiom audit: pinned
+- `Apgi.orders_differ` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.pReport_mem_Icc` — EQ-OBS-2 — axiom audit: pinned
+- `Apgi.pReport_monotone` — EQ-OBS-2 — axiom audit: pinned
+- `Apgi.pipeInv_step` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.pipeLog_B_cases` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.pipeLog_B_eq_one_iff` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.pipeLog_Sinst_ge` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.pipeLog_Sinst_le` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.pipeLog_estimators_separate` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.pipeLog_ignition_measure` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.pipeLog_ne_bound` — EQ-NE-1 — axiom audit: pinned
+- `Apgi.pipeLog_prec_mem_Icc` — EQ-PREC-2 — axiom audit: pinned
+- `Apgi.pipeStep_core` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.pipeStep_decision_input_independent` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.pipeStep_exactly_once` — EQ-RESET-1 — axiom audit: pinned
+- `Apgi.pipeStep_gain_product` — EQ-PREC-SM-1 — axiom audit: pinned
+- `Apgi.pipeStep_readout_noninterference` — EQ-THEFF-1 — axiom audit: pinned
+- `Apgi.pipeStep_reference_excludes_current` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.pipeStep_scaleAllo` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.pipeStep_theta_from_state` — EQ-THEFF-1 — axiom audit: pinned
+- `Apgi.pipeStep_variance_uses_preupdate_mean` — EQ-EMA-1 — axiom audit: pinned
+- `Apgi.pipeStep_weights_eta_zero` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.precClamp_mem_Icc` — EQ-PREC-SM-1, EQ-PREC-ACH-1, EQ-SM-1 — axiom audit: pinned
 - `Apgi.precEff_monotone_marker` — EQ-PREC-SM-1 — axiom audit: pinned
 - `Apgi.precEff_nonneg` — EQ-PREC-SM-1 — axiom audit: pinned
+- `Apgi.precOdeRate_pure_decay` — EQ-PREC-ODE-1 — axiom audit: pinned
+- `Apgi.precOdeRate_strictAnti` — EQ-PREC-ODE-1 — axiom audit: pinned
+- `Apgi.precRaw_le` — EQ-PREC-2 — axiom audit: pinned
+- `Apgi.precRel_mem_Icc` — EQ-PREC-REL-1 — axiom audit: pinned
+- `Apgi.precRel_self` — EQ-PREC-REL-1 — axiom audit: pinned
+- `Apgi.predError_antisymm` — EQ-ERR-1 — axiom audit: pinned
+- `Apgi.predError_self` — EQ-ERR-1 — axiom audit: pinned
+- `Apgi.pred_contraction` — EQ-PRED-1 — axiom audit: pinned
+- `Apgi.pred_error_update` — EQ-PRED-1 — axiom audit: pinned
+- `Apgi.propensity_path_rescale` — EQ-IGN-2 — axiom audit: pinned
+- `Apgi.psiSmall_abs_lt` — EQ-PSI-SMALL-1 — axiom audit: pinned
+- `Apgi.psiSmall_odd` — EQ-PSI-SMALL-1 — axiom audit: pinned
+- `Apgi.psiSmall_zero` — EQ-PSI-SMALL-1 — axiom audit: pinned
 - `Apgi.psi_abs_lt` — EQ-PSI-1 — axiom audit: pinned
 - `Apgi.psi_odd_of_symmetric` — EQ-PSI-1 — axiom audit: pinned
 - `Apgi.psi_symmetric` — EQ-PSI-1 — axiom audit: pinned
+- `Apgi.resReadout_nonneg` — EQ-RES-2 — axiom audit: pinned
+- `Apgi.resStep_abs_lt` — EQ-RES-1 — axiom audit: pinned
+- `Apgi.retain_leak_ge` — EQ-LEAK-1 — axiom audit: pinned
+- `Apgi.sampler_volume` — EQ-HAZARD-1 — axiom audit: pinned
+- `Apgi.scaleAllo_not_injective` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.standardize_abs_le` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.standardize_after_update_shrinks` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.standardize_at_mean` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.standardize_monotone` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.standardize_odd` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.stepRule_gain_le` — EQ-STEP-1 — axiom audit: pinned
+- `Apgi.tauPiLevel_ge_one` — EQ-STEP-1 — axiom audit: pinned
+- `Apgi.tauPiLevel_step_rule` — EQ-STEP-1 — axiom audit: pinned
+- `Apgi.thresholdStep_antitone_value` — EQ-VAL-1 — axiom audit: pinned
+- `Apgi.thresholdStep_eta_zero` — EQ-ALLO-1 — axiom audit: pinned
 - `Apgi.thresholdStep_floor` — EQ-ALLO-1 — axiom audit: pinned
 - `Apgi.thresholdStep_monotone_drive` — EQ-ALLO-1 — axiom audit: pinned
 - `Apgi.thresholdStep_monotone_ignition` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.thresholdStep_scale` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.tier_examples` — EQ-BR-1 — axiom audit: pinned
+- `Apgi.tier_exit_needs_au_inverse` — EQ-BR-1 — axiom audit: pinned
+- `Apgi.traj_S_le` — EQ-LEAK-1 — axiom audit: pinned
+- `Apgi.traj_S_mem_Icc` — EQ-DRIVE-1 — axiom audit: pinned
+- `Apgi.traj_denoms_pos` — EQ-STD-1 — axiom audit: pinned
+- `Apgi.traj_gain_product` — EQ-PREC-SM-1 — axiom audit: pinned
+- `Apgi.traj_inv` — EQ-PIPE-1 — axiom audit: pinned
+- `Apgi.traj_ne_bound` — EQ-NE-1 — axiom audit: pinned
+- `Apgi.traj_prec_mem_Icc` — EQ-PREC-2 — axiom audit: pinned
+- `Apgi.traj_scaleAllo` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.traj_weights_eta_zero` — EQ-ALLO-1 — axiom audit: pinned
+- `Apgi.urgency_monotone` — EQ-URG-1 — axiom audit: pinned
+- `Apgi.urgency_nonneg` — EQ-URG-1 — axiom audit: pinned
+- `Apgi.urgency_off` — EQ-URG-1 — axiom audit: pinned
+- `Apgi.valueV_div` — EQ-VAL-1 — axiom audit: pinned
+- `Apgi.valueV_nonneg` — EQ-VAL-1 — axiom audit: pinned
 
 ## Open specification conflicts
 
