@@ -17,7 +17,9 @@ that APGI describes the brain. See `specification/epistemic-claims.json` and
 - **Conditional:** theorems that carry an explicit extra hypothesis (for example the
   upper bound on S needs a bound on S_inst; the Lyapunov bound is proved at loop gain 0).
 - **Tested:** float64 twins of every theorem (Hypothesis), golden vectors at 50 digits,
-  timestep-refinement convergence, and cross-checks of the pinned production code.
+  timestep-refinement convergence, NaN/Inf and overflow handling (TC-13), the §17
+  parameter-recovery gate on synthetic data (TC-08), a cross-implementation distributional
+  test (TC-19), and cross-checks of the pinned production code.
 - **Assumed / empirical:** bridges and registered hypotheses (`specification/bridges.json`,
   CL-* claims). They are stated as hypotheses and never proved.
 
@@ -51,7 +53,11 @@ apgi-lean/
 │   │                         hazard sampler measure, the rejected 17-step orders
 │   ├── Strata.lean           L0–L4, geometric spacing and its limitations, τ_Π step rule,
 │   │                         H10 as a hypothesis, decoupled Lyapunov bound
-│   └── Epistemic.lean        tier currencies, Tier-3 exit rule, κ calibration rule
+│   ├── Epistemic.lean        tier currencies, Tier-3 exit rule, κ calibration rule
+│   ├── Stability.lean        TC-13: no division by zero on any trajectory, explicit drive bound,
+│   │                         two-sided bound on S, EQ-STEP-1 gain bound
+│   └── Identifiability.lean  TC-08a–c: margin, joint-scale and gain-product degeneracies of
+│                             the event likelihood and the pipeline
 ├── docs/                     REMAINING-TASKS.md, REPRODUCIBILITY.md, VERIFICATION-REPORT.md,
 │                             traceability-matrix.md, assumption-inventory.md (generated)
 └── verification/
