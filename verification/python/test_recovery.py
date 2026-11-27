@@ -22,7 +22,8 @@ Scope limits, stated so they are not overread:
   pipeline to behavioral data and are not covered (task 62b).
 * The design constants below (stimulus levels, trials, r_max·T_W, guess and lapse rates) are
   synthetic-study choices, not registered values. λ_lapse lies in its registered range
-  [0, 0.05]; the guess rate g is not yet a registry row (task 54b).
+  [0, 0.05]; the guess rate g is registered as a rule, not a value (g_guess: the participant's
+  catch-trial false-alarm rate), so the study fixes it as a known catch-trial rate.
 * Passing recovery is not evidence for APGI, and failing it would not falsify APGI (§17).
 """
 from __future__ import annotations
@@ -46,7 +47,8 @@ LAPSE = 0.02
 assert float(P["lambda_lapse"]["range"]["lo"]) <= LAPSE <= float(P["lambda_lapse"]["range"]["hi"])
 
 # Synthetic-study design constants (not registered values).
-GUESS = 0.02
+GUESS = 0.02    # synthetic catch-trial false-alarm rate; g is fixed at it, never fitted (g_guess)
+assert "catch-trial false-alarm rate" in P["g_guess"]["value_rule"]
 RATE_WINDOW = 3.0  # r_max·T_W: P(hit) = 1 − exp(−3·Bₜ) for a propensity held over the window
 LEVELS = np.linspace(0.0, 1.5, 16)  # anchored drive S (AU), S = 0 at zero prediction error
 TRIALS = 60  # per level

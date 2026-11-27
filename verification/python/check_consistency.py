@@ -61,7 +61,9 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
             add("unknown_source", [p["id"]], f"source {p.get('source')!r} not in source-manifest", "P0")
         if p.get("unit") is not None and dims(p["unit"], U) is None:
             add("unknown_unit", [p["id"]], f"unit {p['unit']!r} not in units.json", "P0")
-        if p.get("unit") is None or (p.get("value") is None and p.get("range") is None) or not p.get("version"):
+        # A label row (task 54b) carries a stated value rule instead of a value or range.
+        if p.get("unit") is None or (p.get("value") is None and p.get("range") is None and not p.get("value_rule")) \
+                or not p.get("version"):
             incomplete.append(p["id"])
     if incomplete:
         add("incomplete_parameter", incomplete, "missing value/range, unit, or version")

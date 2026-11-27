@@ -69,3 +69,16 @@ def test_revisions_complete():
             text = (HERE / file).read_text(encoding="utf-8")
             assert not fn or f"def {fn}(" in text, r["id"]
     assert {r["id"] for r in Rv if "Amendment required" in r["type"]} == {"R4", "R8", "R10", "R11"}
+
+
+def test_label_rows_state_a_value_rule():
+    """Task 54b: a parameter row with neither a value nor a range is a label row. It must state the
+    rule the SSOT gives instead (computed, participant-estimated, catch-trial rate, …) and carry
+    evidence, so no value is invented for it."""
+    P = registry.params()
+    labels = {k for k, p in P.items() if p.get("value") is None and p.get("range") is None}
+    assert {"tau_min", "tau_max", "m_Psi", "K_ell", "K_ell_m", "R_L", "kappa_pop", "kappa_beh",
+            "alpha_psy_log", "g_guess", "protocol_seeds"} <= labels
+    for k in labels:
+        assert P[k].get("value_rule"), k
+        assert P[k]["evidence"] and P[k]["verification"] == "extracted", k

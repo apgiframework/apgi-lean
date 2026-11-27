@@ -53,7 +53,7 @@ GATE_EXPECTED = {
     ("sig", "gamma_sig"): True,
     ("sig", "log_pi_scale"): True,
     # Round 74 (task 62b remainder): η_θ·c₂, η_θ·v₂ and the c₂ / δ_reset pair. All fail §17 at
-    # this design; dispositions go with task 71a.
+    # this design; their dispositions (task 71a) are in parameters.json recovery_dispositions.
     ("allo_c2v2", "tau_theta"): False,
     ("allo_c2v2", "k_C2"): False,
     ("allo_c2v2", "k_V2"): False,
@@ -216,6 +216,28 @@ def test_gate_outcomes(report):
                   f"{v['median_range_scaled_error']:.3f}, posterior sd/prior sd = "
                   f"{v['posterior_sd_over_prior_sd']:.2f} -> {'pass' if seen[b, k] else 'FAIL'}")
     assert seen == GATE_EXPECTED
+
+
+def test_failed_recovery_dispositions(report):
+    """§17 (task 71a): every quantity that fails the gate in the committed report has exactly one
+    recorded disposition of an allowed kind, decided by the author before data collection; no
+    disposition is recorded for a quantity that passes, and every cited parameter is registered."""
+    rd = registry.load("parameters.json")["recovery_dispositions"]
+    assert set(rd["allowed"]) == {"fixed_from_external_measurement", "informative_prior",
+                                  "requires_auxiliary_measurement"}
+    failed = {bk for bk, ok in GATE_EXPECTED.items() if not ok}
+    covered = {}
+    for rec in rd["records"]:
+        assert rec["disposition"] in rd["allowed"], rec["id"]
+        assert rec["owner"] and rec["decision_date"], rec["id"]
+        assert all(pid in P for pid in rec["parameters"]), rec["id"]
+        for b, k in rec["recovered_as"]:
+            assert (b, k) not in covered, f"{b}/{k} has two dispositions"
+            assert b in report["blocks"] and k in report["blocks"][b]["parameters"], (b, k)
+            covered[b, k] = rec["id"]
+    assert set(covered) == failed
+    # η_θ is reported only through its products (CL-45); k_V = η_θ·v₁ is the one product that passes.
+    assert "CL-45" in rd["reporting_rule"] and GATE_EXPECTED["allo_blocks", "k_V"]
 
 
 def test_tc08e_tradeoff_present(report):
