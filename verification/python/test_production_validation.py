@@ -159,3 +159,83 @@ def test_full_model_uses_exact_leak_weight():
     assert b - a == pytest.approx(1.0 - lam, rel=1e-12)  # retention e^(−Δt/τ) = 1 − λ (holds today)
     s_inst = {(p.we + p.wi) * 3.0, (p.we + p.wi) * (3.0 - R.M0)}  # uncentered or centered drive
     assert any(a == pytest.approx(lam * s, rel=1e-9) for s in s_inst)
+
+
+# ------------------------------- TC-04: apgi_core.full_model trajectory (task 62b) ----
+def _full_model_pair(n=600, seed=404):
+    """Reference run (CORE_DEFAULTS) and the full model driven by the reference's own Π and z.
+
+    full_model takes Π and ε as inputs, so the reference supplies them: we = wi = 0.5 and
+    Π = 2·Π_rel make its drive we·Π·(|z| − m₀) equal to EQ-DRIVE-1's Π_rel·|z|_ex per channel
+    (β = 1). Both see the same uniform draws through the dt-invariant hazard."""
+    import numpy as np
+
+    g = np.random.default_rng(seed)
+    xe = g.standard_normal(n) + np.where((np.arange(n) % 200) >= 120, 2.0, 0.0)
+    xi, us = g.standard_normal(n), g.random(n)
+    rp = dict(R.CORE_DEFAULTS)
+    par = F.APGIParameters(delta_t=rp["dt"], tau=rp["tau_S"], we=0.5, wi=0.5, theta_t0=rp["theta0"],
+                           k=rp["gamma_sig"], beta=1.0, r_max=rp["r_max"], tau_theta=rp["tau_theta"])
+
+    class Draws:
+        def __init__(self, u):
+            self._it = iter(u)
+
+        def random(self):
+            return next(self._it)
+
+    f = F.APGIFullDynamicModel(par, rng=Draws(us))
+    s = R.core_state(rp)
+    f.state.S, f.state.theta_t = s["S"], s["theta"]
+    rows = []
+    for k in range(n):
+        s, log = R.core_step(s, float(xe[k]), float(xi[k]), rp, u=float(us[k]))
+        st = f.step(2 * log["pi_e_eff"] / rp["pi_bar_e"], 2 * log["pi_i_eff"] / rp["pi_bar_i"],
+                    log["z_e"], log["z_i_eff"])
+        rows.append(dict(ref_S=s["S"], ref_theta=s["theta"], ref_Bt=log["B_prop"], ref_B=log["B"],
+                         fm_S=float(st.S), fm_theta=float(st.theta_t), fm_Bt=float(st.ignition_probability),
+                         fm_B=int(st.I)))
+    return rows
+
+
+def test_full_model_signal_matches_reference_until_first_event():
+    """What full_model shares with the SSOT core (SSOT-V2, resolved): drive and exact leak. Until
+    the first ignition the accumulated S agrees with apgi_ref step for step."""
+    rows = _full_model_pair()
+    first = next(k for k, r in enumerate(rows) if r["ref_B"] or r["fm_B"])
+    assert first > 10
+    for r in rows[:first]:          # the event step itself applies the reset (EQ-RESET-1)
+        assert r["fm_S"] == pytest.approx(r["ref_S"], rel=1e-9, abs=1e-12)
+
+
+@divergence("SSOT-V3")
+def test_full_model_matches_reference_trajectory():
+    """TC-04 for apgi_core.full_model: S, θ, Bₜ and B(t) equal apgi_ref.core_step within
+    tolerance on 600 seeded steps (the SSOT §8 order, EQ-RESET-1, EQ-ALLO-1)."""
+    for k, r in enumerate(_full_model_pair()):
+        assert r["fm_Bt"] == pytest.approx(r["ref_Bt"], rel=1e-9, abs=1e-12), (k, "B_t")
+        assert r["fm_B"] == r["ref_B"], (k, "B")
+        assert r["fm_S"] == pytest.approx(r["ref_S"], rel=1e-9, abs=1e-12), (k, "S")
+        assert r["fm_theta"] == pytest.approx(r["ref_theta"], rel=1e-9, abs=1e-12), (k, "theta")
+
+
+@divergence("SSOT-V3")
+def test_full_model_decides_from_existing_signal():
+    """SSOT §8 step 8: Bₜ = σ(γ_sig·[S(t) − θ_eff(t)]) uses the existing S. full_model computes the
+    propensity from the newly accumulated S(t+1) and the updated θ(t+1)."""
+    f = F.APGIFullDynamicModel(seed=1)
+    f.state.S, f.state.theta_t = 0.0, f.params.theta_t0
+    st = f.step(1.0, 1.0, 5.0, 5.0)
+    assert float(st.ignition_probability) == pytest.approx(
+        R.ignition_prob(f.params.k, 0.0, f.params.theta_t0), rel=1e-12)
+
+
+@divergence("SSOT-V3")
+def test_full_model_applies_retention_on_ignition():
+    """EQ-RESET-1: on B(t) = 1, S ← ρ_retain·S with ρ_retain ∈ [0.1, 0.5], before the leak. With a
+    zero drive (|z| = m₀) the post-event S is therefore at most 0.5·(1 − λ)·S."""
+    f = F.APGIFullDynamicModel(seed=1)
+    f.state.S = 10.0
+    st = f.step(1.0, 1.0, R.M0, R.M0, deterministic_ignition=True)
+    assert st.I == 1
+    assert float(st.S) <= 0.5 * (1 - R.leak_gain(f.params.delta_t, f.params.tau)) * 10.0 + 1e-12

@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: apgiframework/apgi-implementation
-          ref: d153f6a152cb81e05dd1235909f2743e2583ce96
+          ref: 8d8e5bd0373862bbf744277d22a4d9ea70f6bf2f
           path: apgi-implementation
       - uses: actions/setup-python@v6
         with:

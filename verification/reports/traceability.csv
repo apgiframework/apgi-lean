@@ -146,6 +146,8 @@ REQ-TC-02,§23 TC-02,tested,pass,TC-02,test,test_equations.py::test_units_are_de
 REQ-TC-02,§23 TC-02,tested,pass,TC-02,test,test_equations.py::test_ignition_exponent_dimensionless
 REQ-TC-03,§23 TC-03,tested,pass,TC-03,test,test_registry_files.py::test_symbols_unique_and_not_retired
 REQ-TC-04,§23 TC-04,tested,partial,TC-04,test,test_production.py::test_production_core_matches_reference_trajectory
+REQ-TC-04,§23 TC-04,tested,partial,TC-04,test,test_production_validation.py::test_full_model_signal_matches_reference_until_first_event
+REQ-TC-04,§23 TC-04,tested,partial,TC-04,test,test_production_validation.py::test_full_model_matches_reference_trajectory
 REQ-TC-05,§23 TC-05,tested,pass,TC-05,test,test_core.py::test_soft_floor_worked_values
 REQ-TC-06,§23 TC-06,tested,pass,TC-06,test,test_core.py::test_pipeline_timestep_invariance_of_hazard
 REQ-TC-06,§23 TC-06,tested,pass,TC-06,test,test_twins.py::test_per_step_bernoulli_is_not_dt_invariant
@@ -189,12 +191,16 @@ REQ-TC-08,§23 TC-08,tested,partial,TC-08,claim,CL-45
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,claim,CL-46
 REQ-TC-09,§23 TC-09,tested,pass,TC-09,test,test_core.py::test_drive_sign_symmetric
 REQ-TC-09,§23 TC-09,tested,pass,TC-09,test,test_production.py::test_drive_is_sign_symmetric
-REQ-TC-10,§23 TC-10,tested,partial,TC-10,test,test_convergence.py::test_clamp_fraction_reported
-REQ-TC-10,§23 TC-10,tested,partial,TC-10,test,test_pipeline_lean.py::test_traj_inv
+REQ-TC-10,§23 TC-10,tested,pass,TC-10,test,test_convergence.py::test_clamp_fraction_reported
+REQ-TC-10,§23 TC-10,tested,pass,TC-10,test,test_pipeline_lean.py::test_traj_inv
+REQ-TC-10,§23 TC-10,tested,pass,TC-10,test,test_production.py::test_production_run_report_is_current
+REQ-TC-10,§23 TC-10,tested,pass,TC-10,test,test_production.py::test_production_run_report_agrees_with_reference
+REQ-TC-10,§23 TC-10,tested,pass,TC-10,test,test_production.py::test_production_clamp_fraction_matches_reference
 REQ-TC-11,§23 TC-11,tested,pass,TC-11,test,test_core.py::test_pipeline_readout_never_written_back
 REQ-TC-11,§23 TC-11,tested,pass,TC-11,test,test_production.py::test_ne_factor_is_read_out_only
 REQ-TC-12,§23 TC-12,tested,pass,TC-12,test,test_core.py::test_pipeline_exactly_once
 REQ-TC-12,§23 TC-12,tested,pass,TC-12,test,test_production.py::test_reset_increment_inside_allostatic_step
+REQ-TC-12,§23 TC-12,tested,pass,TC-12,test,test_production.py::test_resonance_primary_threshold_gets_delta_once
 REQ-TC-13,§23 TC-13,tested,pass,TC-13,lean,Apgi.traj_denoms_pos
 REQ-TC-13,§23 TC-13,tested,pass,TC-13,lean,Apgi.pipeLog_Sinst_le
 REQ-TC-13,§23 TC-13,tested,pass,TC-13,lean,Apgi.traj_S_mem_Icc
@@ -220,6 +226,7 @@ REQ-TC-13,§23 TC-13,tested,pass,TC-13,claim,CL-41
 REQ-TC-13,§23 TC-13,tested,pass,TC-13,claim,CL-42
 REQ-TC-14,§23 TC-14,tested,pass,TC-14,test,test_core.py::test_soft_floor_worked_values
 REQ-TC-14,§23 TC-14,tested,pass,TC-14,test,test_production.py::test_manifest_reports_operating_point
+REQ-TC-14,§23 TC-14,tested,pass,TC-14,test,test_production.py::test_production_run_report_is_current
 REQ-TC-15,§23 TC-15,tested,pass,TC-15,test,test_core.py::test_tc15_quantitative_signature
 REQ-TC-16,§23 TC-16,tested,pass,TC-16,test,test_registry_files.py::test_configurations_counted_and_consistent
 REQ-TC-17,§23 TC-17,tested,pass,TC-17,test,test_core.py::test_pipeline_estimator_ordering

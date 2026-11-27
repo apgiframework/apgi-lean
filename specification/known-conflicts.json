@@ -46,7 +46,7 @@
   ],
   "production": {
     "repository": "apgiframework/apgi-implementation",
-    "commit": "d153f6a152cb81e05dd1235909f2743e2583ce96",
+    "commit": "8d8e5bd0373862bbf744277d22a4d9ea70f6bf2f",
     "branch": "main",
     "tests": "verification/python/test_production.py (strict xfail while a divergence is open)",
     "divergences": [
@@ -104,13 +104,19 @@
       {"id": "SSOT-P9", "status": "resolved", "resolution": "Task 51: CONFIG beta = beta_da = 0.0.", "severity": "P1", "where": "config.py beta = 1.15 (dopaminergic bias β_DA on zⁱ)",
        "summary": "β_DA defaults to 1.15; the SSOT default is 0 (§4.2), so every default run carries a dopaminergic bias that also enters V(t). Found in the task-53 audit.",
        "tests": ["test_production.py::test_default_dopamine_bias_is_zero"], "task": 51},
-      {"id": "SSOT-P10", "status": "open", "severity": "P1", "task": 59, "where": "pipeline.py legacy_v1_1 path with use_hierarchical_precision_ode: aggregate S_inst from the ODE precisions, update_signal_ode with the inverse-variance Πᵉ_eff, Πⁱ_eff; resonance mode applies δ on the resonance θ and again in apply_refractory_boost",
-       "summary": "Extension path only (model_form legacy_v1_1). Two precision definitions in one simulation, which the SSOT prohibits (§8 shortcuts; EQ-PREC-ODE-1 vs EQ-PREC-2), and a likely double δ in resonance mode. Found by reading; not yet under test. The default ssot_core path is unaffected.",
-       "tests": []},
+      {"id": "SSOT-P10", "status": "open", "severity": "P1", "task": 59, "where": "pipeline.py legacy_v1_1 path. (a) use_hierarchical_precision_ode: S_inst aggregates the ODE precisions (hierarchical_network.pi) while update_signal_ode integrates S with the inverse-variance Πᵉ_eff, Πⁱ_eff. (b) Resonance mode: on ignition, resonance_system.apply_level_ignition raises the resonance-level θ by config DELTA_RESET (default 0.5; `or 0.5` makes 0 unreachable), not by the configured δ_reset (config delta).",
+       "summary": "Extension path only (model_form legacy_v1_1). (a) Two precision definitions in one simulation, which the SSOT prohibits (§8 shortcuts; EQ-PREC-ODE-1 vs EQ-PREC-2): with the ODE on, scaling g_ACh (inverse-variance chain only) changes S while the ODE precisions and z are unchanged. (b) A second δ value in resonance mode: the reported resonance threshold (resonance_thetas[0]) jumps by 0.5 AU on an ignition step even when δ_reset = 0. Task 59 (2026-11-27) put both under test and refuted the suspected double δ on the primary threshold: one ignition raises it by exactly one δ_reset (test_resonance_primary_threshold_gets_delta_once passes), because the next resonance step recomputes its θ from the baseline. The default ssot_core path is unaffected.",
+       "tests": ["test_production.py::test_hierarchical_precision_ode_is_the_only_precision", "test_production.py::test_resonance_reset_uses_the_configured_delta"]},
       {"id": "SSOT-P11", "status": "resolved", "severity": "P1", "task": 68, "where": "core/ssot_core.py step (72ad050): μ, the RNG draw, r(t) and t_ep were updated before (ε − μ)**2 raised OverflowError",
        "summary": "TC-13: an overflowing input (e.g. x_e = 1e200) raised OverflowError after mutating μₑ, the RNG and the core state, so the failure was not atomic, unlike the NaN/Inf rejection (AUD-DEF-01). Found in the task-68 audit.",
        "resolution": "apgi-implementation e0e82cf, on main since d153f6a (pushed 2026-11-27): core/ssot_core.step computes into locals and commits only a finite state; an overflow raises core.finite.NonFiniteStateError (an OverflowError) after restoring the RNG, so the rejected step changes nothing. The SSOT-P11 tests in verification/python/test_production.py now run as ordinary tests against the pin d153f6a and pass.",
-       "tests": ["test_production.py::test_production_overflow_is_rejected_atomically", "test_production.py::test_production_silent_overflow_is_rejected_atomically", "test_production.py::test_overflow_classification_matches_reference"]}
+       "tests": ["test_production.py::test_production_overflow_is_rejected_atomically", "test_production.py::test_production_silent_overflow_is_rejected_atomically", "test_production.py::test_overflow_classification_matches_reference"]},
+      {"id": "SSOT-P12", "status": "open", "severity": "P1", "task": 59, "where": "hierarchy/resonance.py NestedResonanceSystem._compute_thresholds and oscillation/threshold_modulation.py hierarchical_threshold_modulation: θ_l = θ_{0,l}·(1 + κ_down·Π_{l+1}·cos φ_{l+1}); pipeline.py legacy_v1_1 writes the modulated level-0 threshold back into self.theta (resonance primary_threshold, or thetas_mod[0]), which becomes the next step's baseline.",
+       "summary": "Extension path only (model_form legacy_v1_1, use_hierarchical). EQ-MS-4 normalizes the precision by Π_max and bounds the factor in [0.5, 1.5]; production omits /Π_max, so at Π_max = 10, κ_down = 0.1 the factor spans [0, 2]. The modulated threshold is also written back into θ (TC-11 read-out rule), so the factor compounds: under stimulus-free N(0, 1) input with the default κ_down = 0.1, θ sits at the 20 AU numerical guard on about 28 % of 4000 steps (κ_down = 0: never; θ stays in [0.17, 0.79] AU). Found in the task-59 audit (2026-11-27).",
+       "tests": ["test_production.py::test_pac_threshold_factor_is_normalised", "test_production.py::test_pac_modulation_is_read_out_only"]},
+      {"id": "SSOT-P13", "status": "open", "severity": "P1", "task": 59, "where": "config.py ne_on_threshold = False (default), ne_on_precision = True; core/ssot_core.py applies the NE factor to θ_eff only when ne_on_threshold is set",
+       "summary": "Any run with γ_NE ≠ 0 at the default flags drops the NE threshold pathway of EQ-THEFF-1, θ_eff = θ·(1 + γ_NE·g_NE)…; SSOT §11 states that both NE pathways (Πⁱ_eff = g_NE·Πⁱ and the θ_eff factor) share one clamped g_NE, and the §8 pseudocode applies both. The default γ_NE = 0 hides it; the config comment ('avoid accidental instability') dates from the write-back defect SSOT-P5, now resolved. With ne_on_threshold = True production matches apgi_ref step for step (test_production_clamp_fraction_matches_reference[precision+NE]). Found in the task-61b audit (2026-11-27).",
+       "tests": ["test_production.py::test_nonzero_gamma_ne_runs_both_ne_pathways"]}
     ]
   },
   "production_secondary": {
@@ -134,7 +140,10 @@
        "tests": ["test_production_validation.py::test_model_accumulates_signal", "test_production_validation.py::test_model_z_excludes_current_sample"], "task": 52},
       {"id": "SSOT-V2", "status": "resolved", "resolution": "Task 52: APGIFullDynamicModel.signal_accumulation uses the excess drive |ε| − m₀ and the exact leak weight λ = 1 − e^(−Δt/τ); fixed point S_inst.", "severity": "P0", "where": "apgi_core/full_model.py APGIFullDynamicModel.signal_accumulation: S ← e^(−Δt/τ)·S + we·Πe·|εe| + wi·β·Πi·|εi|",
        "summary": "The full model uses the uncentered drive Π·|ε| (no excess m₀, EQ-DRIVE-1) and adds the drive per step without the λ weight, so its fixed point is S_inst/(1 − e^(−Δt/τ)) (≈ 20.5·S_inst at Δt = 10 ms, τ = 0.2 s) instead of S_inst (EQ-LEAK-1).",
-       "tests": ["test_production_validation.py::test_full_model_drive_is_excess_centered", "test_production_validation.py::test_full_model_uses_exact_leak_weight"], "task": 52}
+       "tests": ["test_production_validation.py::test_full_model_drive_is_excess_centered", "test_production_validation.py::test_full_model_uses_exact_leak_weight"], "task": 52},
+      {"id": "SSOT-V3", "status": "open", "severity": "P1", "task": "62b", "where": "apgi_core/full_model.py APGIFullDynamicModel.step and threshold_dynamics (f6fec65)",
+       "summary": "TC-04: full_model does not compute the same S, θ, Bₜ as the SSOT core, although it shares the drive and exact leak (SSOT-V2, resolved; test_full_model_signal_matches_reference_until_first_event passes). (a) The propensity is computed from the newly accumulated S(t+1) and θ(t+1), not the existing S(t) and θ_eff(t) (SSOT §8 step 8). (b) No post-ignition retention S ← ρ_retain·S (EQ-RESET-1); S diverges at the first event. (c) The threshold step is forward-Euler mean reversion with C = γ_c·(S − θ)₊·(1 + η_m/η_m,max), V = Πᵉ|εᵉ| + β·Πⁱ|εⁱ| and a facilitation φ·I(t−1), not EQ-ALLO-1 with EQ-COST-1, EQ-VAL-1 and δ_reset·B(t); η_θ ≥ 0.01 is enforced, so η_θ = 0 cannot be expressed. Found in the task-62b TC-04 trajectory test (2026-11-27). Either align it (as SSOT-V2 did for the drive) or label it a declared variant with MODEL_FORM (as SSOT-V1): an author decision (task 62c).",
+       "tests": ["test_production_validation.py::test_full_model_matches_reference_trajectory", "test_production_validation.py::test_full_model_decides_from_existing_signal", "test_production_validation.py::test_full_model_applies_retention_on_ignition"]}
     ]
   },
   "retired_patterns": [

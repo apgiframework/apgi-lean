@@ -652,3 +652,209 @@ def test_cross_implementation_event_distribution():
     assert agree(pf, rf), (pf.mean(), rf.mean())
     hc, _ = stats(ref_runs({**ref_p, "r_max": 1.5 * ref_p["r_max"]}))
     assert not agree(pc, hc), "power check: a 1.5x hazard rate must be detected"
+
+
+# ------------------------------------- TC-10 / TC-14 production run report (task 61b) ----
+def test_production_run_report_is_current():
+    """TC-10, TC-14: verification/reports/production-run-report.json reports, for CFG-CORE and
+    CFG-CORE-R at the pinned commit, the clamped-step fractions, the operating point and the
+    stimulus-free event rate. Regenerated here and compared field by field."""
+    import production_report as PR
+
+    assert PR.REPORT.exists(), "run production_report.py"
+    import json
+
+    old = json.loads(PR.REPORT.read_text(encoding="utf-8"))
+    new = PR._rounded(PR.build())
+    assert old["production_commit"] == KNOWN["production"]["commit"], "report is for another pin"
+    assert old == new, "production-run-report.json is stale: rerun production_report.py"
+
+
+def test_production_run_report_agrees_with_reference():
+    """The production figures in the report equal apgi_ref's on the same inputs and draws."""
+    import json
+
+    import production_report as PR
+
+    rep = json.loads(PR.REPORT.read_text(encoding="utf-8"))
+    assert set(rep["configurations"]) == {"CFG-CORE", "CFG-CORE-R"}
+    for name, r in rep["configurations"].items():
+        pr, rf = r["production"], r["reference"]
+        for k in ("precision_clamped_fraction", "ne_clamped_fraction", "events", "operating_point"):
+            assert pr[k] == rf[k], (name, k)
+        assert 0.1 <= pr["precision_range"][0] and pr["precision_range"][1] <= 10.0  # [Π_min, Π_max]
+        assert r["steps"] == PR.STEPS and pr["events"] > 0
+
+
+def _clamp_inputs(n=6000):
+    """Low-variance input (Σ shrinks until Π binds at Π_max), then N(0, 1): exteroceptive in the
+    first half, interoceptive in the middle third, so each channel's clamps bind on part of the run."""
+    import numpy as np
+
+    g = np.random.default_rng(1010)
+    xe = np.concatenate([0.05 * g.standard_normal(n // 2), g.standard_normal(n - n // 2)])
+    k = np.arange(n)
+    xi = g.standard_normal(n) * np.where((k >= n // 3) & (k < 2 * n // 3), 0.05, 1.0)
+    return xe, xi, g.random(n)
+
+
+@pytest.mark.parametrize("over", [{}, {"gamma_ne": 2.0, "ne_on_threshold": True}, {"g_ach": 2.0, "g_ne": 2.0}],
+                         ids=["precision", "precision+NE", "precision+gains"])
+def test_production_clamp_fraction_matches_reference(over):
+    """TC-10: when clamps bind, the clamped-step fraction derived from production's outputs equals
+    apgi_ref.clamp_report on identical inputs and draws, strictly between 0 and 1 for precision;
+    with |γ_NE|·g_NE = 2 > 0.5 the NE clamp binds on every step. Precision stays in
+    [Π_min, Π_max] on every step (Lean: Apgi.traj_prec_mem_Icc, Apgi.traj_ne_bound)."""
+    import production_report as PR
+
+    xe, xi, us = _clamp_inputs()
+    r = PR.run_pair(over, xe, xi, us)
+    pr, rf = r["production"], r["reference"]
+    assert pr["precision_clamped_fraction"] == rf["precision_clamped_fraction"]
+    assert pr["ne_clamped_fraction"] == rf["ne_clamped_fraction"]
+    assert pr["events"] == rf["events"]
+    assert 0.05 < pr["precision_clamped_fraction"] < 0.95
+    assert pr["ne_clamped_fraction"] == (1.0 if "gamma_ne" in over else 0.0)
+    lo, hi = pr["precision_range"]
+    assert PR.requested_config(over)["pi_min"] <= lo and hi <= PR.requested_config(over)["pi_max"]
+
+
+def test_production_clamp_flags_detect_bounds():
+    """The harness flag is not vacuous: an output at Π_max or Π_min is flagged, one inside is not."""
+    import production_report as PR
+
+    cfg = {"pi_min": 0.1, "pi_max": 10.0, "gamma_ne": 0.0, "g_ne": 1.0}
+    inside = dict(pi_e=1.0, pi_i=2.0, pi_e_eff=1.0, pi_i_eff=2.0)
+    assert PR.production_clamp_flags(inside, cfg) == (False, False)
+    assert PR.production_clamp_flags({**inside, "pi_i_eff": 10.0}, cfg)[0]
+    assert PR.production_clamp_flags({**inside, "pi_e": 0.1}, cfg)[0]
+    assert PR.production_clamp_flags(inside, {**cfg, "gamma_ne": -0.6})[1]
+
+
+# ------------------------- task 59: legacy extension path (SSOT-P10, SSOT-P12) ----
+def _legacy(**over):
+    import numpy as np
+
+    p = _pipe(**over)
+    assert p.model_form == "legacy_v1_1", p.model_form
+    p.rng = np.random.default_rng(3)
+    return p
+
+
+@divergence("SSOT-P10")
+def test_hierarchical_precision_ode_is_the_only_precision():
+    """SSOT §8 shortcuts / EQ-PREC-ODE-1: the hierarchical precision ODE and the inverse-variance
+    precision (EQ-PREC-2) are never combined in one simulation. With the ODE on, a change that
+    acts only on the inverse-variance chain (g_ACh scales Πᵉ_eff = g_ACh·Πᵉ) must not change S
+    while the ODE precisions are unchanged. Production: S moves, because update_signal_ode is fed
+    the inverse-variance Πᵉ_eff, Πⁱ_eff while S_inst aggregates the ODE precisions."""
+    import copy
+
+    import numpy as np
+
+    p = _legacy(hierarchical_mode="advanced")
+    assert p.hierarchical_network is not None
+    for k in range(50):
+        _step(p, 0.3 * math.sin(k / 5), 0.1)
+    q = copy.deepcopy(p)
+    q.config["g_ach"] = 2.0 * p.config["g_ach"]
+    rp, rq = _step(p, 1.0, 0.5), _step(q, 1.0, 0.5)
+    assert np.array_equal(p.hierarchical_network.pi, q.hierarchical_network.pi)
+    assert rp["z_e_norm"] == rq["z_e_norm"]          # the perturbation does not reach z
+    assert rp["pi_e_eff"] != rq["pi_e_eff"]          # and does reach the inverse-variance chain
+    assert p.S == q.S
+
+
+@pytest.mark.parametrize("delta", [0.0, 0.2])
+def test_resonance_primary_threshold_gets_delta_once(delta):
+    """TC-12 in resonance mode: one ignition raises the primary threshold by exactly one δ_reset.
+    This refutes the 'double δ' suspected in SSOT-P10 for the threshold that decides ignition:
+    resonance.apply_level_ignition raises only the resonance-level copy, which the next
+    resonance step recomputes from its baseline."""
+    p0 = _legacy(hierarchical_mode="basic", stochastic_ignition=False, delta=0.0, resonance_kappa_down=0.0)
+    p1 = _legacy(hierarchical_mode="basic", stochastic_ignition=False, delta=delta, resonance_kappa_down=0.0)
+    for k in range(30):
+        _step(p0, 0.0, 0.0)
+        _step(p1, 0.0, 0.0)
+    assert p0.theta == p1.theta
+    p0.S = p1.S = 50.0                               # forces one deterministic ignition
+    r0, r1 = _step(p0, 0.0, 0.0), _step(p1, 0.0, 0.0)
+    assert r0["B"] == r1["B"] == 1
+    assert p1.theta - p0.theta == pytest.approx(delta, abs=1e-12)
+
+
+@divergence("SSOT-P10")
+def test_resonance_reset_uses_the_configured_delta():
+    """One parameter, one value: the resonance-level threshold reported at an ignition step
+    (output resonance_thetas[0]) rises by the configured δ_reset. Production applies the separate
+    key DELTA_RESET (0.5, and `or 0.5` makes 0 unreachable), so with δ_reset = 0 the reported
+    resonance threshold still jumps by 0.5 AU on the ignition step."""
+    p = _legacy(hierarchical_mode="basic", stochastic_ignition=False, delta=0.0, resonance_kappa_down=0.0)
+    for k in range(30):
+        _step(p, 0.0, 0.0)
+    p.S = 50.0
+    r = _step(p, 0.0, 0.0)
+    assert r["B"] == 1
+    assert r["resonance_thetas"][0] == pytest.approx(p.theta, abs=1e-12)
+
+
+@divergence("SSOT-P12")
+def test_pac_threshold_factor_is_normalised():
+    """EQ-MS-4: θ₀,ℓ(t) = θ₀,ℓ·[1 + κ_down·(Π_{ℓ+1}/Π_max)·cos φ̄_{ℓ+1}], bounded in [0.5, 1.5]·θ₀,ℓ.
+    At Π_{ℓ+1} = Π_max and φ = 0 the factor is 1 + κ_down. Production omits /Π_max, so at the
+    default Π_max = 10 and κ_down = 0.1 the factor is 2 (range [0, 2])."""
+    import numpy as np
+
+    p = _legacy(hierarchical_mode="basic")
+    rs = p.resonance_system
+    pi_max = float(p.config["pi_max"])
+    rs.pi = np.full(rs.n_levels, pi_max)
+    rs.phi = np.zeros(rs.n_levels)
+    rs.theta_0 = np.full(rs.n_levels, 1.0)
+    th = rs._compute_thresholds()
+    assert th[0] == pytest.approx(1.0 + rs.kappa_down, rel=1e-12)
+
+
+@divergence("SSOT-P12")
+def test_pac_modulation_is_read_out_only():
+    """TC-11 for EQ-MS-4: the phase-modulated threshold is a read-out of the allostatic state, not
+    written back into it. Under stimulus-free N(0, 1) input the carried threshold therefore never
+    reaches the numerical guard θ_clip_max (20 AU). Production writes the modulated level-0
+    threshold back into θ, so the factor compounds step after step: with κ_down = 0.1 the run
+    sits at the guard on about 28 % of steps (κ_down = 0: never; checked below as the control)."""
+    import numpy as np
+
+    def at_guard(kd):
+        p = _legacy(hierarchical_mode="basic", resonance_kappa_down=kd, stochastic_ignition=False)
+        g = np.random.default_rng(5)
+        p.rng = np.random.default_rng(5)
+        hits = 0
+        for _ in range(4000):
+            _step(p, float(g.standard_normal()), float(g.standard_normal()))
+            hits += p.theta >= p.config["theta_clip_max"]
+        return hits
+
+    assert at_guard(0.0) == 0                        # control: without modulation the guard is idle
+    assert at_guard(0.1) == 0
+
+
+@divergence("SSOT-P13")
+@pytest.mark.parametrize("gamma_ne", [0.2, -0.3])
+def test_nonzero_gamma_ne_runs_both_ne_pathways(gamma_ne):
+    """SSOT §11 (NE row: 'Both pathways share one clamped g_NE') and EQ-THEFF-1: with γ_NE ≠ 0 the
+    canonical step applies g_NE to Πⁱ_eff and (1 + γ_NE·g_NE) to θ_eff. At production defaults
+    (ne_on_threshold = False) the threshold pathway is silently dropped, so θ_eff, and then the
+    event train, differ from apgi_ref on identical inputs and draws."""
+    import production_report as PR
+
+    xe, xi, us = PR.stimulus_free_inputs(2000)
+    req = PR.requested_config({"gamma_ne": gamma_ne})
+    p = PR.make_pipe({"gamma_ne": gamma_ne})
+    p.rng = PR.FixedDraws(us)
+    rp = PR.ref_params(req)
+    s = R.core_state(rp)
+    for k in range(2000):
+        out = _step(p, float(xe[k]), float(xi[k]))
+        s, log = R.core_step(s, float(xe[k]), float(xi[k]), rp, u=float(us[k]))
+        assert out["theta_eff"] == pytest.approx(log["theta_eff"], rel=1e-9, abs=1e-12), k
+        assert out["B"] == log["B"], k

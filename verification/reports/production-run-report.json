@@ -1,0 +1,72 @@
+{
+  "schema": "apgi-production-run-report/1",
+  "purpose": "SSOT §23 TC-10 (clamped-step fraction) and TC-14 (operating point, stimulus-free event rate) for the pinned production core; apgi_ref on identical inputs and draws.",
+  "production_commit": "8d8e5bd0373862bbf744277d22a4d9ea70f6bf2f",
+  "input": {
+    "kind": "stimulus-free N(0,1) per channel",
+    "seed": 20261127,
+    "steps": 6000,
+    "rng": "numpy PCG64(SeedSequence(seed)): x_e, x_i, then uniform draws"
+  },
+  "configurations": {
+    "CFG-CORE": {
+      "steps": 6000,
+      "dt_s": 0.01,
+      "production": {
+        "precision_clamped_fraction": 0.0,
+        "ne_clamped_fraction": 0.0,
+        "events": 38,
+        "event_rate_per_s": 0.633333333,
+        "precision_range": [
+          0.907736046,
+          1.112141273
+        ],
+        "operating_point": {
+          "gamma_sig_theta0": 0.7,
+          "propensity_floor": 0.331812228,
+          "baseline_rate": 33.181222783
+        }
+      },
+      "reference": {
+        "precision_clamped_fraction": 0.0,
+        "ne_clamped_fraction": 0.0,
+        "events": 38,
+        "operating_point": {
+          "gamma_sig_theta0": 0.7,
+          "propensity_floor": 0.331812228,
+          "baseline_rate": 33.181222783
+        }
+      }
+    },
+    "CFG-CORE-R": {
+      "steps": 6000,
+      "dt_s": 0.01,
+      "production": {
+        "precision_clamped_fraction": 0.0,
+        "ne_clamped_fraction": 0.0,
+        "events": 253,
+        "event_rate_per_s": 4.216666667,
+        "precision_range": [
+          0.907736046,
+          1.112141273
+        ],
+        "operating_point": {
+          "gamma_sig_theta0": 0.7,
+          "propensity_floor": 0.331812228,
+          "baseline_rate": 33.181222783
+        }
+      },
+      "reference": {
+        "precision_clamped_fraction": 0.0,
+        "ne_clamped_fraction": 0.0,
+        "events": 253,
+        "operating_point": {
+          "gamma_sig_theta0": 0.7,
+          "propensity_floor": 0.331812228,
+          "baseline_rate": 33.181222783
+        }
+      }
+    }
+  },
+  "limitation": "Clamp flags are derived by apgi-lean from production's per-step outputs; production does not count clamped steps itself."
+}
