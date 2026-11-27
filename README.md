@@ -56,13 +56,14 @@ apgi-lean/
 │   ├── Epistemic.lean        tier currencies, Tier-3 exit rule, κ calibration rule
 │   ├── Stability.lean        TC-13: no division by zero on any trajectory, explicit drive bound,
 │   │                         two-sided bound on S, EQ-STEP-1 gain bound
-│   └── Identifiability.lean  TC-08a–c: margin, joint-scale and gain-product degeneracies of
-│                             the event likelihood and the pipeline
+│   └── Identifiability.lean  TC-08a–c and TC-08g: margin, joint-scale, gain-product and
+│                             η_θ-weight degeneracies of the event likelihood and the pipeline
 ├── docs/                     REMAINING-TASKS.md, REPRODUCIBILITY.md, VERIFICATION-REPORT.md,
 │                             traceability-matrix.md, assumption-inventory.md (generated)
 └── verification/
     ├── python/               reference implementation, generator, checker, extractor, tests
-    ├── reports/              conflicts, extraction, proof status, release manifest, traceability.csv
+    ├── reports/              conflicts, extraction, proof status, release manifest, traceability.csv,
+    │                         recovery-pipeline.json (TC-08d–g study)
     └── verify_all.ps1        the full local routine
 ```
 
