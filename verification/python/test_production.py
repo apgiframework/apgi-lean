@@ -746,8 +746,9 @@ def test_hierarchical_precision_ode_is_the_only_precision():
     """SSOT §8 shortcuts / EQ-PREC-ODE-1: the hierarchical precision ODE and the inverse-variance
     precision (EQ-PREC-2) are never combined in one simulation. With the ODE on, a change that
     acts only on the inverse-variance chain (g_ACh scales Πᵉ_eff = g_ACh·Πᵉ) must not change S
-    while the ODE precisions are unchanged. Production: S moves, because update_signal_ode is fed
-    the inverse-variance Πᵉ_eff, Πⁱ_eff while S_inst aggregates the ODE precisions."""
+    while the ODE precisions are unchanged. Before 67a6c3f (SSOT-P10 a) S moved, because
+    update_signal_ode was fed the inverse-variance Πᵉ_eff, Πⁱ_eff while S_inst aggregated the ODE
+    precisions."""
     import copy
 
     import numpy as np
@@ -786,9 +787,9 @@ def test_resonance_primary_threshold_gets_delta_once(delta):
 @divergence("SSOT-P10")
 def test_resonance_reset_uses_the_configured_delta():
     """One parameter, one value: the resonance-level threshold reported at an ignition step
-    (output resonance_thetas[0]) rises by the configured δ_reset. Production applies the separate
-    key DELTA_RESET (0.5, and `or 0.5` makes 0 unreachable), so with δ_reset = 0 the reported
-    resonance threshold still jumps by 0.5 AU on the ignition step."""
+    (output resonance_thetas[0]) rises by the configured δ_reset. Before 67a6c3f (SSOT-P10 b)
+    production applied the separate key DELTA_RESET (0.5, and `or 0.5` made 0 unreachable), so with
+    δ_reset = 0 the reported resonance threshold still jumped by 0.5 AU on the ignition step."""
     p = _legacy(hierarchical_mode="basic", stochastic_ignition=False, delta=0.0, resonance_kappa_down=0.0)
     for k in range(30):
         _step(p, 0.0, 0.0)
@@ -801,8 +802,8 @@ def test_resonance_reset_uses_the_configured_delta():
 @divergence("SSOT-P12")
 def test_pac_threshold_factor_is_normalised():
     """EQ-MS-4: θ₀,ℓ(t) = θ₀,ℓ·[1 + κ_down·(Π_{ℓ+1}/Π_max)·cos φ̄_{ℓ+1}], bounded in [0.5, 1.5]·θ₀,ℓ.
-    At Π_{ℓ+1} = Π_max and φ = 0 the factor is 1 + κ_down. Production omits /Π_max, so at the
-    default Π_max = 10 and κ_down = 0.1 the factor is 2 (range [0, 2])."""
+    At Π_{ℓ+1} = Π_max and φ = 0 the factor is 1 + κ_down. Before 67a6c3f (SSOT-P12) production
+    omitted /Π_max, so at the default Π_max = 10 and κ_down = 0.1 the factor was 2 (range [0, 2])."""
     import numpy as np
 
     p = _legacy(hierarchical_mode="basic")
@@ -819,9 +820,10 @@ def test_pac_threshold_factor_is_normalised():
 def test_pac_modulation_is_read_out_only():
     """TC-11 for EQ-MS-4: the phase-modulated threshold is a read-out of the allostatic state, not
     written back into it. Under stimulus-free N(0, 1) input the carried threshold therefore never
-    reaches the numerical guard θ_clip_max (20 AU). Production writes the modulated level-0
-    threshold back into θ, so the factor compounds step after step: with κ_down = 0.1 the run
-    sits at the guard on about 28 % of steps (κ_down = 0: never; checked below as the control)."""
+    reaches the numerical guard θ_clip_max (20 AU). Before 67a6c3f (SSOT-P12) production wrote the
+    modulated level-0 threshold back into θ, so the factor compounded step after step: with
+    κ_down = 0.1 the run sat at the guard on about 28 % of steps (κ_down = 0: never; checked below
+    as the control)."""
     import numpy as np
 
     def at_guard(kd):
@@ -838,13 +840,71 @@ def test_pac_modulation_is_read_out_only():
     assert at_guard(0.1) == 0
 
 
+@divergence("SSOT-P12")
+@pytest.mark.parametrize("phase, factor", [(0.0, 1.5), (math.pi, 0.5)])
+def test_pac_threshold_factor_band(phase, factor):
+    """EQ-MS-4 bounds the factor in [0.5, 1.5]·θ₀,ℓ for any κ_down (Lean: Apgi.msTarget_band).
+    Inside the canonical range κ_down ∈ [0.1, 0.5] with Π ≤ Π_max the band never binds, so it is
+    probed at κ_down = 1 (factor 2 or 0 without the band). Added after a planted fault (band
+    removed) survived test_pac_threshold_factor_is_normalised in the round-74 audit."""
+    import numpy as np
+
+    p = _legacy(hierarchical_mode="basic", resonance_kappa_down=1.0)
+    rs = p.resonance_system
+    rs.pi = np.full(rs.n_levels, float(p.config["pi_max"]))
+    rs.phi = np.full(rs.n_levels, phase)
+    rs.theta_0 = np.full(rs.n_levels, 1.0)
+    assert rs._compute_thresholds()[0] == pytest.approx(factor, rel=1e-12)
+    assert R.ms_threshold_target(1.0, 1.0, 1.0, 1.0, phase) == pytest.approx(factor, rel=1e-12)
+
+
+@divergence("SSOT-P12")
+def test_pac_modulation_leaves_carried_threshold_unchanged():
+    """TC-11 for EQ-MS-4, exact form: with no ignition, the carried threshold θ does not depend on
+    κ_down at all (bitwise), while the decision threshold does (seen in the ignition margin
+    S − θ_eff). A write-back of the modulated threshold breaks the first equality even when the
+    normalized factor is too small to reach the guard; that planted fault survived
+    test_pac_modulation_is_read_out_only in the round-74 audit."""
+    p0 = _legacy(hierarchical_mode="basic", resonance_kappa_down=0.1, stochastic_ignition=False)
+    p1 = _legacy(hierarchical_mode="basic", resonance_kappa_down=0.5, stochastic_ignition=False)
+    margins_differ = False
+    for k in range(400):
+        x = 0.05 * math.sin(k / 7)
+        r0, r1 = _step(p0, x, 0.0), _step(p1, x, 0.0)
+        assert r0["B"] == r1["B"] == 0, k
+        assert p0.theta == p1.theta, k
+        margins_differ |= r0["ignition_margin"] != r1["ignition_margin"]
+    assert margins_differ                            # the modulation is active in the read-out
+
+
+@divergence("SSOT-P12")
+@pytest.mark.parametrize("over", [{"gamma_ne": 0.3}, {"gamma_ne": -0.1}, {"beta_5ht": 0.2}],
+                         ids=["NE+", "NE-", "5HT"])
+def test_legacy_neuromodulator_offsets_are_read_out_only(over):
+    """EQ-THEFF-1 / TC-11 in the legacy extension path: NE and 5-HT shape θ_eff only. With no
+    ignition (γ_NE = −0.1 keeps the minimum margin at −0.02; −0.2 ignites), the carried θ is
+    bitwise the same with and without the offset, and the decision threshold differs. Before
+    67a6c3f the legacy path wrote both into θ; with ne_on_threshold = True as the default
+    (SSOT-P13) an NE write-back would compound."""
+    base = dict(hierarchical_mode="basic", resonance_kappa_down=0.1, stochastic_ignition=False)
+    p0, p1 = _legacy(**base), _legacy(**base, **over)
+    margins_differ = False
+    for k in range(400):
+        x = 0.01 * math.sin(k / 7)                   # weak enough that no run ignites
+        r0, r1 = _step(p0, x, 0.0), _step(p1, x, 0.0)
+        assert r0["B"] == r1["B"] == 0, k
+        assert p0.theta == p1.theta, k
+        margins_differ |= r0["ignition_margin"] != r1["ignition_margin"]
+    assert margins_differ
+
+
 @divergence("SSOT-P13")
 @pytest.mark.parametrize("gamma_ne", [0.2, -0.3])
 def test_nonzero_gamma_ne_runs_both_ne_pathways(gamma_ne):
     """SSOT §11 (NE row: 'Both pathways share one clamped g_NE') and EQ-THEFF-1: with γ_NE ≠ 0 the
-    canonical step applies g_NE to Πⁱ_eff and (1 + γ_NE·g_NE) to θ_eff. At production defaults
-    (ne_on_threshold = False) the threshold pathway is silently dropped, so θ_eff, and then the
-    event train, differ from apgi_ref on identical inputs and draws."""
+    canonical step applies g_NE to Πⁱ_eff and (1 + γ_NE·g_NE) to θ_eff, so θ_eff and the event
+    train match apgi_ref on identical inputs and draws. Before 67a6c3f (SSOT-P13) the production
+    default ne_on_threshold = False silently dropped the threshold pathway."""
     import production_report as PR
 
     xe, xi, us = PR.stimulus_free_inputs(2000)

@@ -1,7 +1,7 @@
 {
   "schema": "apgi-production-run-report/1",
   "purpose": "SSOT §23 TC-10 (clamped-step fraction) and TC-14 (operating point, stimulus-free event rate) for the pinned production core; apgi_ref on identical inputs and draws.",
-  "production_commit": "8d8e5bd0373862bbf744277d22a4d9ea70f6bf2f",
+  "production_commit": "67a6c3fb18f51288b02ed124491422df61ff635e",
   "input": {
     "kind": "stimulus-free N(0,1) per channel",
     "seed": 20261127,
