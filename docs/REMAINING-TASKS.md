@@ -1,26 +1,17 @@
 # APGI verification: remaining tasks
 
-State as of 2026-11-26 21:30 ET. Measured against **APGI Single Source of Truth (SSOT), framework v1.2** (docs/apgi-v-1-2/APGI-Single-Source-of-Truth.md, sha256 18951b65…, pinned as SRC-SSOT-V12D). Registry **spec 0.5.0**; the hash is written by `generate_lean.py` into Apgi/Spec.lean and by `make_release_manifest.py` into verification/reports/release-manifest.json.
+State as of 2026-11-26 22:00 ET. Measured against **APGI Single Source of Truth (SSOT), framework v1.2** (docs/apgi-v-1-2/APGI-Single-Source-of-Truth.md, sha256 18951b65…, pinned as SRC-SSOT-V12D). Registry **spec 0.5.0**; the hash is written by `generate_lean.py` into Apgi/Spec.lean and by `make_release_manifest.py` into verification/reports/release-manifest.json.
 
-- Repositories, all `main` only. **All three are committed locally and NOT pushed** (see "Blocker: push" below):
-  - apgi-lean: **a2b1477** on top of 1411665.
+- Repositories, all `main` only. apgi-implementation and apgi-validation are pushed; apgi-lean is pushed up to the history rewrite and needs one force-push (see "Next step"):
+  - apgi-lean: bba9f0f "Tasks 52-56 …" on 5fb2487 "Task 53 …" (both rewritten on 2026-11-26 to drop the v1.2 drafts, see F1).
   - apgi-implementation: **72ad050** (was a9b2878), pinned in known-conflicts.json and CI.
   - apgi-validation: **f6fec65** (was 811aee2 / 07ca731), pinned in known-conflicts.json and CI.
 - Local results (this PC): `lake build --wfail` green (5 Lean modules plus the generated Spec); `check_consistency.py` 0 open, 0 unacknowledged, 0 stale; extraction 85 of 85 evidence-bearing parameters verified against the pinned sources; apgi-lean pytest with APGI_IMPL_PATH 237 passed, 1 skipped; test_production_validation.py 10 passed, 2 skipped.
 - Rating against the SSOT: **design 94/100, implementation 84/100, release readiness 71/100** (was 92 / 60 / 61). Reasons are at the end of this file.
 
-## Blocker: push (task 2, owner Uxod)
+## Push status (task 2, done 2026-11-26)
 
-Nothing from this round is on GitHub. SSH pushes fail because the `github-apgi` key (~/.ssh/id_ed25519_apgi) is not loaded and the ssh-agent service is disabled. The HTTPS credential stored in Git Credential Manager is the personal account `lesoto`, which gets 403 on all three apgiframework repos. CI now checks out 72ad050 and f6fec65, so **the apgi-lean CI run fails until all three repositories are pushed**. Push order: apgi-implementation, then apgi-validation, then apgi-lean.
-
-```powershell
-Get-Service ssh-agent | Set-Service -StartupType Manual; Start-Service ssh-agent   # admin PowerShell
-ssh-add $HOME\.ssh\id_ed25519_apgi
-git -C C:\Claude\Projects\apgi-implementation push origin main
-git -C C:\Claude\Projects\apgi-validation push https://github.com/apgiframework/apgi-validation.git main   # or switch it to github-apgi
-git -C C:\Claude\Projects\apgi-lake push origin main
-```
-Then confirm the CI run (B-15): 4 of 4 jobs green, 7 of 7 pilot criteria.
+All three repositories were pushed by Uxod: apgi-implementation 72ad050, apgi-validation f6fec65, apgi-lean 2f4e562 (since rewritten, see F1). The CI run on the new pins is still to be confirmed (B-15).
 
 ## Completion against the SSOT (numerator / denominator)
 
@@ -86,7 +77,7 @@ Then confirm the CI run (B-15): 4 of 4 jobs green, 7 of 7 pilot criteria.
 
 ## Findings this round
 
-- **F1 (decision, owner Uxod).** Task-53 commit 1411665 pushed the unpublished v1.2 drafts in docs/apgi-v-1-2/ (Math Spec, Notation Appendix, Papers 1–4, OSF draft, SSOT) to the public apgi-lean repository, against .gitignore's rule. This round untracks them going forward, but they stay in the history on GitHub. Either accept that, or rewrite history (filter-repo plus a force push). That is irreversible for anyone who has cloned the repository, so I did not do it.
+- **F1 (resolved by history rewrite, 2026-11-26).** Task-53 commit 1411665 had pushed the unpublished v1.2 drafts in docs/apgi-v-1-2/ (10 files) to the public repository against .gitignore's rule. Author decision: rewrite and force-push. `git filter-repo --path docs/apgi-v-1-2/ --invert-paths --refs 4f717cd..main` rewrote only the two commits that carried the drafts: 1411665 → 5fb2487 (identical except the 10 drafts) and 2f4e562 → bba9f0f (identical tree). The 12 earlier commits keep their hashes and SSH signatures. Backup: .scratch/apgi-lean-pre-rewrite-2f4e562.bundle (local, git-ignored). After the force-push, GitHub can still serve 1411665 and 2f4e562 by direct SHA until it garbage-collects; ask GitHub Support to purge cached views if that matters, and any existing clone or fork keeps the old commits.
 - **F2 (B-13, owner Uxod).** The production operating point is still the placeholder: γ_sig = 2 (τ_σ = 0.5) and r_max = 100 s⁻¹ give a floor of 0.332 and a stimulus-free rate of 33 events/s, which the SSOT calls "not a viable waking operating point". `manifest()` now reports this on every run. Fit r_max and declare θ₀ and γ_sig.
 - **F3.** The SSOT's TC-15 Appendix-A numbers (c −0.71 → +0.70, d′ 0.91 → 1.69) cannot be reproduced without the Appendix-A stimulus definition (amplitude, window, trial structure). The SSOT should state it; the fixture here records its own setup.
 - **F4.** Registry `beta_DA` has value null, while the SSOT table gives default 0 (production now uses 0). Add the value with an evidence quote at the next extraction.
@@ -96,7 +87,12 @@ Then confirm the CI run (B-15): 4 of 4 jobs green, 7 of 7 pilot criteria.
 
 ### Next step (one at a time)
 
-**2. Push** (blocker above), then confirm CI green on the new pins (B-15).
+**Force-push the rewritten apgi-lean history** (F1), in a shell where the github-apgi key is loaded:
+```powershell
+cd C:\Claude\Projects\apgi-lake
+git push --force-with-lease=main:2f4e562064a7a01de8a622f3a5775c01aa8b7b54 origin main
+```
+The lease refuses the push if anyone pushed to main after 2f4e562. Then confirm CI green on the new pins (B-15).
 
 ### Phase A remainder
 **59.** Put SSOT-P10 under test (hierarchical precision mixing, resonance δ), then fix it in the legacy extension path.
@@ -124,7 +120,6 @@ Then confirm the CI run (B-15): 4 of 4 jobs green, 7 of 7 pilot criteria.
 **B-07.** Second-reader check of the hypothesis register.
 **B-17.** Independent reviewers.
 **B-18.** Add Naccache et al. (2025); Crossref-verify all DOIs.
-**F1.** History decision for the pushed drafts.
 
 ### Phase D: next Zenodo release (v1.2)
 **22.** APGI-Advances p13: restate the κ overhead as R_L, or remove it.
@@ -142,7 +137,7 @@ Then confirm the CI run (B-15): 4 of 4 jobs green, 7 of 7 pilot criteria.
 
 - **Design 94** (was 92). The specification layer is now complete where the SSOT is complete: 53 of 53 equations, symbols, configurations, revisions and a Lean statement for every equation. Deductions: CFG-FULL cannot be counted until its extension parameters are frozen; the legacy extension path still holds a prohibited shortcut (P10); the operating point is undecided (B-13); the loop-gain condition and the Lyapunov conjecture are design heuristics, not derivations; registry records lack the SSOT record-status axis.
 - **Implementation 84** (was 60). The default production path is the SSOT core and equals the reference implementation step for step (TC-04). All nine core divergences, PD-LOOP-GAIN and SSOT-V2 are fixed and guarded by tests; 119 machine-checked theorems; 57 golden vectors. Deductions: extension paths run v1.1 code (P10 open); apgi_core.model is a declared variant, not aligned; placeholder r_max and γ_sig; TC-08, TC-20, TC-25 and TC-26 not implemented; outputs computed before 72ad050 need a versioned rerun.
-- **Release readiness 71** (was 61). Ten of 18 blockers are closed and the local verification chain is green. Deductions: nothing is pushed, so CI has not seen any of it; B-07, B-13, B-14, B-16, B-17 and B-18 are author or external work; the SSOT document's own header and §24–§25 are stale (D10); the release tag and DOI do not exist yet. A perfect specification score would still not be a claim of scientific truth (SSOT §32).
+- **Release readiness 71** (was 61). Ten of 18 blockers are closed and the local verification chain is green. Deductions: CI has not yet run on the new pins and the rewritten history; B-07, B-13, B-14, B-16, B-17 and B-18 are author or external work; the SSOT document's own header and §24–§25 are stale (D10); the release tag and DOI do not exist yet. A perfect specification score would still not be a claim of scientific truth (SSOT §32).
 
 ---
 
