@@ -1,8 +1,8 @@
 {
-  "design_status": "Synthetic recovery-study design for SSOT §17 and TC-08d–g (task 62b). Every value in this file is a study-design choice and NOT a registered APGI value, except the entries listed under 'registered_values_used', which are copied from specification/parameters.json and checked against it by test_recovery_pipeline.py. The generating ranges of the composite gains k_C = η_θ·c₁ and k_V = η_θ·v₁ (per step at this dt) were chosen so that θ moves by O(0.1 AU); they are not estimates of anything. r_max is unregistered (B-13) and fixed here at 5/s.",
+  "design_status": "Synthetic recovery-study design for SSOT §17 and TC-08d–g (task 62b). Every value in this file is a study-design choice and NOT a registered APGI value, except the entries listed under 'registered_values_used', which are copied from specification/parameters.json and checked against it by test_recovery_pipeline.py. The generating ranges of the composite gains k_C = η_θ·c₁, k_V = η_θ·v₁, k_C2 = η_θ·c₂, k_V2 = η_θ·v₂ and of δ_reset in the c2_reset block (per step at this dt) were chosen so that θ moves by O(0.1 AU); they are not estimates of anything. r_max is unregistered (B-13) and fixed here at 5/s.",
   "observation": "Every-step ignition events B(t) with known inputs (oracle observation). A behavioral report is a parameter-free garbling of B, so this bounds what behavior can identify from above.",
-  "design_sha256": "9b169a04d5be051ce0a531e9c6798bfa4c814535726ee7f3c80eb0a78fa32335",
-  "source_sha256": "78d1f5971936405ff5428c8a5dcf111e2d54ff1b0b3392964dc1ff8dee64b30d",
+  "design_sha256": "1660f524af397154bb2fa9261e8a8317afa8c2a228e5f6fc568431444dc9d9b4",
+  "source_sha256": "b1144a890bcc1d8db3c71334b63d5a14e1eab54b6cf3b377733760a59bb9f13c",
   "gate": {
     "r_HIGH": 0.85,
     "err_gate": 0.2
@@ -390,6 +390,200 @@
       "profile_flat_fraction": {
         "gamma_sig": 0.152777777778,
         "log_pi_scale": 0.314814814815
+      }
+    },
+    "allo_c2v2": {
+      "block": "allo_c2v2",
+      "tc": "TC-08g",
+      "question": "Are k_C2 = η_θ·c₂ (event cost) and k_V2 = η_θ·v₂ (interoceptive value) recovered from events, with τ_θ free and δ_reset known?",
+      "input": "fast",
+      "subjects": 30,
+      "mean_events": 339.466666666667,
+      "grid": {
+        "tau_theta": [
+          10.0,
+          30.0,
+          9
+        ],
+        "k_C2": [
+          -0.005,
+          0.005,
+          9
+        ],
+        "k_V2": [
+          0.0,
+          0.0002,
+          9
+        ]
+      },
+      "parameters": {
+        "tau_theta": {
+          "pearson_r": 0.59204394766,
+          "median_range_scaled_error": 0.180353909791,
+          "posterior_sd_over_prior_sd": 0.896497736086,
+          "sbc": {
+            "chi2": 2.666666666667,
+            "df": 9,
+            "p": 0.975245708327,
+            "counts": [
+              2,
+              4,
+              3,
+              2,
+              3,
+              3,
+              5,
+              3,
+              3,
+              2
+            ]
+          }
+        },
+        "k_C2": {
+          "pearson_r": 0.803273826214,
+          "median_range_scaled_error": 0.157304413066,
+          "posterior_sd_over_prior_sd": 0.551148688938,
+          "sbc": {
+            "chi2": 9.333333333333,
+            "df": 9,
+            "p": 0.407200701565,
+            "counts": [
+              3,
+              1,
+              5,
+              1,
+              3,
+              2,
+              5,
+              2,
+              2,
+              6
+            ]
+          }
+        },
+        "k_V2": {
+          "pearson_r": 0.579955937393,
+          "median_range_scaled_error": 0.252843681343,
+          "posterior_sd_over_prior_sd": 0.795356872625,
+          "sbc": {
+            "chi2": 6.666666666667,
+            "df": 9,
+            "p": 0.673167617168,
+            "counts": [
+              3,
+              2,
+              2,
+              3,
+              3,
+              1,
+              3,
+              2,
+              6,
+              5
+            ]
+          }
+        }
+      },
+      "posterior_correlation_median": {
+        "tau_theta~k_C2": 0.242205615295,
+        "tau_theta~k_V2": -0.027090481632,
+        "k_C2~k_V2": 0.694990071588
+      },
+      "profile_flat_fraction": {
+        "tau_theta": 0.944444444444,
+        "k_C2": 0.722222222222,
+        "k_V2": 0.911111111111
+      },
+      "out_of_sample": {
+        "sessions": 8,
+        "null": {
+          "k_C2": 0.0,
+          "k_V2": 0.0
+        },
+        "mean_pred_minus_null_nats": 81.115685338684,
+        "mean_truth_minus_pred_nats": 0.528962097672
+      }
+    },
+    "c2_reset": {
+      "block": "c2_reset",
+      "tc": "TC-08g",
+      "question": "Are k_C2 = η_θ·c₂·B(t−1) and δ_reset·B(t) separable? Both raise θ by a fixed amount per event, one step apart.",
+      "input": "fast",
+      "subjects": 30,
+      "mean_events": 208.466666666667,
+      "grid": {
+        "k_C2": [
+          0.0,
+          0.005,
+          9
+        ],
+        "delta_reset": [
+          0.0,
+          0.005,
+          9
+        ]
+      },
+      "parameters": {
+        "k_C2": {
+          "pearson_r": 0.570086735818,
+          "median_range_scaled_error": 0.218091040232,
+          "posterior_sd_over_prior_sd": 0.762603236524,
+          "sbc": {
+            "chi2": 6.0,
+            "df": 9,
+            "p": 0.74131156129,
+            "counts": [
+              2,
+              2,
+              1,
+              3,
+              5,
+              2,
+              4,
+              2,
+              4,
+              5
+            ]
+          }
+        },
+        "delta_reset": {
+          "pearson_r": 0.792809618219,
+          "median_range_scaled_error": 0.15339830821,
+          "posterior_sd_over_prior_sd": 0.762436995369,
+          "sbc": {
+            "chi2": 11.333333333333,
+            "df": 9,
+            "p": 0.25288831729,
+            "counts": [
+              5,
+              2,
+              3,
+              4,
+              2,
+              7,
+              0,
+              2,
+              2,
+              3
+            ]
+          }
+        }
+      },
+      "posterior_correlation_median": {
+        "k_C2~delta_reset": -0.594299313395
+      },
+      "profile_flat_fraction": {
+        "k_C2": 0.892592592593,
+        "delta_reset": 0.892592592593
+      },
+      "out_of_sample": {
+        "sessions": 8,
+        "null": {
+          "k_C2": 0.0,
+          "delta_reset": 0.0
+        },
+        "mean_pred_minus_null_nats": 9.737811907535,
+        "mean_truth_minus_pred_nats": 0.472129323427
       }
     }
   },

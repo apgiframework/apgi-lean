@@ -186,14 +186,14 @@ def grid_params(axes: dict[str, np.ndarray]) -> tuple[dict[str, np.ndarray], tup
 
 def block_params(design: dict, block: str, free: dict) -> dict:
     """The study's fixed parameters, the block's fixed parameters, then the free ones. The composite
-    gains k_C = η_θ·c₁ and k_V = η_θ·v₁ are mapped to (η_θ = 1, c₁ = k_C, v₁ = k_V), which is
-    exact by the TC-08g scale invariance (Lean: Apgi.traj_scaleAllo)."""
+    gains k_C = η_θ·c₁, k_V = η_θ·v₁, k_C2 = η_θ·c₂ and k_V2 = η_θ·v₂ are mapped to η_θ = 1 with
+    the weight set to the gain, which is exact by the TC-08g scale invariance
+    (Lean: Apgi.traj_scaleAllo): η_θ enters only through these four products."""
     p = {**design["fixed"], **design["blocks"][block].get("fixed", {})}
+    weight = {"k_C": "c1", "k_V": "v1", "k_C2": "c2", "k_V2": "v2"}
     for k, v in free.items():
-        if k == "k_C":
-            p["eta_theta"], p["c1"] = 1.0, v
-        elif k == "k_V":
-            p["eta_theta"], p["v1"] = 1.0, v
+        if k in weight:
+            p["eta_theta"], p[weight[k]] = 1.0, v
         elif k == "log_pi_scale":
             p["pi_bar_e"] = p["pi_bar_i"] = np.exp(v)
         else:

@@ -1,5 +1,5 @@
 {
-  "status": "Synthetic recovery-study design for SSOT §17 and TC-08d–g (task 62b). Every value in this file is a study-design choice and NOT a registered APGI value, except the entries listed under 'registered_values_used', which are copied from specification/parameters.json and checked against it by test_recovery_pipeline.py. The generating ranges of the composite gains k_C = η_θ·c₁ and k_V = η_θ·v₁ (per step at this dt) were chosen so that θ moves by O(0.1 AU); they are not estimates of anything. r_max is unregistered (B-13) and fixed here at 5/s.",
+  "status": "Synthetic recovery-study design for SSOT §17 and TC-08d–g (task 62b). Every value in this file is a study-design choice and NOT a registered APGI value, except the entries listed under 'registered_values_used', which are copied from specification/parameters.json and checked against it by test_recovery_pipeline.py. The generating ranges of the composite gains k_C = η_θ·c₁, k_V = η_θ·v₁, k_C2 = η_θ·c₂, k_V2 = η_θ·v₂ and of δ_reset in the c2_reset block (per step at this dt) were chosen so that θ moves by O(0.1 AU); they are not estimates of anything. r_max is unregistered (B-13) and fixed here at 5/s.",
   "observation": "Every-step ignition events B(t) with known inputs (oracle observation). A behavioral report is a parameter-free garbling of B, so this bounds what behavior can identify from above.",
   "registered_values_used": {
     "theta_baseline": 0.35,
@@ -162,6 +162,59 @@
       "known": [
         "log_pi_scale"
       ]
+    },
+    "allo_c2v2": {
+      "tc": "TC-08g",
+      "question": "Are k_C2 = η_θ·c₂ (event cost) and k_V2 = η_θ·v₂ (interoceptive value) recovered from events, with τ_θ free and δ_reset known?",
+      "input": "fast",
+      "grid": {
+        "tau_theta": [
+          10,
+          30,
+          9
+        ],
+        "k_C2": [
+          -0.005,
+          0.005,
+          9
+        ],
+        "k_V2": [
+          0.0,
+          0.0002,
+          9
+        ]
+      },
+      "subjects": 30,
+      "seed": 2026112805,
+      "oos_subjects": 8,
+      "null": {
+        "k_C2": 0.0,
+        "k_V2": 0.0
+      }
+    },
+    "c2_reset": {
+      "tc": "TC-08g",
+      "question": "Are k_C2 = η_θ·c₂·B(t−1) and δ_reset·B(t) separable? Both raise θ by a fixed amount per event, one step apart.",
+      "input": "fast",
+      "grid": {
+        "k_C2": [
+          0.0,
+          0.005,
+          9
+        ],
+        "delta_reset": [
+          0.0,
+          0.005,
+          9
+        ]
+      },
+      "subjects": 30,
+      "seed": 2026112806,
+      "oos_subjects": 8,
+      "null": {
+        "k_C2": 0.0,
+        "delta_reset": 0.0
+      }
     }
   }
 }

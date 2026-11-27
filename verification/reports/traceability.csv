@@ -174,6 +174,8 @@ REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_s
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_gate_outcomes
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_tc08e_tradeoff_present
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_tc08g_cost_weight_unidentified
+REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_tc08g_second_weights_are_what_the_study_fits
+REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_tc08g_second_weights_trade_off
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_tc08f_free_scale_costs_little_here
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_out_of_sample_prediction
 REQ-TC-08,§23 TC-08,tested,partial,TC-08,test,test_recovery_pipeline.py::test_sbc_detects_a_mismatched_likelihood

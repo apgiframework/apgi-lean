@@ -52,6 +52,13 @@ GATE_EXPECTED = {
     ("ne", "g_ne"): True,
     ("sig", "gamma_sig"): True,
     ("sig", "log_pi_scale"): True,
+    # Round 74 (task 62b remainder): η_θ·c₂, η_θ·v₂ and the c₂ / δ_reset pair. All fail §17 at
+    # this design; dispositions go with task 71a.
+    ("allo_c2v2", "tau_theta"): False,
+    ("allo_c2v2", "k_C2"): False,
+    ("allo_c2v2", "k_V2"): False,
+    ("c2_reset", "k_C2"): False,
+    ("c2_reset", "delta_reset"): False,
 }
 
 
@@ -138,6 +145,17 @@ def test_tc08g_composites_are_what_the_study_fits():
     assert np.array_equal(RP.core_loop(ch, p, u=u)["B"], RP.core_loop(ch, q, u=u)["B"])
 
 
+def test_tc08g_second_weights_are_what_the_study_fits():
+    """The same mapping for the round-74 composites: k_C2 → (η_θ = 1, c₂ = k_C2) and
+    k_V2 → (η_θ = 1, v₂ = k_V2); any (η_θ, c₂ = k_C2/η_θ, v₂ = k_V2/η_θ) gives the same events."""
+    p = RP.block_params(DESIGN, "allo_c2v2", {"tau_theta": 20.0, "k_C2": 3e-3, "k_V2": 1e-4})
+    assert (p["eta_theta"], p["c2"], p["v2"], p["c1"], p["v1"]) == (1.0, 3e-3, 1e-4, 0.0, 0.0)
+    x_e, x_i, u = _inputs(600, 7)
+    ch = RP.precompute(x_e, x_i, p)
+    q = {**p, "eta_theta": 2e-3, "c2": 1.5, "v2": 0.05}
+    assert np.array_equal(RP.core_loop(ch, p, u=u)["B"], RP.core_loop(ch, q, u=u)["B"])
+
+
 # ---------------------------------------------------------------- design
 
 def test_design_uses_registered_values():
@@ -216,6 +234,18 @@ def test_tc08g_cost_weight_unidentified(report):
         r = report["blocks"][b]
         assert r["parameters"]["k_C"]["posterior_sd_over_prior_sd"] > 0.95
         assert r["profile_flat_fraction"]["k_C"] > 0.95
+
+
+def test_tc08g_second_weights_trade_off(report):
+    """Round 74. allo_c2v2: k_C2 (raises θ after each event) and k_V2 (lowers θ with |z_i|) are
+    positively correlated a posteriori: the events mainly constrain their net effect on θ.
+    c2_reset: k_C2·B(t−1) and δ_reset·B(t) are the same per-event increment one step apart; they
+    are negatively correlated, though not fully degenerate (median correlation about −0.6)."""
+    assert report["blocks"]["allo_c2v2"]["posterior_correlation_median"]["k_C2~k_V2"] > 0.5
+    c = report["blocks"]["c2_reset"]["posterior_correlation_median"]["k_C2~delta_reset"]
+    assert -0.9 < c < -0.3
+    for k in ("k_C2", "delta_reset"):
+        assert report["blocks"]["c2_reset"]["parameters"][k]["posterior_sd_over_prior_sd"] > 0.6
 
 
 def test_tc08f_free_scale_costs_little_here(report):
