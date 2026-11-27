@@ -19,7 +19,10 @@ that APGI describes the brain. See `specification/epistemic-claims.json` and
 - **Tested:** float64 twins of every theorem (Hypothesis), golden vectors at 50 digits,
   timestep-refinement convergence, NaN/Inf and overflow handling (TC-13), the §17
   parameter-recovery gate on synthetic data (TC-08), a cross-implementation distributional
-  test (TC-19), and cross-checks of the pinned production code.
+  test (TC-19), and cross-checks of the pinned production code: its core equals the
+  reference step for step (TC-04), and its clamped-step fraction, operating point and
+  stimulus-free event rate are reported (TC-10, TC-14; `verification/reports/production-run-report.json`).
+  Known production divergences are strict xfails, so a fix fails CI until it is recorded.
 - **Assumed / empirical:** bridges and registered hypotheses (`specification/bridges.json`,
   CL-* claims). They are stated as hypotheses and never proved.
 
@@ -63,7 +66,8 @@ apgi-lean/
 └── verification/
     ├── python/               reference implementation, generator, checker, extractor, tests
     ├── reports/              conflicts, extraction, proof status, release manifest, traceability.csv,
-    │                         recovery-pipeline.json (TC-08d–g study)
+    │                         recovery-pipeline.json (TC-08d–g study),
+    │                         production-run-report.json (TC-10/TC-14, pinned production core)
     └── verify_all.ps1        the full local routine
 ```
 
@@ -78,6 +82,7 @@ pip install -r verification/python/requirements.txt
 python verification/python/generate_lean.py --check
 python verification/python/check_consistency.py
 python verification/python/make_traceability.py --check
+APGI_IMPL_PATH=path/to/apgi-implementation python verification/python/production_report.py --check
 cd verification/python && python -m pytest -q --junitxml=../reports/junit.xml && cd ../..
 python verification/python/make_report.py --junit verification/reports/junit.xml --lean-ok
 python verification/python/extract_sources.py --corpus path/to/published-pdfs --corpus path/to/apgi-v-1-2 --write
