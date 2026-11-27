@@ -14,6 +14,7 @@ hard failure until the PD entry is marked resolved.
 """
 import ast
 import inspect
+import math
 import os
 import sys
 from pathlib import Path
@@ -449,3 +450,205 @@ def test_extensions_are_labelled_legacy():
     p = _pipe(use_hierarchical=True)
     assert p.model_form == "legacy_v1_1" and "hierarchical" in p.extensions_active
     assert p.manifest()["model_form"] == "legacy_v1_1"
+
+
+# ------------------------------------------------ TC-13 stability (task 68a) ----
+def _snapshot(p) -> dict:
+    import pickle
+
+    out = {}
+    for k, v in vars(p).items():
+        try:
+            out[k] = pickle.dumps(v)
+        except Exception:  # noqa: BLE001 - unpicklable helpers are compared by repr
+            out[k] = repr(v)
+    return out
+
+
+def _warm_pipe(seed: int = 7):
+    import numpy as np
+
+    p = _pipe()
+    p.rng = np.random.default_rng(seed)
+    for k in range(20):
+        _step(p, 0.1 * k, -0.05 * k)
+    return p
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), -float("inf")], ids=["nan", "inf", "-inf"])
+def test_production_rejects_non_finite_input_atomically(bad):
+    """TC-13: NaN/Inf rejected before any state, statistics, RNG or history change."""
+    p = _warm_pipe()
+    before = _snapshot(p)
+    for args in ((bad, 0.0), (0.0, bad)):
+        with pytest.raises(ValueError) as exc:
+            _step(p, *args)
+        assert type(exc.value).__name__ == "NonFiniteInputError"
+        assert _snapshot(p) == before
+
+
+@divergence("SSOT-P11")
+@pytest.mark.parametrize("big", [1e200, -1e200, 1e308])
+def test_production_overflow_is_rejected_atomically(big):
+    """TC-13: a step that would overflow raises NonFiniteStateError (an OverflowError) and
+    leaves the pipeline, its RNG and its history unchanged; the run then continues exactly
+    as if the call had not happened."""
+    p = _warm_pipe()
+    before = _snapshot(p)
+    with pytest.raises(OverflowError) as exc:
+        _step(p, big, 0.0)
+    assert type(exc.value).__name__ == "NonFiniteStateError"
+    assert _snapshot(p) == before
+    assert _step(p, 0.2, 0.1) == _step(_warm_pipe(), 0.2, 0.1)
+
+
+@divergence("SSOT-P11")
+def test_production_silent_overflow_is_rejected_atomically():
+    """TC-13: float64 `*` and `/` overflow to inf without raising. With Π̄ᵉ = 1e-300 the drive
+    overflows silently; the step must still be rejected and change nothing."""
+    import numpy as np
+
+    p = _pipe(pi_bar_e=1e-300)
+    p.rng = np.random.default_rng(7)
+    for k in range(20):
+        _step(p, 0.1 * k, -0.05 * k)
+    before = _snapshot(p)
+    with pytest.raises(OverflowError):
+        _step(p, 1e10, 0.0)
+    assert _snapshot(p) == before
+
+
+@pytest.mark.parametrize("mag", [1.0, 1e3, 1e50, 1e100, 1e150, 1e154, 1e155, 1e160, 1e200, 1e300])
+def test_overflow_classification_matches_reference(mag):
+    """TC-13 across implementations: for the same state and input, production and apgi_ref
+    either both accept the step (with the same result) or both reject it as an overflow."""
+    import numpy as np
+
+    us = [0.5] * 21
+    p = _pipe()
+    p.rng = _FixedDraws(us)
+    ref_p = _ref_params(p.config)
+    s = R.core_state(ref_p)
+    for k in range(20):
+        _step(p, 0.1 * k, -0.05 * k)
+        s, _ = R.core_step(s, 0.1 * k, -0.05 * k, ref_p, u=0.5)
+    try:
+        r = _step(p, mag, 0.0)
+        prod = ("ok", r["S"])
+    except OverflowError:
+        prod = ("overflow", None)
+    try:
+        s2, _ = R.core_step(s, mag, 0.0, ref_p, u=0.5)
+        ref = ("ok", s2["S"])
+    except OverflowError:
+        ref = ("overflow", None)
+    assert prod[0] == ref[0], (mag, prod, ref)
+    if prod[0] == "ok":
+        assert np.isfinite(prod[1])
+        assert prod[1] == pytest.approx(ref[1], rel=1e-9, abs=1e-12)
+
+
+def test_production_constant_input_has_no_division_by_zero():
+    """TC-13: σ_ref → 0 and Σ → 0 under constant input; every denominator stays ≥ ε_stab
+    (Lean: Apgi.traj_denoms_pos) and Π_raw is clamped to Π_max, never infinite."""
+    p = _pipe()
+    for _ in range(3000):
+        r = _step(p, 1.0, 1.0)
+    for k in ("S", "S_inst", "theta", "theta_eff", "B_prop", "z_e_norm", "z_i_norm", "pi_e", "pi_i"):
+        assert math.isfinite(float(r[k])), k
+    assert r["pi_e"] == pytest.approx(p.config["pi_max"])
+
+
+# --------------------------- TC-19 stochastic reproducibility (task 68b) ----
+TC19_RUNS = 200
+TC19_STEPS = 300
+
+
+def _tc19_inputs():
+    import numpy as np
+
+    g = np.random.default_rng(19)
+    xe = g.standard_normal(TC19_STEPS) + np.where((np.arange(TC19_STEPS) % 100) >= 60, 1.5, 0.0)
+    xi = g.standard_normal(TC19_STEPS)
+    return [float(x) for x in xe], [float(x) for x in xi]
+
+
+def _ks_statistic(a, b) -> float:
+    import numpy as np
+
+    a, b = np.sort(np.asarray(a, float)), np.sort(np.asarray(b, float))
+    grid = np.union1d(a, b)
+    fa = np.searchsorted(a, grid, side="right") / a.size
+    fb = np.searchsorted(b, grid, side="right") / b.size
+    return float(np.max(np.abs(fa - fb)))
+
+
+def test_production_rng_algorithm_is_pcg64_and_seed_reproducible():
+    """TC-19: fixed RNG algorithm (numpy PCG64 via default_rng) and seeds. The same seed
+    reproduces the same event sequence within one platform; SSOT §23 notes that seeds alone
+    do not guarantee cross-platform equality, hence the distributional test below."""
+    import numpy as np
+
+    xe, xi = _tc19_inputs()
+    runs = []
+    for _ in range(2):
+        p = _pipe()
+        p.rng = np.random.default_rng(np.random.SeedSequence(20261127))
+        assert isinstance(p.rng.bit_generator, np.random.PCG64)
+        runs.append([_step(p, a, b)["B"] for a, b in zip(xe, xi)])
+    assert runs[0] == runs[1]
+    assert 0 < sum(runs[0]) < TC19_STEPS
+
+
+def test_cross_implementation_event_distribution():
+    """TC-19 distributional test across implementations. Same deterministic inputs; production
+    samples with its own hazard sampler on independent PCG64 streams, apgi_ref with Philox
+    streams (a different algorithm on purpose). The per-run ignition counts and first-ignition
+    times must agree in distribution: |Welch z| < 4 and the two-sample KS statistic below its
+    α = 0.001 critical value. A twin with r_max scaled by 1.5 must fail the same test
+    (power check), so the test can detect a real difference."""
+    import numpy as np
+
+    xe, xi = _tc19_inputs()
+    root = np.random.SeedSequence(20261127)
+    prod_seeds, ref_seeds = root.spawn(2)
+    p0 = _pipe()
+    ref_p = _ref_params(p0.config)
+
+    def prod_runs():
+        out = []
+        for ss in prod_seeds.spawn(TC19_RUNS):
+            p = _pipe()
+            p.rng = np.random.Generator(np.random.PCG64(ss))
+            B = [_step(p, a, b)["B"] for a, b in zip(xe, xi)]
+            out.append(B)
+        return out
+
+    def ref_runs(params):
+        out = []
+        for ss in ref_seeds.spawn(TC19_RUNS):
+            g = np.random.Generator(np.random.Philox(ss))
+            s, B = R.core_state(params), []
+            for a, b in zip(xe, xi):
+                s, log = R.core_step(s, a, b, params, u=float(g.random()))
+                B.append(log["B"])
+            out.append(B)
+        return out
+
+    def stats(runs):
+        counts = [sum(B) for B in runs]
+        first = [B.index(1) if 1 in B else TC19_STEPS for B in runs]
+        return np.array(counts, float), np.array(first, float)
+
+    def agree(x, y) -> bool:
+        z = (x.mean() - y.mean()) / math.sqrt(x.var(ddof=1) / x.size + y.var(ddof=1) / y.size)
+        crit = math.sqrt(-math.log(0.001 / 2) / 2) * math.sqrt((x.size + y.size) / (x.size * y.size))
+        return abs(z) < 4 and _ks_statistic(x, y) < crit
+
+    pc, pf = stats(prod_runs())
+    rc, rf = stats(ref_runs(ref_p))
+    assert pc.mean() > 1  # the window is informative: several ignitions per run
+    assert agree(pc, rc), (pc.mean(), rc.mean())
+    assert agree(pf, rf), (pf.mean(), rf.mean())
+    hc, _ = stats(ref_runs({**ref_p, "r_max": 1.5 * ref_p["r_max"]}))
+    assert not agree(pc, hc), "power check: a 1.5x hazard rate must be detected"

@@ -106,7 +106,11 @@
        "tests": ["test_production.py::test_default_dopamine_bias_is_zero"], "task": 51},
       {"id": "SSOT-P10", "status": "open", "severity": "P1", "task": 59, "where": "pipeline.py legacy_v1_1 path with use_hierarchical_precision_ode: aggregate S_inst from the ODE precisions, update_signal_ode with the inverse-variance Πᵉ_eff, Πⁱ_eff; resonance mode applies δ on the resonance θ and again in apply_refractory_boost",
        "summary": "Extension path only (model_form legacy_v1_1). Two precision definitions in one simulation, which the SSOT prohibits (§8 shortcuts; EQ-PREC-ODE-1 vs EQ-PREC-2), and a likely double δ in resonance mode. Found by reading; not yet under test. The default ssot_core path is unaffected.",
-       "tests": []}
+       "tests": []},
+      {"id": "SSOT-P11", "status": "open", "severity": "P1", "task": 68, "where": "core/ssot_core.py step (72ad050): μ, the RNG draw, r(t) and t_ep were updated before (ε − μ)**2 raised OverflowError",
+       "summary": "TC-13: an overflowing input (e.g. x_e = 1e200) raised OverflowError after mutating μₑ, the RNG and the core state, so the failure was not atomic, unlike the NaN/Inf rejection (AUD-DEF-01). Found in the task-68 audit.",
+       "fix": "apgi-implementation e0e82cf (committed locally 2026-11-27, NOT pushed; the push was not permitted from this session): core/ssot_core.step computes into locals and commits only a finite state; an overflow raises core.finite.NonFiniteStateError (an OverflowError) after restoring the RNG, so the rejected step changes nothing. Against e0e82cf the strict-xfail tests pass (verified locally). To close: push e0e82cf, set this entry to resolved, move the pin to e0e82cf.",
+       "tests": ["test_production.py::test_production_overflow_is_rejected_atomically", "test_production.py::test_production_silent_overflow_is_rejected_atomically", "test_production.py::test_overflow_classification_matches_reference"]}
     ]
   },
   "production_secondary": {

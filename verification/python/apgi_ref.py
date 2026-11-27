@@ -237,9 +237,48 @@ def _ref_stats(window: list) -> tuple[float, float]:
     return mu, math.sqrt(sum((w - mu) ** 2 for w in window) / len(window))
 
 
+class NonFiniteInputError(ValueError):
+    """TC-13: a caller-supplied input (x_e, x_i or the draw u) is NaN or infinite."""
+
+
+class NonFiniteStateError(OverflowError):
+    """TC-13: a step would leave a non-finite state from finite inputs (float64 overflow)."""
+
+
+_STATE_FLOATS = ("S", "theta", "r", "xhat_e", "xhat_i", "mu_e", "s2_e", "mu_i", "s2_i")
+
+
+def require_finite(name: str, x: float) -> float:
+    """TC-13: reject NaN/Inf (and non-numbers, bools) before any computation."""
+    if isinstance(x, bool) or not isinstance(x, (int, float, np.floating, np.integer)):
+        raise NonFiniteInputError(f"{name} must be a real number, got {type(x).__name__}")
+    x = float(x)
+    if not math.isfinite(x):
+        raise NonFiniteInputError(f"{name} must be finite, got {x!r}")
+    return x
+
+
 def core_step(state: dict, x_e: float, x_i: float, p: dict | None = None, u: float = 1.0) -> tuple[dict, dict]:
     """One timestep of the canonical pipeline, SSOT §13 (Math Spec v1.2 draft §13 Table 3).
-    `u` is the uniform draw for the hazard sampler (u = 1 never ignites). Returns (state', log)."""
+    `u` is the uniform draw for the hazard sampler (u = 1 never ignites). Returns (state', log).
+
+    TC-13 defined handling. NaN/Inf inputs raise NonFiniteInputError; a step that would overflow
+    raises NonFiniteStateError (an OverflowError). `state` is never mutated, so a rejected step
+    changes nothing. Division by zero cannot occur: every denominator is σ_ref + ε_stab or
+    Σ + ε_stab with σ_ref, Σ ≥ 0 (Lean: Apgi.traj_denoms_pos)."""
+    x_e, x_i, u = require_finite("x_e", x_e), require_finite("x_i", x_i), require_finite("u", u)
+    try:
+        s, log = _core_step(state, x_e, x_i, p, u)
+    except OverflowError as exc:
+        raise NonFiniteStateError(f"core_step overflowed: {exc}") from exc
+    bad = [k for k in _STATE_FLOATS if not math.isfinite(s[k])]
+    bad += [k for k in ("ref_e", "ref_i") if s[k] and not math.isfinite(s[k][-1])]
+    if bad:
+        raise NonFiniteStateError("core_step would leave a non-finite state: " + ", ".join(bad))
+    return s, log
+
+
+def _core_step(state: dict, x_e: float, x_i: float, p: dict | None, u: float) -> tuple[dict, dict]:
     p = {**CORE_DEFAULTS, **(p or {})}
     s = {**state, "ref_e": list(state["ref_e"]), "ref_i": list(state["ref_i"])}
     eps_e, eps_i = x_e - s["xhat_e"], x_i - s["xhat_i"]                                   # 2

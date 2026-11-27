@@ -7,3 +7,5 @@ import Apgi.Coverage
 import Apgi.Pipeline
 import Apgi.Strata
 import Apgi.Epistemic
+import Apgi.Stability
+import Apgi.Identifiability
