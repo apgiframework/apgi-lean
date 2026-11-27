@@ -253,4 +253,9 @@ REQ-TC-22,§23 TC-22,tested,pass,TC-22,test,test_equations.py::test_every_lean_t
 REQ-TC-23,§23 TC-23,tested,pass,TC-23,test,test_conflicts.py::test_euler_precondition_violation
 REQ-TC-24,§23 TC-24,tested,pass,TC-24,test,test_conflicts.py::test_ci_checks_out_the_pinned_production_commits
 REQ-TC-25,§23 TC-25,tested,not-implemented,TC-25,none,
-REQ-TC-26,§23 TC-26,tested,not-implemented,TC-26,none,
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_every_row_is_verified_against_the_locked_record
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_codes_follow_from_the_pred_id_cell
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_tier_and_label_are_literal_readings_of_the_severity_cell
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_every_cited_prediction_code_is_registered
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_alpha_psy_is_the_pred_1e_threshold
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_v12_draft_table_equals_the_locked_record

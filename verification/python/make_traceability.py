@@ -97,6 +97,18 @@ def build() -> dict[str, str]:
         if r["limitation"]:
             L.append(f"- Limitation: {r['limitation']}")
         L.append("")
+    if (ROOT / "specification" / "hypotheses.json").exists():
+        H = load("hypotheses.json")
+        T, PR = H["table"], H["predictions"]
+        L += [f"## Registered predictions ({T['id']}, {T['title']}; TC-26 first slice)", "",
+              f"{len(PR)} rows, {sum(len(p['codes']) for p in PR)} prediction codes, cells verbatim from {T['source']} "
+              f"pp. {T['first_page']}–{T['last_page']} and verified against the pinned PDF by `extract_sources.py`. "
+              "Tier and label are read literally from the Severity cell; no classification is derived.", ""]
+        for p in PR:
+            tag = " · ".join(x for x in (f"tier {p['severity_tier']}" if p["severity_tier"] else "", p["label"] or "") if x)
+            L.append(f"- **{p['pred_id']}** ({p['protocol']}; {tag}): {p['construct']}. "
+                     f"Standard: {p['classification_standard']}. HEP-dependent: {p['hep_dependent']}.")
+        L.append("")
     matrix = "\n".join(L).rstrip() + "\n"
 
     A = ["# APGI assumption inventory", "",

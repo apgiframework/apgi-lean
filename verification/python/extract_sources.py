@@ -155,6 +155,132 @@ def param_hash(p: dict) -> str:
     return hashlib.sha256(json.dumps(keep, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
+HYP_COLUMNS = ("pred_id", "protocol", "construct", "classification_standard", "severity", "hep_dependent",
+               "fallback_proxy")
+
+
+def hypothesis_register() -> tuple[dict | None, list[dict]]:
+    """(table description, prediction records) of specification/hypotheses.json, or (None, [])."""
+    import registry
+    if not (registry.SPEC / "hypotheses.json").exists():
+        return None, []
+    h = load("hypotheses.json")
+    return h["table"], h["predictions"]
+
+
+def hypothesis_hash(r: dict) -> str:
+    """Hash of a hypotheses.json record's verified fields (cells, codes, literal readings, evidence)."""
+    keep = {k: r.get(k) for k in ("id", *HYP_COLUMNS, "codes", "severity_tier", "label", "evidence")}
+    return hashlib.sha256(json.dumps(keep, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def table_segments(table: dict, pages: list[str]) -> tuple[dict[int, str], list[str]]:
+    """Squashed text of the registered table on each of its pages: from the table title (first page)
+    or the repeated column header (later pages) to the end of the page or to end_before (last page)."""
+    first, last = table["first_page"], table["last_page"]
+    start, hdr, end = squash(table["start_after"]), squash(table["header"]), squash(table["end_before"])
+    seg, problems = {}, []
+    for n in range(first, last + 1):
+        if not 1 <= n <= len(pages):
+            problems.append(f"page {n} not in document")
+            continue
+        s = pages[n - 1]
+        if n == first:
+            k = s.find(start)
+            if k < 0:
+                problems.append(f"table title not on page {n}")
+                continue
+            s = s[k + len(start):]
+        if not s.startswith(hdr):
+            problems.append(f"column header not at the start of the table on page {n}")
+        else:
+            s = s[len(hdr):]
+        if n == last:
+            k = s.find(end)
+            if k < 0:
+                problems.append(f"end marker not on page {n}")
+            else:
+                s = s[:k]
+        seg[n] = s
+    return seg, problems
+
+
+def verify_hypotheses(pages_cache: dict, raw_pages: dict | None = None) -> dict:
+    """TC-26 (first slice): every row of the registered table occurs cell for cell, in column order, on its
+    stated page of the pinned source; a row split by a page break is registered as head cells on one page
+    and tail cells on the next, which must join to the full cells; and the rows reproduce the table on
+    each page exactly, so no row of the source is missing from the register and none is invented."""
+    table, preds = hypothesis_register()
+    if table is None:
+        return {}
+    pages = pages_cache.get(table["source"])
+    raw = (raw_pages or {}).get(table["source"])
+    if raw is not None and table.get("text_layer_map"):
+        # The source's table font emits private-use code points for some punctuation, which squash() would
+        # delete. The map is specific to that pinned file (other PDFs use the same code points for other
+        # glyphs), so it is applied to this source's raw text only, before squashing.
+        glyphs = str.maketrans({int(k, 16): v for k, v in table["text_layer_map"].items()})
+        pages = [squash(pg.translate(glyphs)) for pg in raw]
+    out = {}
+    if pages is None:
+        for r in preds:
+            out[r["id"]] = {"status": "failed", "record_hash": hypothesis_hash(r),
+                            "detail": "source not pinned or not found in corpus"}
+        return {"table": {"id": table["id"], "status": "failed", "problems": ["source not pinned or not found"]},
+                "predictions": out}
+    seg, problems = table_segments(table, pages)
+    expected = {n: "" for n in seg}
+    for r in preds:
+        ev, why = r.get("evidence") or [], []
+        if len(ev) == 1:
+            n, part = ev[0]["page"], squash("".join(r[c] for c in HYP_COLUMNS))
+            expected[n] = expected.get(n, "") + part
+            if part not in seg.get(n, ""):
+                why.append(f"row not on page {n}")
+        elif len(ev) == 2 and ev[1]["page"] == ev[0]["page"] + 1:
+            heads, tails = ev[0].get("cells") or [], ev[1].get("cells") or []
+            if len(heads) != len(HYP_COLUMNS) or len(tails) != len(HYP_COLUMNS):
+                why.append("split row needs one head and one tail per column")
+            else:
+                for c, h, t in zip(HYP_COLUMNS, heads, tails):
+                    if squash(h + t) != squash(r[c]):
+                        why.append(f"{c}: head + tail != cell")
+                for e, cells in ((ev[0], heads), (ev[1], tails)):
+                    part = squash("".join(cells))
+                    expected[e["page"]] = expected.get(e["page"], "") + part
+                    if part not in seg.get(e["page"], ""):
+                        why.append(f"row part not on page {e['page']}")
+        else:
+            why.append("evidence must name one page, or two consecutive pages for a split row")
+        out[r["id"]] = {"status": "failed" if why else "verified", "record_hash": hypothesis_hash(r),
+                        "pages": [e["page"] for e in ev], "detail": "; ".join(why) or None}
+    for n in seg:
+        if seg[n] != expected.get(n, ""):
+            problems.append(f"page {n}: registered rows do not reproduce the table "
+                            f"(table {len(seg[n])} chars, rows {len(expected.get(n, ''))})")
+    return {"table": {"id": table["id"], "status": "failed" if problems else "verified", "problems": problems,
+                      "rows": len(preds), "pages": [table["first_page"], table["last_page"]]},
+            "predictions": out}
+
+
+def draft_table_rows(path: Path, heading: str) -> list[list[str]]:
+    """Body rows of the first Markdown table after the line starting with `heading`, cells unescaped
+    and unbolded (the v1.2 draft's copy of a registered table, for the fidelity comparison)."""
+    lines = path.read_text(encoding="utf-8").split("\n")
+    i = next(k for k, line in enumerate(lines) if line.startswith(heading))
+    rows: list[list[str]] = []
+    for line in lines[i + 1:]:
+        if not line.startswith("|"):
+            if rows:
+                break
+            continue
+        cells = [MD_ESCAPE.sub(r"\1", c.strip()).replace("**", "") for c in re.split(r"(?<!\\)\|", line)[1:-1]]
+        if set(cells[0]) <= set(":-") or not rows and cells[0] == "Pred-ID":
+            continue
+        rows.append(cells)
+    return rows
+
+
 # ----------------------------------------------------------- verification --
 def verify(corpus: Path | list[Path]) -> dict:
     sources = {s["id"]: s for s in load("source-manifest.json")["sources"]}
@@ -162,13 +288,17 @@ def verify(corpus: Path | list[Path]) -> dict:
     dirs = corpus if isinstance(corpus, list) else [corpus]
     for f in iter_files([str(d) for d in dirs]):
         by_hash.setdefault(sha256(f), f)
-    pins, pages_cache = {}, {}
+    pins, pages_cache, raw_cache = {}, {}, {}
+    hyp_source = (hypothesis_register()[0] or {}).get("source")
     for sid, s in sources.items():
         if s.get("sha256"):
             f = by_hash.get(s["sha256"])
             pins[sid] = {"sha256": s["sha256"], "found": f is not None, "file": f.name if f else None}
             if f is not None:
-                pages_cache[sid] = [squash(pg) for pg in read_pages(f)]
+                raw = read_pages(f)
+                pages_cache[sid] = [squash(pg) for pg in raw]
+                if sid == hyp_source:
+                    raw_cache[sid] = raw
 
     out = {}
     for p in load("parameters.json")["parameters"]:
@@ -216,7 +346,8 @@ def verify(corpus: Path | list[Path]) -> dict:
             ok &= found
         records[r["id"]] = {"status": "verified" if ok and details else "failed", "record_hash": record_hash(r), "evidence": details}
     return {"generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "tool": "extract_sources.py --corpus", "source_pins": pins, "parameters": out, "records": records}
+            "tool": "extract_sources.py --corpus", "source_pins": pins, "parameters": out, "records": records,
+            "hypotheses": verify_hypotheses(pages_cache, raw_cache)}
 
 
 # --------------------------------------------------------------------- CLI --
@@ -249,12 +380,26 @@ def main() -> int:
                 bad += 1
                 for d in v["evidence"]:
                     print(f"       p{d['page']} {d['status']}: {d['quote'][:80]}")
+        hyp = r["hypotheses"]
+        if hyp:
+            t = hyp["table"]
+            print(f"{'OK  ' if t['status'] == 'verified' else 'FAIL'} {t['id']} ({t['rows']} rows, "
+                  f"pages {t['pages'][0]}-{t['pages'][1]})" if "rows" in t else f"FAIL {t['id']}")
+            for pr in t["problems"]:
+                print(f"       {pr}")
+            bad += t["status"] != "verified"
+            for hid, v in hyp["predictions"].items():
+                if v["status"] != "verified":
+                    bad += 1
+                    print(f"FAIL {hid}: {v['detail']}")
         if a.write:
             REPORT.parent.mkdir(parents=True, exist_ok=True)
             REPORT.write_text(json.dumps(r, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
             print(f"wrote {REPORT.relative_to(ROOT)}")
-        print(f"{len(r['parameters']) + len(r['records']) - bad} verified, {bad} failed "
-              f"({len(r['parameters'])} parameters, {len(r['records'])} bridge/observable records)")
+        nh = len(hyp.get("predictions", {})) + (1 if hyp else 0)
+        print(f"{len(r['parameters']) + len(r['records']) + nh - bad} verified, {bad} failed "
+              f"({len(r['parameters'])} parameters, {len(r['records'])} bridge/observable records, "
+              f"{nh} prediction-register records)")
         return 1 if bad or not all(p["found"] for p in r["source_pins"].values()) else 0
     hits = scan(a.targets)
     if a.json:

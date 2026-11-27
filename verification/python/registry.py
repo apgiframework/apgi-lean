@@ -11,7 +11,7 @@ SPEC = ROOT / "specification"
 SPEC_FILES = ("parameters.json", "equations.json", "units.json",
               "epistemic-claims.json", "source-manifest.json", "known-conflicts.json",
               "symbols.json", "configurations.json", "revisions.json",
-              "bridges.json", "requirements.json")
+              "bridges.json", "requirements.json", "hypotheses.json")
 
 
 def load(name: str) -> dict:

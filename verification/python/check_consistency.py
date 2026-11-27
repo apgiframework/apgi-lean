@@ -190,6 +190,7 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
     # traceability, bridge evidence, record-status axis (TC-01), axiom pins (TC-22)
     found += traceability(E, C)
     found += bridge_check()
+    found += hypothesis_check()
     found += record_status_check(P, E, C)
     found += axiom_check()
     return found
@@ -211,7 +212,8 @@ def record_status_check(P, E, C) -> list[dict]:
     Q = optional("requirements.json")
     groups = {"parameters.json": P, "equations.json": E, "epistemic-claims.json": C,
               "bridges.json": B.get("bridges", []) + B.get("observables", []),
-              "requirements.json": Q.get("requirements", [])}
+              "requirements.json": Q.get("requirements", []),
+              "hypotheses.json": optional("hypotheses.json").get("predictions", [])}
     out = []
     for file, recs in groups.items():
         ids = [r["id"] for r in recs]
@@ -244,6 +246,31 @@ def bridge_check() -> list[dict]:
                if e["record_hash"] != record_hash(r) else None)
         if why:
             out.append({"check": "bridge_unverified", "params": [], "detail": f"{r['id']}: {why}", "severity": "P1"})
+    return out
+
+
+def hypothesis_check() -> list[dict]:
+    """TC-26: every hypotheses.json record, and the registered table as a whole, must be backed by a verified
+    extraction against the pinned source (extract_sources.verify_hypotheses)."""
+    from extract_sources import hypothesis_hash, hypothesis_register
+    table, preds = hypothesis_register()
+    if table is None:
+        return []
+    path = ROOT / "verification" / "reports" / "extraction.json"
+    report = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    hyp = report.get("hypotheses") or {}
+    out = []
+    if (hyp.get("table") or {}).get("status") != "verified":
+        out.append({"check": "prediction_register_unverified", "params": [],
+                    "detail": f"{table['id']}: table not verified against {table['source']}", "severity": "P1"})
+    recs = hyp.get("predictions") or {}
+    for r in preds:
+        e = recs.get(r["id"])
+        why = ("no entry in extraction.json" if e is None else "extraction failed" if e["status"] != "verified"
+               else "record changed since extraction (re-run extract_sources.py --corpus DIR --write)"
+               if e["record_hash"] != hypothesis_hash(r) else None)
+        if why:
+            out.append({"check": "prediction_unverified", "params": [], "detail": f"{r['id']}: {why}", "severity": "P1"})
     return out
 
 

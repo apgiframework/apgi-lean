@@ -1,0 +1,922 @@
+{
+  "schema": "apgi-hypotheses/1",
+  "note": "Master Prediction Register (OSF Table 15) of the locked pre-registration SRC-OSF (v1.1, Amendment 1, osf.io/yk29g), one record per table row, cells verbatim. extract_sources.py --corpus verifies every row cell for cell on its stated page of the sha256-pinned PDF and that the rows reproduce the table with nothing dropped or added (TC-26, first slice). severity_tier and label are read literally from the Severity cell (tier A/B; label Exploratory, CE or Speculative when the cell states one); no other classification is derived. Not yet registered: Tables 12, 13, 16, 17, 19, the exclusion and data-admissibility rules and the methods.",
+  "table": {
+    "id": "OSF-T15",
+    "title": "Master Prediction Register",
+    "source": "SRC-OSF",
+    "first_page": 53,
+    "last_page": 58,
+    "start_after": "Table 15. Master Prediction Register",
+    "header": "Pred-ID Protocol Construct tested Classification standard Severity HEP-dependent? Fallback proxy applies?",
+    "end_before": "Every code appearing in §1.6",
+    "text_layer_map": {
+      "E081": "(",
+      "E082": ")",
+      "E083": "[",
+      "E084": "]",
+      "E088": "-",
+      "E089": "–",
+      "E092": ":",
+      "E09D": "+",
+      "E09E": "−",
+      "E1DC": "↔"
+    },
+    "text_layer_map_note": "Private-use code points in the text layer of the pinned SRC-OSF PDF, each fixed by context on pages 53-58: (A/B/C), 0.A–0.C, 'A: gate', 'ROPE d = [−0.15, +0.15]', 'DMN↔PCI'. Applied to this source only.",
+    "columns": [
+      "pred_id",
+      "protocol",
+      "construct",
+      "classification_standard",
+      "severity",
+      "hep_dependent",
+      "fallback_proxy"
+    ],
+    "draft": {
+      "file": "docs/apgi-v-1-2/APGI-OSF-Preregistration.md",
+      "table_heading": "**Table 15\\. Master Prediction Register**"
+    }
+  },
+  "predictions": [
+    {
+      "id": "T15-0-A-0-C",
+      "pred_id": "0.A–0.C",
+      "protocol": "Protocol 0 (HEP Proxy Validation)",
+      "construct": "HEP proxy validity (prerequisite gate)",
+      "classification_standard": "Gate: r > 0.35; +15% cholinergic; aINS r > 0.30 (all three for full retention; single failure → targeted reclassification; ≥ 2 failures → HEP-dependent claims exploratory)",
+      "severity": "A: gate",
+      "hep_dependent": "Defines HEP",
+      "fallback_proxy": "This is the proxy test",
+      "codes": [
+        "0.A",
+        "0.B",
+        "0.C"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 53
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-1-A-1-B",
+      "pred_id": "1.A–1.B",
+      "protocol": "Protocol 1 (Cardiac-EEG)",
+      "construct": "Attention-condition (1.A) and cardiac-phase (1.B) modulation of near-threshold detection",
+      "classification_standard": "A-standard; α = 0.0125",
+      "severity": "A",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "1.A",
+        "1.B"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 53
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-1-C",
+      "pred_id": "1.C",
+      "protocol": "Protocol 1 (Cardiac-EEG)",
+      "construct": "Continuous IA × condition interaction (moderation of Pred 1.A / 1.B effects)",
+      "classification_standard": "β_std ≥ 0.30 (α = 0.0125)",
+      "severity": "B",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "1.C"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 53
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-1-D",
+      "pred_id": "1.D",
+      "protocol": "Protocol 1 (Cardiac-EEG)",
+      "construct": "HEP–P3b coupling beyond arousal",
+      "classification_standard": "A-standard; partial r > 0.40 at α = 0.0125",
+      "severity": "A",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "1.D"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 53
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-1-E",
+      "pred_id": "1.E",
+      "protocol": "Protocol 1 (Cardiac-EEG)",
+      "construct": "Psychometric steepness α_psy ≥ 10",
+      "classification_standard": "α_psy ≥ 10",
+      "severity": "A",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "1.E"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-1-F",
+      "pred_id": "1.F",
+      "protocol": "Protocol 1 (Cardiac-EEG)",
+      "construct": "Trait Πⁱ_baseline modulates detection sensitivity (continuous moderator)",
+      "classification_standard": "Standardized interaction slope β_std ≥ 0.36 (α = 0.05, secondary family)",
+      "severity": "B",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "1.F"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-A",
+      "pred_id": "2.A",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "Human-matching convergence benchmark",
+      "classification_standard": "50–80 trials; Mann–Whitney U p < 0.01",
+      "severity": "B: CE",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.A"
+      ],
+      "severity_tier": "B",
+      "label": "CE",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-B",
+      "pred_id": "2.B",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "Interoceptive trigger composition at ignition",
+      "classification_standard": "70–85% of ignitions interoceptively dominant; binomial p < 0.01",
+      "severity": "B",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.B"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-C",
+      "pred_id": "2.C",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "Somatic-marker retrieval leads threshold crossing",
+      "classification_standard": "Cross-correlation peak at negative lag; Kendall τ > 0.3",
+      "severity": "B",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.C"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-D",
+      "pred_id": "2.D",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "β_SM lesion specificity",
+      "classification_standard": "Permutation p < 0.01, 10,000 permutations",
+      "severity": "B",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.D"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-E",
+      "pred_id": "2.E",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "Model parsimony on human IGT (framework falsifier F2)",
+      "classification_standard": "ΔBIC ≥ 10 vs. each alternative",
+      "severity": "A: framework",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.E"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-G",
+      "pred_id": "2.G",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "Critical-slowing computational proxy for Pred 6.C (AC1; exploratory and cannot adjudicate Pred 6.C)",
+      "classification_standard": "AC1 rise / critical slowing near θ",
+      "severity": "Exploratory (computational proxy; cannot adjudicate Pred 6.C)",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.G"
+      ],
+      "severity_tier": null,
+      "label": "Exploratory",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 54
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-2-F",
+      "pred_id": "2.F",
+      "protocol": "Protocol 2 (Somatic-AgentSim)",
+      "construct": "Ignition-linked strategy change beyond |ε|",
+      "classification_standard": "Ignition coefficient p < 0.01 controlling for |ε|; descriptive",
+      "severity": "Exploratory",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "2.F"
+      ],
+      "severity_tier": null,
+      "label": "Exploratory",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 55
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-3-A",
+      "pred_id": "3.A",
+      "protocol": "Protocol 3 (Anticipation-fMRI)",
+      "construct": "Somatic-marker incremental ignition variance",
+      "classification_standard": "Incremental R² > 0.02; vmPFC–insula PPI",
+      "severity": "A",
+      "hep_dependent": "No (insula interpretation via Pred 0.C only)",
+      "fallback_proxy": "No",
+      "codes": [
+        "3.A"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 55
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-3-B",
+      "pred_id": "3.B",
+      "protocol": "Protocol 3 (Anticipation-fMRI)",
+      "construct": "vmPFC→aINS vs. vmPFC→pIC PPI dissociation",
+      "classification_standard": "Δr ≥ 0.30 FWE; pIC null at BF₀₁ ≥ 6",
+      "severity": "A",
+      "hep_dependent": "No (insula interpretation via Pred 0.C only)",
+      "fallback_proxy": "No",
+      "codes": [
+        "3.B"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 55
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-3-C",
+      "pred_id": "3.C",
+      "protocol": "Protocol 3 (Anticipation-fMRI)",
+      "construct": "vmPFC anticipation is valence- not contrast-specific",
+      "classification_standard": "EV modulation p < 0.05 FWE; contrast null p > 0.20",
+      "severity": "B",
+      "hep_dependent": "No (insula interpretation via Pred 0.C only)",
+      "fallback_proxy": "No",
+      "codes": [
+        "3.C"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 55
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-3-D",
+      "pred_id": "3.D",
+      "protocol": "Protocol 3 (Anticipation-fMRI)",
+      "construct": "No-foreperiod control collapses coupling",
+      "classification_standard": "Long > 0 ms foreperiod, p < 0.05, d > 0.4",
+      "severity": "B",
+      "hep_dependent": "No (insula interpretation via Pred 0.C only)",
+      "fallback_proxy": "No",
+      "codes": [
+        "3.D"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 55
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-4-A-4-C",
+      "pred_id": "4.A, 4.C",
+      "protocol": "Protocol 4 (Metabolic-State Crossover)",
+      "construct": "Metabolic-state threshold shift (allostatic)",
+      "classification_standard": "ηₚ² ≥ 0.06, α = 0.0167, BF₁₀ ≥ 100",
+      "severity": "A: T1-operational",
+      "hep_dependent": "No (HEP secondary only)",
+      "fallback_proxy": "No",
+      "codes": [
+        "4.A",
+        "4.C"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 55
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-4-B",
+      "pred_id": "4.B",
+      "protocol": "Protocol 4 (Metabolic-State Crossover)",
+      "construct": "Selective P3b suppression under depletion",
+      "classification_standard": "Interaction p < 0.0167; ΔP3b ≥ 1.5 µV",
+      "severity": "A: T1-operational",
+      "hep_dependent": "No (HEP secondary only)",
+      "fallback_proxy": "No",
+      "codes": [
+        "4.B"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-5-A-5-C",
+      "pred_id": "5.A–5.C",
+      "protocol": "Protocol 5 (Insula-TMS)",
+      "construct": "Causal aINS/dlPFC gating dissociation",
+      "classification_standard": "15–25% PCI reduction; BF-supported dissociation",
+      "severity": "A",
+      "hep_dependent": "Yes (5.B)",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "5.A",
+        "5.B",
+        "5.C"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-5-D",
+      "pred_id": "5.D",
+      "protocol": "Protocol 5 (Insula-TMS)",
+      "construct": "Directional IA × site simple effect at aINS",
+      "classification_standard": "p < 0.05, η² > 0.10; absent at dlPFC/PPC",
+      "severity": "B",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "5.D"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-5-E",
+      "pred_id": "5.E",
+      "protocol": "Protocol 5 (Insula-TMS)",
+      "construct": "dlPFC null-on-HEP equivalence",
+      "classification_standard": "ROPE d = [−0.15, +0.15], BF₀₁ ≥ 6",
+      "severity": "B",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "5.E"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-6-A-6-C",
+      "pred_id": "6.A–6.C",
+      "protocol": "Protocol 6 (Ignition-iEEG)",
+      "construct": "Saddle-node ignition triad (bistability, minimal intermediate dwell, critical slowing)",
+      "classification_standard": "All three signatures co-occur near θ",
+      "severity": "B: CE",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "6.A",
+        "6.B",
+        "6.C"
+      ],
+      "severity_tier": "B",
+      "label": "CE",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-6-D",
+      "pred_id": "6.D",
+      "protocol": "Protocol 6 (Ignition-iEEG)",
+      "construct": "Long-range beta/gamma coherence predicts detection",
+      "classification_standard": "Point-biserial r > 0.40, 200–400 ms",
+      "severity": "B: CE",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "6.D"
+      ],
+      "severity_tier": "B",
+      "label": "CE",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-6-E",
+      "pred_id": "6.E",
+      "protocol": "Protocol 6 (Ignition-iEEG)",
+      "construct": "Multi-timescale ignition clustering under Πⁱ",
+      "classification_standard": "≥ 3 timescales; BF₁₀ ≥ 100 vs. single",
+      "severity": "B: CE",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "6.E"
+      ],
+      "severity_tier": "B",
+      "label": "CE",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-A",
+      "pred_id": "7.A",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "Joint baseline PCI + HEP incremental prediction of consciousness level",
+      "classification_standard": "Four-group AND patient-only cross-validated McFadden ΔR² ≥ 0.05, each 95% BCa CI lower bound > 0; C-index secondary",
+      "severity": "B: theoretical primary; estimation-first (Amendment 1)",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "7.A"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 56
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-B",
+      "pred_id": "7.B",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "DMN↔PCI vs. DMN↔HEP dissociation",
+      "classification_standard": "DMN↔PCI r > 0.50 AND DMN↔HEP negligible under the registered interval rule",
+      "severity": "B: secondary (Protocol 7 within-protocol BY-FDR family)",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "7.B"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 57
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-C",
+      "pred_id": "7.C",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "Carrier-controlled CO₂ perturbation of PCI",
+      "classification_standard": "Registered group interaction AND both within-MCS directional control contrasts (one-sided α = 0.025 each)",
+      "severity": "B: secondary; within-MCS conjunction of two directional contrasts",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "7.C"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 57
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-D",
+      "pred_id": "7.D",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "Six-month prognostic prediction",
+      "classification_standard": "Joint longitudinal–survival analysis plus cross-validated ΔR² ≥ 0.05 over the clinical-baseline model",
+      "severity": "B: secondary prognostic (Protocol 7 within-protocol BY-FDR family)",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "Yes",
+      "codes": [
+        "7.D"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 57
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-E",
+      "pred_id": "7.E",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "Infraslow-phase to theta-amplitude PAC across the DoC gradient",
+      "classification_standard": "Jonckheere–Terpstra p < 0.05; r ≥ 0.30",
+      "severity": "Exploratory",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "7.E"
+      ],
+      "severity_tier": null,
+      "label": "Exploratory",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 57
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-F",
+      "pred_id": "7.F",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "β_SM modulates reportable workspace content",
+      "classification_standard": "d > 0.45, arousal-covaried",
+      "severity": "Exploratory",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "7.F"
+      ],
+      "severity_tier": null,
+      "label": "Exploratory",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 57
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-7-G",
+      "pred_id": "7.G",
+      "protocol": "Protocol 7 (DoC-Biomarker)",
+      "construct": "Baseline HEP prognosis of 3-month CRS-R beyond age + etiology (patients only)",
+      "classification_standard": "Positive HEP coefficient with LRT p < 0.048 (registered final α); smallest effect of interest ΔR² = 0.05",
+      "severity": "B: confirmatory primary (Amendment 1)",
+      "hep_dependent": "Yes",
+      "fallback_proxy": "No (HEP-specific; exploratory under proxy failure)",
+      "codes": [
+        "7.G"
+      ],
+      "severity_tier": "B",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 57,
+          "cells": [
+            "7.G",
+            "Protocol 7 (DoC-Biomarker)",
+            "Baseline HEP prognosis of 3-month CRS-R",
+            "Positive HEP coefficient with LRT p < 0.048",
+            "B: confirmatory",
+            "Yes",
+            "No (HEP-specific;"
+          ]
+        },
+        {
+          "source": "SRC-OSF",
+          "page": 58,
+          "cells": [
+            "",
+            "",
+            "beyond age + etiology (patients only)",
+            "(registered final α); smallest effect of interest ΔR² = 0.05",
+            "primary (Amendment 1)",
+            "",
+            "exploratory under proxy failure)"
+          ]
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-MS-H1",
+      "pred_id": "MS-H1",
+      "protocol": "Multi-Scale (spectral)",
+      "construct": "1/f threshold dynamics; ∼3.2 Hz crossover",
+      "classification_standard": "α_DFA ≈ 0.85–0.95; crossover present",
+      "severity": "A: must-pass",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "MS-H1"
+      ],
+      "severity_tier": "A",
+      "label": null,
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 58
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    },
+    {
+      "id": "T15-MS-H2",
+      "pred_id": "MS-H2",
+      "protocol": "Multi-Scale (spectral)",
+      "construct": "Discrete spectral shoulders at predicted corner frequencies f_c",
+      "classification_standard": "Resolvable shoulders at predicted f_c; count-robust (4 or 6 levels → revise, not refute)",
+      "severity": "B: Speculative",
+      "hep_dependent": "No",
+      "fallback_proxy": "No",
+      "codes": [
+        "MS-H2"
+      ],
+      "severity_tier": "B",
+      "label": "Speculative",
+      "evidence": [
+        {
+          "source": "SRC-OSF",
+          "page": 58
+        }
+      ],
+      "verification": "extracted",
+      "record_status": "Registered",
+      "owner": "Uxod",
+      "approval_date": null
+    }
+  ]
+}
