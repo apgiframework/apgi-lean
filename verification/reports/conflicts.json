@@ -1,6 +1,34 @@
 {
-  "registry_hash": "e4b80c7bfd610dadcc762047efd0ef9c2202e0b906b5d035542ba44d83617171",
-  "acknowledged": [],
+  "registry_hash": "516242ee93d441cf056e78499536276bddc91be6c31b0777f3e994fd24c3c33e",
+  "acknowledged": [
+    {
+      "check": "register_tier_conflict",
+      "params": [
+        "1.F"
+      ],
+      "detail": "1.F: tier A in OSF Table 12 (H4, Severity 'A') but B in OSF Table 15 (T15-1-F, Severity 'B')",
+      "severity": "P1",
+      "known": "KC-OSF-TIER-1F"
+    },
+    {
+      "check": "register_tier_conflict",
+      "params": [
+        "3.C"
+      ],
+      "detail": "3.C: tier A in OSF Table 12 (H5, Severity 'A') but B in OSF Table 15 (T15-3-C, Severity 'B')",
+      "severity": "P1",
+      "known": "KC-OSF-TIER-H5"
+    },
+    {
+      "check": "register_tier_conflict",
+      "params": [
+        "3.D"
+      ],
+      "detail": "3.D: tier A in OSF Table 12 (H5, Severity 'A') but B in OSF Table 15 (T15-3-D, Severity 'B')",
+      "severity": "P1",
+      "known": "KC-OSF-TIER-H5"
+    }
+  ],
   "unacknowledged": [],
   "stale_known_conflicts": [],
   "ok": true

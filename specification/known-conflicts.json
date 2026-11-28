@@ -26,7 +26,13 @@
     {"id": "KC-PRECOND-TAU-PI", "check": "precondition_unverifiable", "params": ["dt", "dt_reservoir", "tau_Pi"], "status": "resolved", "severity": "P1",
      "summary": "The step rule dt ≤ τ_Π/10 could not be checked: the published corpus states only τ_Π > 0.",
      "note": "Math Spec p6 and Notation Appendix p16 define τ_Π without a value or range, but both state dt ≤ min(τ_S, τ_θ, τ_Π)/10.",
-     "resolution": "Task 31: the v1.2 Math Spec draft (§2.6, SRC-MATHSPEC-V12D) fixes the design lower bound τ_Π ≥ 1 s. With dt = 10 ms and Δt_res = 1 ms both dt ≤ τ_Π/10 rules hold (0.01 ≤ 0.1). τ_Π itself stays uncalibrated; production uses 1000 s."}
+     "resolution": "Task 31: the v1.2 Math Spec draft (§2.6, SRC-MATHSPEC-V12D) fixes the design lower bound τ_Π ≥ 1 s. With dt = 10 ms and Δt_res = 1 ms both dt ≤ τ_Π/10 rules hold (0.01 ≤ 0.1). τ_Π itself stays uncalibrated; production uses 1000 s."},
+    {"id": "KC-OSF-TIER-1F", "check": "register_tier_conflict", "params": ["1.F"], "status": "open", "severity": "P1",
+     "summary": "The locked pre-registration (SRC-OSF, v1.1 Amendment 1) gives Pred 1.F two severity tiers: Table 12 (p. 45) registers H4 / Pred 1.F with Severity A; Table 15 (p. 54) registers Pred 1.F with Severity B, and the multiplicity rule (p. 68) calls Pred 1.F 'a secondary test (α = 0.05)'.",
+     "note": "Detected by check_consistency.register_tier_check from the extraction-verified records T12-H4 and T15-1-F. The two rows also word the estimand differently (Table 12: association beyond Πᵉ, interval criterion ±√0.02; Table 15: continuous-moderator slope β_std ≥ 0.36), which the mechanical check does not adjudicate (B-07 second reader). Not resolved here: choosing either table would invent a classification. Owner: Uxod (erratum or Amendment 2, B-14)."},
+    {"id": "KC-OSF-TIER-H5", "check": "register_tier_conflict", "params": ["3.C", "3.D"], "status": "open", "severity": "P1",
+     "summary": "Table 12 (p. 45) registers H5 as 'Pred 3.A–3.D (confirmatory)' with Severity A; Table 15 (p. 55) gives 3.A and 3.B Severity A but 3.C and 3.D Severity B.",
+     "note": "Either the Table 12 tier is a row-level tier (the strongest of its codes) or the range is wrong. The locked record's own H↔Pred crosswalk (p. 148) reads 'H5 ↔ Pred 3.A, 3.B, 3.D', which drops 3.C, a third reading. Detected by register_tier_check (T12-H5 vs T15-3-C, T15-3-D). Owner: Uxod (erratum or Amendment 2, B-14)."}
   ],
   "corpus_patterns": [
     {"id": "KC-LANDAUER-287", "pattern": "2[.,]87\\s*[×x]\\s*10\\s*(?:⁻²¹|\\^?-21|−21|-21)", "severity": "P0", "summary": "Landauer at 310 K is 2.967×10⁻²¹ J. 2.871×10⁻²¹ J is the 300 K value: the corpus used room temperature, not body temperature."},

@@ -1,9 +1,9 @@
 # APGI Verification Report
 
-- Generated: 2026-11-27T22:53:42+00:00
-- Spec version: 0.6.0 · registry hash `e4b80c7bfd610dad…`
+- Generated: 2026-11-27T23:55:19+00:00
+- Spec version: 0.6.0 · registry hash `516242ee93d441cf…`
 - Lean build (`lake build --wfail`): **passed**
-- Python test functions: **273 passed, 0 failed** of 274 (parametrised cases collapsed)
+- Python test functions: **288 passed, 0 failed** of 289 (parametrised cases collapsed)
 - Pilot criteria met: **6 of 7**
 
 > A Lean proof establishes a consequence of a definition. It is not evidence that APGI describes the brain.
@@ -11,9 +11,9 @@
 ## Pilot criteria
 
 - ✅ **Every canonical parameter has a source identifier, unit, version, and documented range** — all parameters complete
-- ✅ **Known discrepancies produce explicit failures** — 0 open conflicts tracked; seeded suite passed
+- ✅ **Known discrepancies produce explicit failures** — 3 open conflicts tracked; seeded suite passed
 - ✅ **Lean theorems compile without sorry or unapproved axioms** — lake build --wfail: passed; 196/196 theorems axiom-audited via #guard_msgs
-- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry e4b80c7bfd61
+- ✅ **Mathematical results are linked to exact specification revisions** — Spec.lean hash matches registry 516242ee93d4
 - ✅ **Python tests pass the APGI numerical tolerances (1e-9)** — 15/15 golden-vector tests passed
 - ❌ **Continuous integration produces a reproducible verification report** — generated locally (CI run required)
 - ✅ **No mathematical proof is described as empirical confirmation of APGI** — no claim cites a Lean theorem as empirical evidence
@@ -273,6 +273,9 @@
 
 ## Open specification conflicts
 
+- **KC-OSF-TIER-1F** (P1) register_tier_conflict: 1.F: tier A in OSF Table 12 (H4, Severity 'A') but B in OSF Table 15 (T15-1-F, Severity 'B')
+- **KC-OSF-TIER-H5** (P1) register_tier_conflict: 3.C: tier A in OSF Table 12 (H5, Severity 'A') but B in OSF Table 15 (T15-3-C, Severity 'B')
+- **KC-OSF-TIER-H5** (P1) register_tier_conflict: 3.D: tier A in OSF Table 12 (H5, Severity 'A') but B in OSF Table 15 (T15-3-D, Severity 'B')
 
 ## Traceability
 

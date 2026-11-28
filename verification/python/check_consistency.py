@@ -191,6 +191,7 @@ def detect(spec_dir: Path | None = None) -> list[dict]:
     found += traceability(E, C)
     found += bridge_check()
     found += hypothesis_check()
+    found += register_tier_check()
     found += record_status_check(P, E, C)
     found += axiom_check()
     return found
@@ -213,7 +214,8 @@ def record_status_check(P, E, C) -> list[dict]:
     groups = {"parameters.json": P, "equations.json": E, "epistemic-claims.json": C,
               "bridges.json": B.get("bridges", []) + B.get("observables", []),
               "requirements.json": Q.get("requirements", []),
-              "hypotheses.json": optional("hypotheses.json").get("predictions", [])}
+              "hypotheses.json": optional("hypotheses.json").get("predictions", [])
+              + [r for g in optional("hypotheses.json").get("registers", []) for r in g["rows"]]}
     out = []
     for file, recs in groups.items():
         ids = [r["id"] for r in recs]
@@ -250,27 +252,61 @@ def bridge_check() -> list[dict]:
 
 
 def hypothesis_check() -> list[dict]:
-    """TC-26: every hypotheses.json record, and the registered table as a whole, must be backed by a verified
-    extraction against the pinned source (extract_sources.verify_hypotheses)."""
-    from extract_sources import hypothesis_hash, hypothesis_register
+    """TC-26: every hypotheses.json record, and every registered table as a whole (Table 15 and the further
+    registers, Tables 12 and 13), must be backed by a verified extraction against the pinned source
+    (extract_sources.verify_hypotheses)."""
+    from extract_sources import HYP_COLUMNS, further_registers, hypothesis_register, register_hash
     table, preds = hypothesis_register()
     if table is None:
         return []
     path = ROOT / "verification" / "reports" / "extraction.json"
     report = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     hyp = report.get("hypotheses") or {}
+    groups = [(table, preds, hyp.get("table"), hyp.get("predictions"), HYP_COLUMNS)]
+    for t, rows in further_registers():
+        g = (hyp.get("registers") or {}).get(t["id"]) or {}
+        groups.append((t, rows, g.get("table"), g.get("rows"), tuple(t["columns"])))
     out = []
-    if (hyp.get("table") or {}).get("status") != "verified":
-        out.append({"check": "prediction_register_unverified", "params": [],
-                    "detail": f"{table['id']}: table not verified against {table['source']}", "severity": "P1"})
-    recs = hyp.get("predictions") or {}
-    for r in preds:
-        e = recs.get(r["id"])
-        why = ("no entry in extraction.json" if e is None else "extraction failed" if e["status"] != "verified"
-               else "record changed since extraction (re-run extract_sources.py --corpus DIR --write)"
-               if e["record_hash"] != hypothesis_hash(r) else None)
-        if why:
-            out.append({"check": "prediction_unverified", "params": [], "detail": f"{r['id']}: {why}", "severity": "P1"})
+    for t, recs_reg, t_rep, r_rep, cols in groups:
+        if (t_rep or {}).get("status") != "verified":
+            out.append({"check": "prediction_register_unverified", "params": [],
+                        "detail": f"{t['id']}: table not verified against {t['source']}", "severity": "P1"})
+        r_rep = r_rep or {}
+        for r in recs_reg:
+            e = r_rep.get(r["id"])
+            why = ("no entry in extraction.json" if e is None else "extraction failed" if e["status"] != "verified"
+                   else "record changed since extraction (re-run extract_sources.py --corpus DIR --write)"
+                   if e["record_hash"] != register_hash(r, cols) else None)
+            if why:
+                out.append({"check": "prediction_unverified", "params": [], "detail": f"{r['id']}: {why}", "severity": "P1"})
+    return out
+
+
+def register_tier_check() -> list[dict]:
+    """TC-26 / B-07: a code named in the falsifiable hypothesis register (OSF Table 12) must carry the same
+    severity tier there as in the Master Prediction Register (OSF Table 15), and must be registered there.
+    Both are read literally from the locked record; a disagreement is a defect of that record, reported per
+    code and resolved only by the author (erratum or amendment), never by choosing one table here."""
+    from extract_sources import further_registers, hypothesis_register
+    table, preds = hypothesis_register()
+    if table is None:
+        return []
+    t15 = {c: p for p in preds for c in p["codes"]}
+    out = []
+    for t, rows in further_registers():
+        if t["id"] != "OSF-T12":
+            continue
+        for r in rows:
+            for c in r["codes"]:
+                p = t15.get(c)
+                if p is None:
+                    out.append({"check": "register_code_unregistered", "params": [c],
+                                "detail": f"{r['id']} names {c}, which OSF Table 15 does not register", "severity": "P1"})
+                elif p["severity_tier"] != r["severity_tier"]:
+                    out.append({"check": "register_tier_conflict", "params": [c],
+                                "detail": f"{c}: tier {r['severity_tier']} in OSF Table 12 ({r['h']}, Severity "
+                                          f"'{r['severity']}') but {p['severity_tier']} in OSF Table 15 "
+                                          f"({p['id']}, Severity '{p['severity']}')", "severity": "P1"})
     return out
 
 

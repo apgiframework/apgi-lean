@@ -109,6 +109,20 @@ def build() -> dict[str, str]:
             L.append(f"- **{p['pred_id']}** ({p['protocol']}; {tag}): {p['construct']}. "
                      f"Standard: {p['classification_standard']}. HEP-dependent: {p['hep_dependent']}.")
         L.append("")
+        for g in H.get("registers", []):
+            T, RS = g["table"], g["rows"]
+            L += [f"## Registered hypotheses ({T['id']}, {T['title']}; TC-26 second slice)", "",
+                  f"{len(RS)} rows, cells verbatim from {T['source']} pp. {T['first_page']}–{T['last_page']} and "
+                  "verified against the pinned PDF by `extract_sources.py`. Codes are read from the Pred-ID cell only.", ""]
+            for r in RS:
+                codes = ", ".join(r["codes"]) or "no Table 15 code"
+                if "falsifier" in r:
+                    L.append(f"- **{r['h']}** ({codes}; tier {r['severity_tier']}; {r['evidence_tier']}): "
+                             f"{r['hypothesis']}. Falsifier: {r['falsifier']} Min n: {r['min_n']}.")
+                else:
+                    L.append(f"- **{r['h']}** ({r['pred_id']}; {r['evidence_tier']}): {r['hypothesis']}. "
+                             f"{r['status_reason']}")
+            L.append("")
     matrix = "\n".join(L).rstrip() + "\n"
 
     A = ["# APGI assumption inventory", "",

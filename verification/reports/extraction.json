@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-27T22:32:06+00:00",
+  "generated": "2026-11-27T23:35:49+00:00",
   "tool": "extract_sources.py --corpus",
   "source_pins": {
     "SRC-NOTATION": {
@@ -2769,6 +2769,161 @@
           58
         ],
         "detail": null
+      }
+    },
+    "registers": {
+      "OSF-T12": {
+        "table": {
+          "id": "OSF-T12",
+          "status": "verified",
+          "problems": [],
+          "rows": 12,
+          "pages": [
+            43,
+            49
+          ]
+        },
+        "rows": {
+          "T12-H1": {
+            "status": "verified",
+            "record_hash": "fb55daab93376cb2ae95fcbbb01360e1889f1956180d490045ddb085b603f889",
+            "pages": [
+              43
+            ],
+            "detail": null
+          },
+          "T12-H2": {
+            "status": "verified",
+            "record_hash": "09d7dd680e645c4ed5cd4879ccdb66a96502616f42ba3f83962cbb5eb876697b",
+            "pages": [
+              43,
+              44
+            ],
+            "detail": null
+          },
+          "T12-H3": {
+            "status": "verified",
+            "record_hash": "f4b454c9599f9d559b71d780430eee383d4080ee9b40195464db031d0233dc33",
+            "pages": [
+              44,
+              45
+            ],
+            "detail": null
+          },
+          "T12-H4": {
+            "status": "verified",
+            "record_hash": "f96ea1f43b6d1324de071d3198370e6f80dd275d8d181258d5511d4e8dfb2766",
+            "pages": [
+              45
+            ],
+            "detail": null
+          },
+          "T12-H5": {
+            "status": "verified",
+            "record_hash": "6bb6ed82ee523c6c987041d70db168712d8e675b39f6b99e921fa0be45a678a2",
+            "pages": [
+              45,
+              46
+            ],
+            "detail": null
+          },
+          "T12-H6": {
+            "status": "verified",
+            "record_hash": "18c51237160a47216559db6e0be5aead048be36903694ca50e6a0101204110a5",
+            "pages": [
+              46
+            ],
+            "detail": null
+          },
+          "T12-H8": {
+            "status": "verified",
+            "record_hash": "d2201cd212b06b22fe08bca0d2e4f8a27d3ebb5e0b9b0444ad9ba7a3d5e4d29d",
+            "pages": [
+              46,
+              47
+            ],
+            "detail": null
+          },
+          "T12-H9": {
+            "status": "verified",
+            "record_hash": "d1a29f2ff0a00600a31585f4a6c2c13bdd25fd68530def078c4addb146f2e117",
+            "pages": [
+              47
+            ],
+            "detail": null
+          },
+          "T12-H11": {
+            "status": "verified",
+            "record_hash": "18095ec94ee8a2e3711b40db216ad38926bd03a5df858ed5965da9ff1adf7d49",
+            "pages": [
+              47
+            ],
+            "detail": null
+          },
+          "T12-H12": {
+            "status": "verified",
+            "record_hash": "32f80f4a99d12038b2bf29a6d6e9ebc69d3ccbdf753ae0879f66e284bf5c4d1b",
+            "pages": [
+              48
+            ],
+            "detail": null
+          },
+          "T12-H13": {
+            "status": "verified",
+            "record_hash": "a9961e8eb4e0877cba3c8da0a7757ce4c116dbcf76f4a852f3c9191da14935a9",
+            "pages": [
+              48
+            ],
+            "detail": null
+          },
+          "T12-H14": {
+            "status": "verified",
+            "record_hash": "be5fd667d78cd1a4421ee9ee0b344bcdfbb36ab3793deec8d93973a4f0e58f6c",
+            "pages": [
+              48,
+              49
+            ],
+            "detail": null
+          }
+        }
+      },
+      "OSF-T13": {
+        "table": {
+          "id": "OSF-T13",
+          "status": "verified",
+          "problems": [],
+          "rows": 3,
+          "pages": [
+            50,
+            50
+          ]
+        },
+        "rows": {
+          "T13-H7": {
+            "status": "verified",
+            "record_hash": "0ddd86211aaaeb2ef4ab8fa770f4568eee025ac47c739e2db0d05f14d50314f1",
+            "pages": [
+              50
+            ],
+            "detail": null
+          },
+          "T13-H10": {
+            "status": "verified",
+            "record_hash": "8db78b000b32e0df4c8ea0d5ef58004a6653c8f97de607bd7f596afc7e553310",
+            "pages": [
+              50
+            ],
+            "detail": null
+          },
+          "T13-H15": {
+            "status": "verified",
+            "record_hash": "cb4cb73112f82ead291fd7da634aa8189c8b6d8de92410d8f58ee20d68282593",
+            "pages": [
+              50
+            ],
+            "detail": null
+          }
+        }
       }
     }
   }

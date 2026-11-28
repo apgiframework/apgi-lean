@@ -260,3 +260,15 @@ REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test
 REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_alpha_psy_is_the_pred_1e_threshold
 REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_v12_draft_table_equals_the_locked_record
 REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_prediction_register.py::test_ssot_condensed_table_agrees_with_the_locked_record
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_register_is_verified_against_the_locked_record
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_codes_are_the_pred_id_cell_read_literally
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_severity_tier_is_the_first_letter_of_the_severity_cell
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_tables_12_and_13_partition_h1_to_h15
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_table13_commitments_name_no_core_battery_code
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_table12_codes_are_registered_in_table15
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_tier_disagreements_are_exactly_the_acknowledged_conflicts
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_registry_citations_of_h_numbers_name_the_right_table
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_alpha_dfa_band_and_falsifier_are_the_h8_row
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_v12_draft_table_equals_the_locked_record
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_ssot_condensed_table12_agrees_with_the_locked_record
+REQ-TC-26,§23 TC-26,tested,partial,TC-26,test,test_hypothesis_register.py::test_ssot_condensed_table13_agrees_with_the_locked_record
