@@ -53,10 +53,10 @@ writes `.verify.log`.
 The v1.1 PDFs and the v1.2 drafts are not in this public repository. `source-manifest.json`
 pins each by sha256; `extract_sources.py --corpus DIR --write` locates the files by hash and
 re-verifies every evidence quote of `parameters.json` and `bridges.json` and every row of
-the prediction register (`hypotheses.json`, OSF Table 15, pp. 53–58 of the locked
-pre-registration), writing `verification/reports/extraction.json`. The locked PDF's table font
-emits private-use code points for some punctuation; the glyph map that undoes this is stored
-with the table record and applied to that one source only, because other PDFs in the corpus
+the registered tables (`hypotheses.json`: OSF Table 15, pp. 53–58, and Tables 12 and 13,
+pp. 43–50, of the locked pre-registration), writing `verification/reports/extraction.json`. The
+locked PDF's table font emits private-use code points for some punctuation; the glyph map that
+undoes this is stored with each table record and applied to that one source only, because other PDFs in the corpus
 use the same code points for other glyphs. `check_consistency.py` then fails on any registry
 record that changed after its last verified extraction. Without the corpus, CI trusts the
 committed extraction report and checks that it matches the current registry by hash.
